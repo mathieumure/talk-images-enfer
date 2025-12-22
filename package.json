@@ -9,6 +9,7 @@
 		"preview": "astro preview"
 	},
 	"dependencies": {
+		"@fontsource/caesar-dressing": "^5.2.8",
 		"astro": "5.16.6",
 		"reveal.js": "5.2.1"
 	},
