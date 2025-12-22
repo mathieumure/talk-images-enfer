@@ -1,51 +1,15 @@
 ---
-import '../styles/global.css';
+import Layout from "../layouts/Layout.astro";
+import Title from "../slides/Title.astro";
+import WhyAstro from "../slides/WhyAstro.astro";
 ---
 
-<!doctype html>
-<html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="description" content="Conférence sur les images" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Talk Images</title>
-  </head>
-  <body>
-    <div class="reveal">
-      <div class="slides">
-        <section>
-          <h1>Talk Images</h1>
-          <h3>Conférence sur la thématique des images</h3>
-          <p>
-            <small>Créé avec <a href="https://astro.build">Astro</a> et <a href="https://revealjs.com">Reveal.js</a></small>
-          </p>
-        </section>
-
-        <section>
-          <h2>Introduction</h2>
-          <p>
-            Bienvenue dans cette conférence sur les images !
-          </p>
-        </section>
-
-        <section>
-          <h2>Plan de la présentation</h2>
-          <ul>
-            <li>Introduction aux images</li>
-            <li>Traitement et manipulation</li>
-            <li>Cas d'usage pratiques</li>
-            <li>Conclusion</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2>Merci pour votre attention !</h2>
-          <p>Questions ?</p>
-        </section>
-      </div>
-    </div>
-  </body>
-</html>
-
+<Layout title="My Awesome Talk Title">
+	<main class="reveal">
+		<div class="slides">
+			<Title />
+			<WhyAstro />
+			<!-- Put your slides here -->
+		</div>
+	</main>
+</Layout>
