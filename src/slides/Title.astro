@@ -2,50 +2,36 @@
 import Slide from "../components/Slide.astro";
 ---
 
-<Slide>
-	<video src="https://talk-assets.s3.fr-par.scw.cloud/Talkimages_intro.mp4" loop muted autoplay class="video" />
-	<div class="content">
-		<h1>Au secours, mes</h1>
-  	<img src="https://talk-assets.s3.fr-par.scw.cloud/Intro_logo.png" alt="intro" />
-		<h2>pourrissent mes perfs</h2>
-	</div>
+<Slide class="title-slide" data-background-video="https://talk-assets.s3.fr-par.scw.cloud/Talkimages_intro.mp4" data-background-video-loop data-background-video-muted data-background-size="cover">
+	<p class="title first">Au secours, mes</p>
+	<img src="https://talk-assets.s3.fr-par.scw.cloud/Intro_logo.png" alt="intro" />
+	<p class="title second">pourrissent mes perfs</p>
 </Slide>
 
 <style lang="scss">
-	h1, h2 {
-		font-family: 'Caesar Dressing', system-ui;
+	.title {
+		font-family: 'Spectral SC', system-ui;
 		text-shadow: 2px 2px 6px #000;
 	}
 
-	h1 {
+	.title.first {
 		font-size: 72px;
-		margin-bottom: -50px;
 	}
 
-	h2 {
+	.title.second {
 		font-size: 72px;
-		margin-top: -50px;
 	}
 
-	.video {
-		width: 100%;
-		max-width: 100%;
-		min-width: 100%;
+	img {
+		margin: -64px auto -43px;
+		flex: 0;
+		max-width: 550px;
 	}
 
-	.content {
-		position: absolute;
-		inset: 0;
-		display: flex;
+	.title-slide {
+		height: 100%;
+		display: flex !important;
 		flex-direction: column;
-		align-items: center;
-		justify-content: flex-end;
-		padding-bottom: 50px;
-
-		img {
-			margin: 0;
-			flex: 0;
-			max-width: 671px;
-		}
+		justify-content: end;
 	}
 </style>
