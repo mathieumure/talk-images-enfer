@@ -1,27 +1,162 @@
-# Reveal.js + Astro
+# Talk Images Enfer
 
-Minimalist template for presentations on the web.
+Monorepo for managing and serving Hades Wiki images with a complete optimization pipeline.
 
-## Usage
+## Overview
 
-You have several options to start a new presentation using this template:
+This project provides tools to scrape, store, manage, and optimize images from the [Hades Wiki](https://hades.fandom.com/wiki/Hades_Wiki) for presentation and web use.
 
-- Click on the button 'Use this template' above, or
-- Clone the repo : `git clone git@github.com:jsulpis/slides-template.git`, or
-- Use [degit](https://www.npmjs.com/package/degit) (get a copy without cloning): `pnpm dlx degit jsulpis/slides-template my-talk`
-
-## UI Framework
-
-For the specific cases where you need one, you can add one of the [frameworks](https://docs.astro.build/en/guides/integrations-guide/) supported by Astro.
-
-For instance:
+## Architecture
 
 ```
-pnpm astro add svelte
+talk-images-enfer/
+├── packages/
+│   ├── image-scraper/     # Wiki image scraping tool
+│   └── cms/               # Strapi CMS with image optimization
+└── presentation/          # Reveal.js slides (Astro)
 ```
 
-or
+## Packages
+
+### 📥 [@talk-images/image-scraper](./packages/image-scraper)
+
+Automated scraper that downloads and organizes Hades Wiki images.
+
+**Features:**
+- Recursive category exploration
+- 1,038 images scraped (42MB)
+- Git LFS storage
+- Organized by Wiki categories
+
+**Quick Start:**
+```bash
+cd packages/image-scraper
+pnpm install
+pnpm start
+```
+
+[Read more →](./packages/image-scraper/README.md)
+
+### 📦 [@talk-images/cms](./packages/cms)
+
+Complete image management and optimization stack powered by Strapi.
+
+**Stack:**
+- **Strapi CMS** - Content and media management
+- **PostgreSQL** - Database backend
+- **Scaleway S3** - Cloud storage
+- **Imgproxy** - On-demand image processing
+- **Varnish** - HTTP cache layer
+
+**Features:**
+- On-demand image resizing and format conversion
+- WebP optimization with quality control
+- 24h cache with < 50ms delivery for cached images
+- Admin panel for image organization
+
+**Quick Start:**
+```bash
+cd packages/cms
+cp .env.example .env
+# Edit .env with your Scaleway credentials
+docker compose up -d
+```
+
+[Read more →](./packages/cms/README.md)
+
+## Quick Start
+
+### Prerequisites
+
+- **Node.js** 20+ and **pnpm** 8+
+- **Docker** and Docker Compose (for CMS)
+- **Git LFS** (for working with scraped images)
+
+### Installation
 
 ```bash
-pnpm astro add react tailwind
+# Clone the repository
+git clone git@github.com:mathieumure/talk-images-enfer.git
+cd talk-images-enfer
+
+# Install dependencies (all packages)
+pnpm install
+
+# Install Git LFS for images
+brew install git-lfs
+git lfs install
 ```
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed setup instructions.
+
+### Development
+
+```bash
+# Run presentation dev server
+pnpm dev
+
+# Start image scraper
+pnpm --filter @talk-images/image-scraper start
+
+# Start CMS (Docker)
+pnpm --filter @talk-images/cms docker:up
+```
+
+## Image Optimization Examples
+
+Once the CMS is running, you can process images on-demand:
+
+```bash
+# Original
+http://localhost:8080/insecure/plain/https://strapi-assets.s3.fr-par.scw.cloud/Zeus_symbol.png
+
+# Thumbnail 300x300
+http://localhost:8080/insecure/resize:fill:300:300/plain/https://strapi-assets.s3.fr-par.scw.cloud/Zeus_symbol.png
+
+# Responsive WebP
+http://localhost:8080/insecure/resize:fit:800:0/format:webp/plain/https://strapi-assets.s3.fr-par.scw.cloud/Zeus_symbol.png
+```
+
+## Project Structure
+
+```
+talk-images-enfer/
+├── packages/
+│   ├── image-scraper/
+│   │   ├── src/              # Scraper source code
+│   │   ├── images/           # Downloaded images (Git LFS)
+│   │   └── README.md
+│   └── cms/
+│       ├── config/           # Strapi configuration
+│       ├── docker-compose.yml # 4-service stack
+│       ├── default.vcl       # Varnish cache config
+│       └── README.md
+├── src/
+│   └── slides/               # Presentation slides
+├── public/                   # Static assets
+├── .gitattributes            # Git LFS configuration
+├── pnpm-workspace.yaml       # Monorepo workspace config
+└── README.md
+```
+
+## Tech Stack
+
+- **Monorepo**: pnpm workspaces
+- **Presentation**: Astro + Reveal.js
+- **Scraper**: TypeScript + Cheerio + Node Fetch
+- **CMS**: Strapi 5 + PostgreSQL + Scaleway S3
+- **Image Processing**: Imgproxy + Varnish Cache
+- **Containerization**: Docker + Docker Compose
+- **Storage**: Git LFS for binary assets
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines on:
+- Setting up the development environment
+- Running the project locally
+- Submitting pull requests
+- Code conventions
+
+## License
+
+MIT

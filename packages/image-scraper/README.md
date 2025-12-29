@@ -1,18 +1,28 @@
-# image-scraper
+# @talk-images/image-scraper
 
-Tool to scrape and download images from the [Hades Wiki](https://hades.fandom.com/wiki/Hades_Wiki).
+Automated scraper to download and organize images from the [Hades Wiki](https://hades.fandom.com/wiki/Hades_Wiki).
 
 ## Overview
 
 This scraper navigates through the [Category:Images](https://hades.fandom.com/wiki/Category:Images) page and all its subcategories to download game assets including:
-- Character portraits
+- Character portraits and artwork
 - Achievement icons
-- Boon icons
-- Weapon images
+- Boon icons from all Gods
+- Weapon images and aspects
+- Keepsake icons
+- Resource icons
+- Status effect icons
 - Concept art
 - And more...
 
-All images are saved in the `images/` folder, organized by category in subdirectories.
+All images are saved in the `images/` directory, organized by category in subdirectories.
+
+## Current Dataset
+
+The repository includes **1,038 scraped images** (42MB total) tracked with Git LFS:
+- **Average size**: ~38KB per image
+- **Formats**: PNG, JPG, WebP
+- **Organization**: Categorized in subdirectories matching Wiki categories
 
 ## Installation
 
@@ -56,6 +66,34 @@ images/
 └── ...
 ```
 
-## Note
+## Git LFS Storage
 
-Images are not versioned with git (see `.gitignore`).
+Images are tracked with **Git LFS** (Large File Storage) for efficient version control of binary files. This allows us to:
+- Keep the Git repository lightweight
+- Version control the complete image dataset
+- Share images across the team efficiently
+
+### Prerequisites for Contributors
+
+If you plan to contribute or update images, you'll need Git LFS installed:
+
+```bash
+# macOS
+brew install git-lfs
+
+# Initialize Git LFS in the repo
+git lfs install
+```
+
+### How It Works
+
+All files in `images/**` are automatically tracked by Git LFS via `.gitattributes`. When you clone the repository:
+- Small pointer files are downloaded initially
+- Actual images are fetched from LFS storage on demand
+- Full images are available when needed
+
+### Storage Stats
+
+- **Total size**: 42MB
+- **Number of files**: 1,038
+- **LFS tracking pattern**: `packages/image-scraper/images/**`
