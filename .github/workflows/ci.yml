@@ -35,3 +35,6 @@ jobs:
 
       - name: Lint image-scraper package
         run: pnpm --filter @talk-images/image-scraper lint
+
+      - name: Build CMS package
+        run: pnpm --filter @talk-images/cms build

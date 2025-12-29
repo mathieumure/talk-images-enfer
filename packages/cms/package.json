@@ -1,0 +1,35 @@
+{
+  "name": "@talk-images/cms",
+  "version": "0.1.0",
+  "description": "Strapi CMS for managing Hades wiki scraped images",
+  "private": true,
+  "scripts": {
+    "develop": "strapi develop",
+    "start": "strapi start",
+    "build": "strapi build",
+    "strapi": "strapi",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f strapi",
+    "docker:restart": "docker-compose restart strapi"
+  },
+  "dependencies": {
+    "@strapi/provider-upload-aws-s3": "5.33.1",
+    "@strapi/strapi": "5.33.1",
+    "pg": "8.13.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.2",
+    "styled-components": "^6.1.19"
+  },
+  "devDependencies": {
+    "@strapi/typescript-utils": "5.33.1",
+    "@types/node": "20.19.27",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=18.0.0 <=20.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
+}
