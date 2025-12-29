@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: strapi-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME:-strapi}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-strapi}
+      POSTGRES_DB: ${DATABASE_NAME:-strapi}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U strapi']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  strapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: strapi-cms
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_CLIENT: postgres
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: ${DATABASE_NAME:-strapi}
+      DATABASE_USERNAME: ${DATABASE_USERNAME:-strapi}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-strapi}
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+      APP_KEYS: ${APP_KEYS}
+      API_TOKEN_SALT: ${API_TOKEN_SALT}
+      TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT}
+      NODE_ENV: ${NODE_ENV:-development}
+      SCALEWAY_ACCESS_KEY_ID: ${SCALEWAY_ACCESS_KEY_ID}
+      SCALEWAY_SECRET_ACCESS_KEY: ${SCALEWAY_SECRET_ACCESS_KEY}
+      SCALEWAY_REGION: ${SCALEWAY_REGION:-fr-par}
+      SCALEWAY_ENDPOINT: ${SCALEWAY_ENDPOINT:-https://s3.fr-par.scw.cloud}
+      SCALEWAY_BUCKET: ${SCALEWAY_BUCKET}
+    ports:
+      - '1337:1337'
+    volumes:
+      - ./config:/app/config
+      - ./src:/app/src
+      - ./public/uploads:/app/public/uploads
+      - ./database:/app/database
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  imgproxy:
+    image: darthsim/imgproxy:latest
+    container_name: strapi-imgproxy
+    restart: unless-stopped
+    environment:
+      IMGPROXY_ENABLE_WEBP_DETECTION: 'true'
+      IMGPROXY_ENFORCE_WEBP: 'false'
+      IMGPROXY_QUALITY: 85
+      IMGPROXY_GZIP_COMPRESSION: 5
+      IMGPROXY_MAX_SRC_RESOLUTION: 50
+    expose:
+      - '8080'
+    healthcheck:
+      test: ['CMD', 'imgproxy', 'health']
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  varnish:
+    image: varnish:stable
+    container_name: strapi-varnish-cache
+    restart: unless-stopped
+    ports:
+      - '8080:80'
+    volumes:
+      - ./default.vcl:/etc/varnish/default.vcl:ro
+    environment:
+      VARNISH_SIZE: 512M
+    command: ['-p', 'default_ttl=86400', '-p', 'default_grace=3600']
+    depends_on:
+      - imgproxy
+    tmpfs:
+      - /var/lib/varnish:exec
+
+volumes:
+  postgres-data:
