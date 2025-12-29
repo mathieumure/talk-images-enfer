@@ -1,0 +1,28 @@
+{
+  "name": "@talk-images/image-scraper",
+  "version": "0.1.0",
+  "description": "Tool for scraping images from websites",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "tsx src/index.ts"
+  },
+  "keywords": [
+    "scraper",
+    "images",
+    "web-scraping"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "20.19.27",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3"
+  },
+  "dependencies": {
+    "cheerio": "1.1.2",
+    "node-fetch": "3.3.2"
+  }
+}
