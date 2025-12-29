@@ -2,9 +2,6 @@
 dist/
 *.tsbuildinfo
 
-# Images folder
-images/
-
 # Dependencies
 node_modules/
 
