@@ -58,7 +58,7 @@ The infrastructure provides a complete, production-ready image service using Sca
 
 **Configuration**:
 - Region: `fr-par` (Paris, France)
-- Bucket name: `talk-images-prod-images`
+- Bucket name: `talk-images-prod-images-bucket`
 - Public access: Enabled
 - Versioning: Disabled (to reduce costs)
 

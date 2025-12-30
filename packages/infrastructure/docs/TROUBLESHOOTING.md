@@ -107,13 +107,13 @@ Create the state bucket manually:
 
 ```bash
 # Using AWS CLI with Scaleway endpoint
-aws s3 mb s3://talk-images-terraform-state \
+aws s3 mb s3://talk-images-enfer-terraform-state \
   --endpoint-url https://s3.fr-par.scw.cloud \
   --region fr-par
 
 # Enable encryption
 aws s3api put-bucket-encryption \
-  --bucket talk-images-terraform-state \
+  --bucket talk-images-enfer-terraform-state \
   --endpoint-url https://s3.fr-par.scw.cloud \
   --server-side-encryption-configuration '{
     "Rules": [{
@@ -308,7 +308,7 @@ Error downloading source image
    export AWS_ACCESS_KEY_ID="<imgproxy-key>"
    export AWS_SECRET_ACCESS_KEY="<imgproxy-secret>"
 
-   aws s3 ls s3://talk-images-prod-images/ \
+   aws s3 ls s3://talk-images-prod-images-bucket/ \
      --endpoint-url https://s3.fr-par.scw.cloud
    ```
 
@@ -377,13 +377,13 @@ Error: State file appears to be corrupted
 
 1. **Backup current state**:
    ```bash
-   aws s3 cp s3://talk-images-terraform-state/production/ ./state-backup/ \
+   aws s3 cp s3://talk-images-enfer-terraform-state/production/ ./state-backup/ \
      --recursive --endpoint-url https://s3.fr-par.scw.cloud
    ```
 
 2. **Restore from backup** (if available):
    ```bash
-   aws s3 cp ./state-backup/ s3://talk-images-terraform-state/production/ \
+   aws s3 cp ./state-backup/ s3://talk-images-enfer-terraform-state/production/ \
      --recursive --endpoint-url https://s3.fr-par.scw.cloud
    ```
 
@@ -505,7 +505,7 @@ inputs = {
 2. **Clean up old images**:
    ```bash
    # Delete unused images
-   aws s3 rm s3://talk-images-prod-images/old/ --recursive \
+   aws s3 rm s3://talk-images-prod-images-bucket/old/ --recursive \
      --endpoint-url https://s3.fr-par.scw.cloud
    ```
 
@@ -570,15 +570,15 @@ export AWS_ACCESS_KEY_ID="your-key"
 export AWS_SECRET_ACCESS_KEY="your-secret"
 
 # List bucket
-aws s3 ls s3://talk-images-prod-images/ \
+aws s3 ls s3://talk-images-prod-images-bucket/ \
   --endpoint-url https://s3.fr-par.scw.cloud
 
 # Upload test file
-aws s3 cp test.jpg s3://talk-images-prod-images/ \
+aws s3 cp test.jpg s3://talk-images-prod-images-bucket/ \
   --endpoint-url https://s3.fr-par.scw.cloud
 
 # Download test file
-aws s3 cp s3://talk-images-prod-images/test.jpg . \
+aws s3 cp s3://talk-images-prod-images-bucket/test.jpg . \
   --endpoint-url https://s3.fr-par.scw.cloud
 ```
 
@@ -592,7 +592,7 @@ CONTAINER_URL=$(cd environments/production/serverless-container && terragrunt ou
 curl "${CONTAINER_URL}/health"
 
 # Process test image
-curl "${CONTAINER_URL}/resize:fill:300:200/s3://talk-images-prod-images/test.jpg" \
+curl "${CONTAINER_URL}/resize:fill:300:200/s3://talk-images-prod-images-bucket/test.jpg" \
   --output test-processed.jpg
 ```
 
@@ -660,6 +660,6 @@ Report issues in this repository with:
 3. **Regular state backups**:
    ```bash
    # Download state weekly
-   aws s3 sync s3://talk-images-terraform-state/ ./state-backup/ \
+   aws s3 sync s3://talk-images-enfer-terraform-state/ ./state-backup/ \
      --endpoint-url https://s3.fr-par.scw.cloud
    ```

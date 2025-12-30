@@ -207,14 +207,14 @@ Terragrunt handles dependencies automatically:
    export AWS_ACCESS_KEY_ID="your-scaleway-access-key"
    export AWS_SECRET_ACCESS_KEY="your-scaleway-secret-key"
 
-   aws s3 cp test.jpg s3://talk-images-prod-images/ \
+   aws s3 cp test.jpg s3://talk-images-prod-images-bucket/ \
      --endpoint-url https://s3.fr-par.scw.cloud
    ```
 
 4. **Test Image Processing**
    ```bash
    # Process test image
-   curl "${CONTAINER_URL}/resize:fill:300:200/s3://talk-images-prod-images/test.jpg" \
+   curl "${CONTAINER_URL}/resize:fill:300:200/s3://talk-images-prod-images-bucket/test.jpg" \
      --output processed.jpg
    ```
 
@@ -380,21 +380,21 @@ If state is corrupted:
 2. **Backup to Another Region**:
    ```bash
    # Use s3cmd or rclone for cross-region backup
-   rclone sync scaleway:talk-images-prod-images/ \
+   rclone sync scaleway:talk-images-prod-images-bucket/ \
      scaleway-backup:talk-images-backup/
    ```
 
 ### State File Recovery
 
 State file is stored in Scaleway S3:
-- Bucket: `talk-images-terraform-state`
+- Bucket: `talk-images-enfer-terraform-state`
 - Encryption: Enabled
 - Location: `fr-par`
 
 To recover:
 ```bash
 # Download state manually if needed
-aws s3 cp s3://talk-images-terraform-state/production/terraform.tfstate . \
+aws s3 cp s3://talk-images-enfer-terraform-state/production/terraform.tfstate . \
   --endpoint-url https://s3.fr-par.scw.cloud
 ```
 
@@ -436,7 +436,7 @@ To minimize costs without destroying infrastructure:
 2. **Clean up old S3 data**:
    ```bash
    # Delete unused images
-   aws s3 rm s3://talk-images-prod-images/old/ --recursive \
+   aws s3 rm s3://talk-images-prod-images-bucket/old/ --recursive \
      --endpoint-url https://s3.fr-par.scw.cloud
    ```
 
