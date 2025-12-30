@@ -74,6 +74,9 @@ inputs = {
   port        = 8080
   http_option = "enabled"
 
+	# Base url
+	imgproxy_base_url = dependency.object_storage.outputs.bucket_api_endpoint
+
   # Auto-deploy
   auto_deploy = true
 

@@ -1,11 +1,6 @@
 variable "project_id" {
   description = "Scaleway project ID where resources will be created"
   type        = string
-
-  validation {
-    condition     = can(regex("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", var.project_id))
-    error_message = "Project ID must be a valid UUID."
-  }
 }
 
 variable "imgproxy_app_name" {

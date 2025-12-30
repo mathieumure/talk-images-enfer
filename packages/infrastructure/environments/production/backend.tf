@@ -2,13 +2,14 @@
 terraform {
   backend "s3" {
     bucket                      = "talk-images-enfer-terraform-state"
-    encrypt                     = true
+    encrypt                     = false
     endpoint                    = "https://s3.fr-par.scw.cloud"
     key                         = "production/terraform.tfstate"
     region                      = "fr-par"
     skip_credentials_validation = true
     skip_metadata_api_check     = true
     skip_region_validation      = true
+    skip_s3_checksum            = true
     use_path_style              = false
   }
 }

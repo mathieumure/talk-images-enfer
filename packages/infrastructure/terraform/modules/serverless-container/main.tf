@@ -59,6 +59,7 @@ resource "scaleway_container" "imgproxy" {
       IMGPROXY_USE_S3      = "true"
       IMGPROXY_S3_ENDPOINT = var.s3_endpoint
       IMGPROXY_S3_REGION   = var.s3_region
+      IMGPROXY_BASE_URL    = var.imgproxy_base_url
 
       # Image processing settings
       IMGPROXY_ENABLE_WEBP_DETECTION = var.imgproxy_enable_webp_detection

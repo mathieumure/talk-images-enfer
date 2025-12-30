@@ -271,6 +271,12 @@ variable "imgproxy_process_timeout" {
   default     = 10
 }
 
+variable "imgproxy_base_url" {
+  description = "Base url used by image proxy"
+  type        = string
+  default     = ""
+}
+
 # Additional configuration
 variable "additional_environment_variables" {
   description = "Additional environment variables"

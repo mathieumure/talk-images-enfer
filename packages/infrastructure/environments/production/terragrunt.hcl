@@ -36,12 +36,5 @@ inputs = {
   name_prefix = local.name_prefix
 
   # Merge environment tags with common tags
-  tags = merge(
-    local.env_tags,
-    {
-      ManagedBy   = "Terragrunt"
-      Project     = "talk-images"
-      Environment = local.environment
-    }
-  )
+  tags = {}
 }

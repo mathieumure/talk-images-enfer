@@ -15,12 +15,12 @@ output "bucket_region" {
 
 output "bucket_endpoint" {
   description = "The S3 endpoint URL for the bucket"
-  value       = "https://s3.${scaleway_object_bucket.images.region}.scw.cloud"
+  value       = "https://s3.fr-par.scw.cloud"
 }
 
 output "bucket_api_endpoint" {
   description = "The full S3 API endpoint for the bucket"
-  value       = "https://s3.${scaleway_object_bucket.images.region}.scw.cloud/${scaleway_object_bucket.images.name}"
+  value       = "https://${scaleway_object_bucket.images.name}.s3.fr-par.scw.cloud/"
 }
 
 output "bucket_arn" {

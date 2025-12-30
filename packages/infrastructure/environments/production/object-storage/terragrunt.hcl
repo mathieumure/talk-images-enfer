@@ -16,7 +16,7 @@ locals {
   env_vars = read_terragrunt_config("${get_terragrunt_dir()}/../terragrunt.hcl")
 
   # Bucket name must be globally unique
-  bucket_name = "${local.env_vars.inputs.name_prefix}-images"
+  bucket_name = "${local.env_vars.inputs.name_prefix}-images-bucket"
   region      = local.env_vars.inputs.region
   tags        = local.env_vars.inputs.tags
 }
