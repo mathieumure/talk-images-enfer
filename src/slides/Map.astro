@@ -1,0 +1,52 @@
+---
+import Slide from "../components/Slide.astro";
+---
+
+<Slide data-background-color="black">
+	<div class="container">
+		<img src="https://talk-assets.s3.fr-par.scw.cloud/hell_map_start.webp">
+		<img src="https://talk-assets.s3.fr-par.scw.cloud/hades-pin.webp" class="pin">
+	</div>
+</Slide>
+
+<style lang="scss">
+	@keyframes slideDown {
+		0% {
+			transform: translateY(0);
+		}
+		100% {
+			transform: translateY(calc(-100% + 90vh));
+		}
+	}
+
+	@keyframes clip {
+		0% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
+	}
+
+	img {
+		width: 100%;
+	}
+
+	.present {
+		.container {
+			animation: slideDown 2s ease-in-out forwards;
+		}
+	}
+
+	.container {
+		position: relative;
+	}
+
+	.pin {
+		position: absolute;
+		bottom: 13.5%;
+		left: 48%;
+		width: 2.5%;
+		animation: clip 0.5s alternate infinite;
+	}
+</style>

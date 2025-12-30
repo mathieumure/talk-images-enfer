@@ -1,0 +1,61 @@
+---
+type Props = {
+	title: string;
+	subtitle?: string;
+	class?: string;
+}
+
+const { title, subtitle, class: className, ...other } = Astro.props;
+---
+
+<div class:list={['container', className]} {...other}>
+	<img src="https://talk-assets.s3.fr-par.scw.cloud/hades_2_text_box.png">
+	<h2>{title}</h2>
+	{subtitle && <h3>{subtitle}</h3>}
+	<div class="text-content">
+		<slot />
+	</div>
+</div>
+
+<style lang="scss">
+	.container {
+		container-type: inline-size;
+		position: relative;
+
+		img {
+			margin: 0 auto;
+		}
+
+		h2 {
+			position: absolute;
+			top: 9.7cqw;
+			left: 18cqw;
+			font-family: 'Caesar Dressing', system-ui;
+			font-size: 3.5cqw;
+		}
+		h3 {
+			position: absolute;
+			top: 13.6cqw;
+			left: 18cqw;
+			font-family: "P22Underground", system-ui;
+			color: #6aa48e;
+			font-size: 2.6cqw;
+		}
+		.text-content {
+			font-family: 'Lato', system-ui;
+			font-size: 3.2cqw;
+			font-style: italic;
+			position: absolute;
+			color: #cecece;
+			top: 20cqw;
+			left: 18cqw;
+			width: 73cqw;
+			height: 20cqw;
+			text-align: start;
+			padding-top: 1.6cqw;
+			:global(p) {
+				margin: 0;
+			}
+		}
+	}
+</style>

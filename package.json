@@ -10,6 +10,7 @@
 	},
 	"dependencies": {
 		"@fontsource/caesar-dressing": "^5.2.8",
+		"@fontsource/lato": "^5.2.7",
 		"@fontsource/spectral-sc": "^5.2.8",
 		"astro": "5.16.6",
 		"reveal.js": "5.2.1"

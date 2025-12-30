@@ -2,6 +2,7 @@
 const { title } = Astro.props;
 import '@fontsource/caesar-dressing';
 import '@fontsource/spectral-sc';
+import '@fontsource/lato';
 ---
 
 <!doctype html>
@@ -46,8 +47,16 @@ import '@fontsource/spectral-sc';
 	@import "reveal.js/dist/theme/night.css";
 	@import "../../src/styles/highlightjs-theme-vs2015.css";
 
+	@font-face {
+		font-family: 'P22Underground';
+		src: url('/fonts/P22Underground-BkP.woff2') format('woff2');
+		font-weight: normal;
+		font-style: normal;
+		font-display: swap;
+	}
+
 	main,
 	.slide-background-content {
-		background: linear-gradient(#133055, #0c1a2a);
+		background: black;
 	}
 </style>

@@ -1,0 +1,35 @@
+---
+import Slide from "../components/Slide.astro";
+import TextBox from '../components/TextBox.astro'
+---
+
+<Slide class="speaker-slide">
+	<div class="container">
+		<img src="https://talk-assets.s3.fr-par.scw.cloud/AntoineCharon.webp" class="antoine-charon">
+		<TextBox title="Antoine Charon" subtitle="Nocher des stacks" class="caption-container">
+			<p>Tu utilises encore le bitmap ?!!</p>
+			<p>Nnnrrrraaauuuggghhh....</p>
+		</TextBox>
+	</div>
+</Slide>
+
+<style lang="scss">
+	.container {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.antoine-charon {
+		flex-shrink: 0;
+		width: auto;
+		max-width: min(40vw, 700px);
+		max-height: 100vh;
+	}
+
+	.caption-container {
+		flex-grow: 1;
+		transform: translateX(-33px);
+	}
+</style>

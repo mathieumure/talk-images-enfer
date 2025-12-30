@@ -1,0 +1,37 @@
+---
+import Slide from "../components/Slide.astro";
+import TextBox from "../components/TextBox.astro";
+---
+
+<Slide class="speaker-slide">
+	<div class="container">
+		<img src="https://talk-assets.s3.fr-par.scw.cloud/MathieuMort.webp" class="mathieu-mort">
+		<TextBox title="Mathieu Mort" subtitle="La mort incarnée" class="caption-container">
+			<p>Il avait poussé toutes ses images en 4k sur le repo git aussi...</p>
+		</TextBox>
+	</div>
+</Slide>
+
+<style lang="scss">
+	.container {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-direction: column;
+		height: 90vh;
+	}
+
+	.mathieu-mort {
+		flex-shrink: 0;
+		width: auto;
+		height: 80%;
+	}
+
+	.caption-container {
+		flex-grow: 1;
+		transform: translateY(-50%);
+		aspect-ratio: 2 / 1;
+		width: 60%;
+	}
+</style>

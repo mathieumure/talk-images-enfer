@@ -11,6 +11,9 @@ importers:
       '@fontsource/caesar-dressing':
         specifier: ^5.2.8
         version: 5.2.8
+      '@fontsource/lato':
+        specifier: ^5.2.7
+        version: 5.2.7
       '@fontsource/spectral-sc':
         specifier: ^5.2.8
         version: 5.2.8
@@ -1105,6 +1108,9 @@ packages:
 
   '@fontsource/caesar-dressing@5.2.8':
     resolution: {integrity: sha512-QIAeipBUhYTY7PbfaNoDgvxU/yQGaq3oAyT2y9mdUbTt3Zjmww37wVuAjmiIu+8L4KAyyXsGjZJAgVyIbZ3KJg==}
+
+  '@fontsource/lato@5.2.7':
+    resolution: {integrity: sha512-k5mum1ADbDW5cTw1Ett1eQVWeoZ6gq0ct6SFBibEhB4LRxhniChJZTBgd6ph5yBxLkN1fcnsnmicBNA4S/3nbw==}
 
   '@fontsource/spectral-sc@5.2.8':
     resolution: {integrity: sha512-MTHbE5H9JW8QoEscAE2YoFx4ko8TVkaEhfepwFhuOP6K4sQMp8XbkYCplySfwTS3ptrNiVlM0Y0byqdByqx+YQ==}
@@ -9332,6 +9338,8 @@ snapshots:
   '@floating-ui/utils@0.2.10': {}
 
   '@fontsource/caesar-dressing@5.2.8': {}
+
+  '@fontsource/lato@5.2.7': {}
 
   '@fontsource/spectral-sc@5.2.8': {}
 
