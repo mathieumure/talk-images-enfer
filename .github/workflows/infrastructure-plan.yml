@@ -44,8 +44,6 @@ jobs:
           SCALEWAY_PROJECT_ID: ${{ secrets.SCALEWAY_PROJECT_ID }}
         run: |
           echo "Credentials configured from secrets"
-          echo "AWS_ACCESS_KEY_ID length: ${#SCALEWAY_ACCESS_KEY}"
-          echo "Secrets present: ACCESS_KEY=$([ -n \"$SCALEWAY_ACCESS_KEY\" ] && echo 'yes' || echo 'no') SECRET_KEY=$([ -n \"$SCALEWAY_SECRET_KEY\" ] && echo 'yes' || echo 'no')"
 
       - name: Terragrunt Init
         env:
