@@ -6,7 +6,7 @@ Strapi CMS for managing Hades wiki scraped images.
 
 This package provides a Strapi headless CMS to organize, manage and serve the images scraped from the [Hades Wiki](https://hades.fandom.com/wiki/Hades_Wiki) by the `@talk-images/image-scraper` package.
 
-The CMS runs in Docker containers with PostgreSQL as the database backend, Scaleway S3 for image storage, imgproxy for on-demand image optimization, and Varnish for caching, providing a robust and scalable solution for managing game assets.
+The CMS runs in Docker containers with PostgreSQL as the database backend, LocalStack S3 for local image storage, imgproxy for on-demand image optimization, and Varnish for caching, providing a fully local development environment for managing game assets.
 
 ### Architecture Diagram
 
@@ -19,9 +19,8 @@ flowchart TB
         Imgproxy[🖼️ Imgproxy<br/>Image Processing<br/>WebP Detection<br/>Quality: 85]
         Strapi[📦 Strapi CMS<br/>Port 1337<br/>Admin & API]
         Postgres[(🗄️ PostgreSQL<br/>Port 5432<br/>Database)]
+        LocalStack[☁️ LocalStack S3<br/>Port 4566<br/>Local S3 Emulator]
     end
-
-    S3[☁️ Scaleway S3<br/>Object Storage<br/>strapi-assets]
 
     User -->|Image Request<br/>resize/format/optimize| Varnish
     User -->|Admin/API| Strapi
@@ -29,25 +28,25 @@ flowchart TB
     Varnish -->|Cache MISS| Imgproxy
     Varnish -.->|Cache HIT<br/>Instant delivery| User
 
-    Imgproxy -->|Fetch original| S3
+    Imgproxy -->|Fetch original| LocalStack
     Imgproxy -->|Processed image| Varnish
 
-    Strapi -->|Upload images| S3
+    Strapi -->|Upload images| LocalStack
     Strapi -->|Store metadata| Postgres
 
     style Varnish fill:#f9f,stroke:#333,stroke-width:2px
-    style S3 fill:#bbf,stroke:#333,stroke-width:2px
+    style LocalStack fill:#bbf,stroke:#333,stroke-width:2px
     style User fill:#9f9,stroke:#333,stroke-width:2px
 ```
 
 ### Key Features
 
 - **📝 Content Management**: Strapi headless CMS for organizing images
-- **☁️ Cloud Storage**: Scaleway S3 for reliable image storage
+- **☁️ Local S3 Storage**: LocalStack for local S3-compatible storage
 - **🖼️ Image Optimization**: Imgproxy for on-demand resizing, compression, and format conversion
 - **⚡ Performance**: Varnish cache for lightning-fast image delivery
 - **🗄️ Database**: PostgreSQL for robust data persistence
-- **🐳 Docker**: Fully containerized for easy deployment
+- **🐳 Docker**: Fully containerized for easy local development
 
 ## Prerequisites
 
@@ -152,7 +151,7 @@ pnpm develop
 
 ### Docker Services
 
-The stack consists of 4 containerized services:
+The stack consists of 5 containerized services:
 
 **1. PostgreSQL (postgres)**
 - **Image**: `postgres:16-alpine`
@@ -161,19 +160,30 @@ The stack consists of 4 containerized services:
 - **Persistence**: Docker volume `postgres-data`
 - **Health Check**: `pg_isready` every 10s
 
-**2. Strapi CMS (strapi)**
+**2. LocalStack S3 (localstack)**
+- **Image**: `localstack/localstack:latest`
+- **Port**: 4566
+- **Purpose**: Local S3-compatible storage emulator
+- **Persistence**: Docker volume `localstack-data`
+- **Features**:
+  - S3 API compatibility
+  - Automatic bucket creation via init script
+  - Data persistence across container restarts
+  - No cloud credentials required
+
+**3. Strapi CMS (strapi)**
 - **Image**: Custom (built from local Dockerfile)
 - **Port**: 1337
 - **Purpose**: Headless CMS for content and media management
-- **Connected to**: PostgreSQL, Scaleway S3
+- **Connected to**: PostgreSQL, LocalStack S3
 - **Volumes**: Config, src, uploads mounted for live development
 - **Features**:
   - Admin panel at `/admin`
   - REST API at `/api`
-  - File upload to Scaleway S3
+  - File upload to LocalStack S3
   - CSP configured for S3 image loading
 
-**3. Imgproxy (imgproxy)**
+**4. Imgproxy (imgproxy)**
 - **Image**: `darthsim/imgproxy:latest`
 - **Port**: 8080 (internal only, accessed via Varnish)
 - **Purpose**: On-demand image processing and optimization
@@ -186,9 +196,9 @@ The stack consists of 4 containerized services:
   - Resize images (`resize:fill:WxH`, `resize:fit:WxH`)
   - Convert formats (WebP, JPEG, PNG)
   - Optimize quality
-  - Fetch from Scaleway S3
+  - Fetch from LocalStack S3
 
-**4. Varnish Cache (varnish)**
+**5. Varnish Cache (varnish)**
 - **Image**: `varnish:stable`
 - **Port**: 8080 (exposed to host)
 - **Purpose**: HTTP cache layer for processed images
@@ -217,7 +227,9 @@ packages/cms/
 ├── database/           # Database files and migrations
 ├── public/             # Static files and uploads
 │   └── uploads/        # Uploaded images (gitignored)
-├── docker-compose.yml  # Docker orchestration (4 services)
+├── localstack-init/    # LocalStack initialization scripts
+│   └── init-s3.sh      # Auto-create S3 bucket on startup
+├── docker-compose.yml  # Docker orchestration (5 services)
 ├── Dockerfile          # Strapi container definition
 ├── default.vcl         # Varnish cache configuration
 ├── .env                # Environment variables (gitignored)
@@ -250,43 +262,47 @@ Suggested content type structure for managing scraped images:
 - `description` (text)
 - `images` (relation to Image)
 
-## Scaleway S3 Configuration
+## LocalStack S3 Configuration
 
-This CMS is configured to use Scaleway Object Storage (S3-compatible) for uploading images.
+This CMS uses LocalStack to emulate S3 storage locally, eliminating the need for cloud credentials and making it perfect for demos and local development.
 
-### Setup Scaleway S3
+### How It Works
 
-1. **Create a Scaleway account** at https://www.scaleway.com
+1. **Automatic Setup**: When you start the containers with `pnpm docker:up`, LocalStack automatically:
+   - Starts an S3-compatible service on port 4566
+   - Runs the initialization script (`localstack-init/init-s3.sh`)
+   - Creates the `strapi-assets` bucket
+   - Persists data in a Docker volume
 
-2. **Create an Object Storage bucket:**
-   - Go to Object Storage in Scaleway console
-   - Create a new bucket (e.g., `hades-images`)
-   - Note the region (e.g., `fr-par`, `nl-ams`, `pl-waw`)
+2. **No Configuration Required**: The default `.env` file is already configured for LocalStack with test credentials.
 
-3. **Generate API credentials:**
-   - Go to "Project Settings" > "API Keys"
-   - Create a new API key
-   - Copy the Access Key ID and Secret Key
+### Accessing LocalStack S3
 
-4. **Update `.env` file:**
-   ```bash
-   SCALEWAY_ACCESS_KEY_ID=your-access-key-id
-   SCALEWAY_SECRET_ACCESS_KEY=your-secret-access-key
-   SCALEWAY_REGION=fr-par
-   SCALEWAY_ENDPOINT=https://s3.fr-par.scw.cloud
-   SCALEWAY_BUCKET=your-bucket-name
-   ```
+LocalStack S3 is accessible from:
+- **Within Docker network**: `http://localstack:4566`
+- **From host machine**: `http://localhost:4566`
 
-### Scaleway Regions
+### S3 Bucket URL Format
 
-Available endpoints:
-- Paris: `https://s3.fr-par.scw.cloud` (region: `fr-par`)
-- Amsterdam: `https://s3.nl-ams.scw.cloud` (region: `nl-ams`)
-- Warsaw: `https://s3.pl-waw.scw.cloud` (region: `pl-waw`)
+Images uploaded to LocalStack are accessible at:
+```
+http://localhost:4566/strapi-assets/[filename]
+```
 
-### Local vs S3 Upload
+### Testing LocalStack
 
-By default, files are uploaded to Scaleway S3. If you want to use local storage instead (for development), you can comment out the upload provider configuration in `config/plugins.ts`.
+You can verify LocalStack is working using the AWS CLI:
+
+```bash
+# List buckets
+aws --endpoint-url=http://localhost:4566 s3 ls
+
+# List objects in the bucket
+aws --endpoint-url=http://localhost:4566 s3 ls s3://strapi-assets/
+
+# Upload a test file
+aws --endpoint-url=http://localhost:4566 s3 cp test.png s3://strapi-assets/
+```
 
 ## Image Processing with Imgproxy
 
@@ -317,27 +333,27 @@ http://localhost:8080/insecure/[processing_options]/plain/[source_url]
 
 **Original image:**
 ```
-http://localhost:8080/insecure/plain/https://strapi-assets.s3.fr-par.scw.cloud/Zeus_symbol_0018ce86cc.png
+http://localhost:8080/insecure/plain/http://localhost:4566/strapi-assets/Zeus_symbol_0018ce86cc.png
 ```
 
 **Thumbnail 300x300:**
 ```
-http://localhost:8080/insecure/resize:fill:300:300/plain/https://strapi-assets.s3.fr-par.scw.cloud/Zeus_symbol_0018ce86cc.png
+http://localhost:8080/insecure/resize:fill:300:300/plain/http://localhost:4566/strapi-assets/Zeus_symbol_0018ce86cc.png
 ```
 
 **Responsive image 800px wide, WebP:**
 ```
-http://localhost:8080/insecure/resize:fit:800:0/format:webp/plain/https://strapi-assets.s3.fr-par.scw.cloud/Zeus_symbol_0018ce86cc.png
+http://localhost:8080/insecure/resize:fit:800:0/format:webp/plain/http://localhost:4566/strapi-assets/Zeus_symbol_0018ce86cc.png
 ```
 
 **High compression for mobile (quality 60, WebP):**
 ```
-http://localhost:8080/insecure/quality:60/format:webp/plain/https://strapi-assets.s3.fr-par.scw.cloud/Zeus_symbol_0018ce86cc.png
+http://localhost:8080/insecure/quality:60/format:webp/plain/http://localhost:4566/strapi-assets/Zeus_symbol_0018ce86cc.png
 ```
 
 **Multiple options combined:**
 ```
-http://localhost:8080/insecure/resize:fill:500:500/quality:70/format:webp/plain/https://strapi-assets.s3.fr-par.scw.cloud/Zeus_symbol_0018ce86cc.png
+http://localhost:8080/insecure/resize:fill:500:500/quality:70/format:webp/plain/http://localhost:4566/strapi-assets/Zeus_symbol_0018ce86cc.png
 ```
 
 ### Cache Headers
@@ -351,7 +367,7 @@ Varnish adds debug headers to help monitor cache performance:
 
 **Check cache status:**
 ```bash
-curl -I "http://localhost:8080/insecure/resize:fill:300:300/plain/https://strapi-assets.s3.fr-par.scw.cloud/your-image.png"
+curl -I "http://localhost:8080/insecure/resize:fill:300:300/plain/http://localhost:4566/strapi-assets/your-image.png"
 ```
 
 ### Performance
@@ -372,12 +388,13 @@ See `.env.example` for all available environment variables.
 - `JWT_SECRET` - Secret for user JWT
 - `DATABASE_*` - PostgreSQL connection details
 
-**Scaleway S3 Variables:**
-- `SCALEWAY_ACCESS_KEY_ID` - Your Scaleway access key
-- `SCALEWAY_SECRET_ACCESS_KEY` - Your Scaleway secret key
-- `SCALEWAY_REGION` - Scaleway region (fr-par, nl-ams, pl-waw)
-- `SCALEWAY_ENDPOINT` - S3 endpoint URL
-- `SCALEWAY_BUCKET` - Your bucket name
+**LocalStack S3 Variables:**
+- `AWS_ACCESS_KEY_ID` - Test credentials for LocalStack (default: `test`)
+- `AWS_SECRET_ACCESS_KEY` - Test credentials for LocalStack (default: `test`)
+- `AWS_REGION` - AWS region (default: `us-east-1`)
+- `AWS_ENDPOINT` - LocalStack endpoint URL (default: `http://localstack:4566`)
+- `AWS_BUCKET` - S3 bucket name (default: `strapi-assets`)
+- `AWS_FORCE_PATH_STYLE` - Use path-style URLs for S3 (required for LocalStack)
 
 **Security Note:** Never commit `.env` to version control. Always use strong random values in production.
 

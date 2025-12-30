@@ -7,20 +7,18 @@ export default [
       contentSecurityPolicy: {
         useDefaults: true,
         directives: {
-          'connect-src': ["'self'", 'https:'],
+          'connect-src': ["'self'", 'https:', 'http://localhost:4566'],
           'img-src': [
             "'self'",
             'data:',
             'blob:',
-            'https://s3.fr-par.scw.cloud',
-            'strapi-assets.s3.fr-par.scw.cloud',
+            'http://localhost:4566',
           ],
           'media-src': [
             "'self'",
             'data:',
             'blob:',
-            'https://s3.fr-par.scw.cloud',
-            'strapi-assets.s3.fr-par.scw.cloud',
+            'http://localhost:4566',
           ],
           upgradeInsecureRequests: null,
         },

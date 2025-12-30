@@ -40,11 +40,12 @@ services:
       API_TOKEN_SALT: ${API_TOKEN_SALT}
       TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT}
       NODE_ENV: ${NODE_ENV:-development}
-      SCALEWAY_ACCESS_KEY_ID: ${SCALEWAY_ACCESS_KEY_ID}
-      SCALEWAY_SECRET_ACCESS_KEY: ${SCALEWAY_SECRET_ACCESS_KEY}
-      SCALEWAY_REGION: ${SCALEWAY_REGION:-fr-par}
-      SCALEWAY_ENDPOINT: ${SCALEWAY_ENDPOINT:-https://s3.fr-par.scw.cloud}
-      SCALEWAY_BUCKET: ${SCALEWAY_BUCKET}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-test}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-test}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      AWS_ENDPOINT: ${AWS_ENDPOINT:-http://localstack:4566}
+      AWS_BUCKET: ${AWS_BUCKET:-strapi-assets}
+      AWS_FORCE_PATH_STYLE: ${AWS_FORCE_PATH_STYLE:-true}
     ports:
       - '1337:1337'
     volumes:
@@ -55,9 +56,30 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      localstack:
+        condition: service_healthy
+
+  localstack:
+    image: localstack/localstack:4.12.0
+    container_name: strapi-localstack
+    restart: unless-stopped
+    environment:
+      SERVICES: s3
+      DEBUG: 0
+      PERSISTENCE: 1
+    ports:
+      - '4566:4566'
+    volumes:
+      - ./localstack-init:/etc/localstack/init/ready.d
+      - localstack-data:/var/lib/localstack
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:4566/_localstack/health']
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   imgproxy:
-    image: darthsim/imgproxy:latest
+    image: darthsim/imgproxy:v3.30.0
     container_name: strapi-imgproxy
     restart: unless-stopped
     environment:
@@ -75,7 +97,7 @@ services:
       retries: 3
 
   varnish:
-    image: varnish:stable
+    image: varnish:7.7.3
     container_name: strapi-varnish-cache
     restart: unless-stopped
     ports:
@@ -88,7 +110,8 @@ services:
     depends_on:
       - imgproxy
     tmpfs:
-      - /var/lib/varnish:exec
+      - /var/lib/varnish:exec,mode=1777
 
 volumes:
   postgres-data:
+  localstack-data:
