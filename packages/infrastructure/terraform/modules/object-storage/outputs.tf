@@ -23,11 +23,6 @@ output "bucket_api_endpoint" {
   value       = "https://s3.${scaleway_object_bucket.images.region}.scw.cloud/${scaleway_object_bucket.images.name}"
 }
 
-output "bucket_website_endpoint" {
-  description = "The website endpoint URL (if website hosting is enabled)"
-  value       = var.enable_website ? "https://${scaleway_object_bucket.images.name}.s3-website.${scaleway_object_bucket.images.region}.scw.cloud" : null
-}
-
 output "bucket_arn" {
   description = "The ARN of the bucket (for IAM policies)"
   value       = "arn:aws:s3:::${scaleway_object_bucket.images.name}"
