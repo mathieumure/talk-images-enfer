@@ -1,0 +1,139 @@
+name: Infrastructure Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/infrastructure/**'
+      - '.github/workflows/infrastructure-deploy.yml'
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  deploy:
+    name: Deploy Infrastructure
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: packages/infrastructure
+
+    environment:
+      name: production
+      url: ${{ steps.outputs.outputs.container_url }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.6.0
+
+      - name: Setup Terragrunt
+        run: |
+          TERRAGRUNT_VERSION=0.96.1
+          wget -q https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64
+          chmod +x terragrunt_linux_amd64
+          sudo mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
+          terragrunt --version
+
+      - name: Configure Scaleway credentials
+        env:
+          SCW_ACCESS_KEY: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          SCW_SECRET_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
+          SCW_DEFAULT_ORGANIZATION_ID: ${{ secrets.SCALEWAY_ORGANIZATION_ID }}
+          SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCALEWAY_PROJECT_ID }}
+        run: |
+          echo "Credentials configured from secrets"
+
+      - name: Terragrunt Init
+        env:
+          TERRAGRUNT_TFPATH: tofu
+          SCW_ACCESS_KEY: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          SCW_SECRET_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
+          SCW_DEFAULT_ORGANIZATION_ID: ${{ secrets.SCALEWAY_ORGANIZATION_ID }}
+          SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCALEWAY_PROJECT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
+        run: |
+          cd environments/production
+          terragrunt run --all --non-interactive -- init
+
+      - name: Terragrunt Plan
+        env:
+          TERRAGRUNT_TFPATH: tofu
+          SCW_ACCESS_KEY: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          SCW_SECRET_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
+          SCW_DEFAULT_ORGANIZATION_ID: ${{ secrets.SCALEWAY_ORGANIZATION_ID }}
+          SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCALEWAY_PROJECT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
+        run: |
+          cd environments/production
+          terragrunt run --all --non-interactive -- plan
+
+      - name: Terragrunt Apply
+        env:
+          TERRAGRUNT_TFPATH: tofu
+          SCW_ACCESS_KEY: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          SCW_SECRET_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
+          SCW_DEFAULT_ORGANIZATION_ID: ${{ secrets.SCALEWAY_ORGANIZATION_ID }}
+          SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCALEWAY_PROJECT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
+        run: |
+          cd environments/production
+          terragrunt run --all --non-interactive -- apply -auto-approve
+
+      - name: Get Outputs
+        id: outputs
+        env:
+          TERRAGRUNT_TFPATH: tofu
+          SCW_ACCESS_KEY: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          SCW_SECRET_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
+          SCW_DEFAULT_ORGANIZATION_ID: ${{ secrets.SCALEWAY_ORGANIZATION_ID }}
+          SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCALEWAY_PROJECT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
+        run: |
+          cd environments/production/serverless-container
+          CONTAINER_URL=$(terragrunt output -raw container_url 2>/dev/null || echo "")
+          echo "container_url=$CONTAINER_URL" >> $GITHUB_OUTPUT
+          echo "Deployment successful!"
+          echo "Container URL: $CONTAINER_URL"
+
+      - name: Deployment Summary
+        env:
+          TERRAGRUNT_TFPATH: tofu
+          SCW_ACCESS_KEY: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          SCW_SECRET_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
+          SCW_DEFAULT_ORGANIZATION_ID: ${{ secrets.SCALEWAY_ORGANIZATION_ID }}
+          SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCALEWAY_PROJECT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
+        run: |
+          cd environments/production
+          echo "## Infrastructure Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Deployed Resources" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Object Storage
+          echo "#### Object Storage" >> $GITHUB_STEP_SUMMARY
+          (cd object-storage && {
+            echo "- Bucket: \`$(terragrunt output -raw bucket_name 2>/dev/null || echo 'N/A')\`" >> $GITHUB_STEP_SUMMARY
+            echo "- Region: \`$(terragrunt output -raw bucket_region 2>/dev/null || echo 'N/A')\`" >> $GITHUB_STEP_SUMMARY
+          })
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Serverless Container
+          echo "#### Serverless Container" >> $GITHUB_STEP_SUMMARY
+          (cd serverless-container && {
+            echo "- Container URL: \`$(terragrunt output -raw container_url 2>/dev/null || echo 'N/A')\`" >> $GITHUB_STEP_SUMMARY
+            echo "- Min Scale: \`$(terragrunt output -raw min_scale 2>/dev/null || echo 'N/A')\`" >> $GITHUB_STEP_SUMMARY
+            echo "- Max Scale: \`$(terragrunt output -raw max_scale 2>/dev/null || echo 'N/A')\`" >> $GITHUB_STEP_SUMMARY
+          })
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Deployment completed successfully!" >> $GITHUB_STEP_SUMMARY

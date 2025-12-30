@@ -1,0 +1,28 @@
+{
+  "name": "@talk-images/infrastructure",
+  "version": "0.1.0",
+  "description": "Infrastructure as Code for Scaleway image service using OpenTofu and Terragrunt",
+  "private": true,
+  "scripts": {
+    "setup": "./scripts/setup.sh",
+    "validate": "./scripts/validate.sh",
+    "plan": "./scripts/plan.sh",
+    "apply": "./scripts/apply.sh",
+    "destroy": "./scripts/destroy.sh",
+    "fmt": "cd terraform && tofu fmt -recursive",
+    "fmt:check": "cd terraform && tofu fmt -recursive -check"
+  },
+  "keywords": [
+    "infrastructure",
+    "scaleway",
+    "terraform",
+    "opentofu",
+    "terragrunt",
+    "s3",
+    "serverless",
+    "imgproxy"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {}
+}
