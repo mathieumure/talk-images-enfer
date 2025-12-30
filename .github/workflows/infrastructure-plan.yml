@@ -52,6 +52,8 @@ jobs:
           SCALEWAY_SECRET_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
           SCALEWAY_ORGANIZATION_ID: ${{ secrets.SCALEWAY_ORGANIZATION_ID }}
           SCALEWAY_PROJECT_ID: ${{ secrets.SCALEWAY_PROJECT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
         run: |
           cd environments/production
           terragrunt run --all --non-interactive -- init
@@ -64,6 +66,8 @@ jobs:
           SCALEWAY_SECRET_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
           SCALEWAY_ORGANIZATION_ID: ${{ secrets.SCALEWAY_ORGANIZATION_ID }}
           SCALEWAY_PROJECT_ID: ${{ secrets.SCALEWAY_PROJECT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
         run: |
           cd environments/production
           terragrunt run --all --non-interactive -- plan -no-color 2>&1 | tee plan.txt

@@ -49,12 +49,17 @@ jobs:
           echo "SCALEWAY_SECRET_KEY=dummy" >> $GITHUB_ENV
           echo "SCALEWAY_ORGANIZATION_ID=00000000-0000-0000-0000-000000000000" >> $GITHUB_ENV
           echo "SCALEWAY_PROJECT_ID=00000000-0000-0000-0000-000000000000" >> $GITHUB_ENV
+          # S3 backend credentials (for remote state)
+          echo "AWS_ACCESS_KEY_ID=dummy" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=dummy" >> $GITHUB_ENV
 
       - name: Validate Terragrunt Configuration
         env:
           TERRAGRUNT_TFPATH: tofu
         run: |
           cd environments/production
+          # Init with backend disabled for validation
+          terragrunt run --all --non-interactive -- init -backend=false
           terragrunt run --all --non-interactive -- validate
 
       - name: Validation Success

@@ -55,6 +55,8 @@ jobs:
           SCALEWAY_SECRET_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
           SCALEWAY_ORGANIZATION_ID: ${{ secrets.SCALEWAY_ORGANIZATION_ID }}
           SCALEWAY_PROJECT_ID: ${{ secrets.SCALEWAY_PROJECT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
         run: |
           cd environments/production
           terragrunt run --all --non-interactive -- init
@@ -66,6 +68,8 @@ jobs:
           SCALEWAY_SECRET_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
           SCALEWAY_ORGANIZATION_ID: ${{ secrets.SCALEWAY_ORGANIZATION_ID }}
           SCALEWAY_PROJECT_ID: ${{ secrets.SCALEWAY_PROJECT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
         run: |
           cd environments/production
           terragrunt run --all --non-interactive -- plan
@@ -77,6 +81,8 @@ jobs:
           SCALEWAY_SECRET_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
           SCALEWAY_ORGANIZATION_ID: ${{ secrets.SCALEWAY_ORGANIZATION_ID }}
           SCALEWAY_PROJECT_ID: ${{ secrets.SCALEWAY_PROJECT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
         run: |
           cd environments/production
           terragrunt run --all --non-interactive -- apply -auto-approve
@@ -89,6 +95,8 @@ jobs:
           SCALEWAY_SECRET_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
           SCALEWAY_ORGANIZATION_ID: ${{ secrets.SCALEWAY_ORGANIZATION_ID }}
           SCALEWAY_PROJECT_ID: ${{ secrets.SCALEWAY_PROJECT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
         run: |
           cd environments/production/serverless-container
           CONTAINER_URL=$(terragrunt output -raw container_url 2>/dev/null || echo "")
@@ -103,6 +111,8 @@ jobs:
           SCALEWAY_SECRET_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
           SCALEWAY_ORGANIZATION_ID: ${{ secrets.SCALEWAY_ORGANIZATION_ID }}
           SCALEWAY_PROJECT_ID: ${{ secrets.SCALEWAY_PROJECT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
         run: |
           cd environments/production
           echo "## Infrastructure Deployment Summary" >> $GITHUB_STEP_SUMMARY
