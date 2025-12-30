@@ -11,7 +11,7 @@ remote_state {
     region   = "fr-par"
 
     # State bucket and key
-    bucket = "talk-images-terraform-state"
+    bucket = "talk-images-enfer-terraform-state"
     key    = "${path_relative_to_include()}/terraform.tfstate"
 
     # S3-compatible settings
