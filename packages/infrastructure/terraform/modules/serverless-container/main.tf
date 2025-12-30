@@ -18,7 +18,8 @@ resource "scaleway_container_namespace" "main" {
   environment_variables        = var.namespace_environment_variables
   secret_environment_variables = var.namespace_secret_environment_variables
 
-  tags = var.tags
+  # Convert map to list of "key:value" strings for container namespace tags
+  tags = [for k, v in var.tags : "${k}:${v}"]
 }
 
 # imgproxy Container
@@ -93,7 +94,8 @@ resource "scaleway_container" "imgproxy" {
   # Deploy configuration
   deploy = var.auto_deploy
 
-  tags = var.tags
+  # Convert map to list of "key:value" strings for container tags
+  tags = [for k, v in var.tags : "${k}:${v}"]
 }
 
 # Custom domain (optional)
