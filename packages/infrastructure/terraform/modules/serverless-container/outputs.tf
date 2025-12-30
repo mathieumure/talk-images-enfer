@@ -94,8 +94,4 @@ output "trigger_id" {
   value       = var.create_trigger ? scaleway_container_trigger.main[0].id : null
 }
 
-output "trigger_url" {
-  description = "The URL to trigger container deployment (if created)"
-  value       = var.create_trigger ? scaleway_container_trigger.main[0].url : null
-  sensitive   = true
-}
+# Note: Scaleway container triggers don't expose a URL attribute in Terraform
