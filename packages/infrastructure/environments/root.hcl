@@ -37,14 +37,12 @@ generate "provider" {
 
   contents = <<-EOF
     provider "scaleway" {
-      region          = var.region
-      zone            = var.zone
-      organization_id = var.organization_id
-      project_id      = var.project_id
-
-      # Credentials from environment variables:
-      # SCALEWAY_ACCESS_KEY
-      # SCALEWAY_SECRET_KEY
+      # Credentials and settings from environment variables:
+      # - SCALEWAY_ACCESS_KEY
+      # - SCALEWAY_SECRET_KEY
+      # - SCALEWAY_ORGANIZATION_ID
+      # - SCALEWAY_PROJECT_ID
+      # Region is set via module inputs
     }
   EOF
 }

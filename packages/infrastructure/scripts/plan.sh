@@ -8,6 +8,20 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# Load environment variables and export AWS credentials for S3 backend
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ENV_FILE="$SCRIPT_DIR/../.env"
+
+if [ -f "$ENV_FILE" ]; then
+    source "$ENV_FILE"
+    # Export AWS credentials for S3 backend (using Scaleway credentials)
+    export AWS_ACCESS_KEY_ID=$SCALEWAY_ACCESS_KEY
+    export AWS_SECRET_ACCESS_KEY=$SCALEWAY_SECRET_KEY
+else
+    echo -e "${RED}Error: .env file not found at $ENV_FILE${NC}"
+    exit 1
+fi
+
 echo "=================================================="
 echo "  Infrastructure Plan Script"
 echo "=================================================="
