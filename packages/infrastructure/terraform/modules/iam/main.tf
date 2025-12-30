@@ -14,7 +14,8 @@ resource "scaleway_iam_application" "imgproxy" {
   name        = var.imgproxy_app_name
   description = "Service account for imgproxy serverless container to access S3 bucket"
 
-  tags = var.tags
+  # Convert map to list of "key:value" strings for IAM application tags
+  tags = [for k, v in var.tags : "${k}:${v}"]
 }
 
 # API Key for imgproxy application
@@ -46,7 +47,8 @@ resource "scaleway_iam_application" "github_actions" {
   name        = var.github_actions_app_name
   description = "Service account for GitHub Actions CI/CD pipelines"
 
-  tags = var.tags
+  # Convert map to list of "key:value" strings for IAM application tags
+  tags = [for k, v in var.tags : "${k}:${v}"]
 }
 
 # API Key for GitHub Actions
