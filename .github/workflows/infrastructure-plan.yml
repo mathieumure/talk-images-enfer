@@ -1,0 +1,108 @@
+name: Infrastructure Plan
+
+on:
+  pull_request:
+    paths:
+      - 'packages/infrastructure/**'
+      - '.github/workflows/infrastructure-plan.yml'
+
+jobs:
+  plan:
+    name: Plan Infrastructure Changes
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: packages/infrastructure
+
+    permissions:
+      contents: read
+      pull-requests: write  # For commenting on PRs
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.6.0
+
+      - name: Setup Terragrunt
+        run: |
+          TERRAGRUNT_VERSION=0.54.0
+          wget -q https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64
+          chmod +x terragrunt_linux_amd64
+          sudo mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
+          terragrunt --version
+
+      - name: Configure Scaleway credentials
+        env:
+          SCALEWAY_ACCESS_KEY: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          SCALEWAY_SECRET_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
+          SCALEWAY_ORGANIZATION_ID: ${{ secrets.SCALEWAY_ORGANIZATION_ID }}
+          SCALEWAY_PROJECT_ID: ${{ secrets.SCALEWAY_PROJECT_ID }}
+        run: |
+          echo "Credentials configured from secrets"
+
+      - name: Terragrunt Init
+        env:
+          SCALEWAY_ACCESS_KEY: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          SCALEWAY_SECRET_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
+          SCALEWAY_ORGANIZATION_ID: ${{ secrets.SCALEWAY_ORGANIZATION_ID }}
+          SCALEWAY_PROJECT_ID: ${{ secrets.SCALEWAY_PROJECT_ID }}
+        run: |
+          cd environments/production
+          terragrunt run --all --non-interactive -- init
+
+      - name: Terragrunt Plan
+        id: plan
+        env:
+          SCALEWAY_ACCESS_KEY: ${{ secrets.SCALEWAY_ACCESS_KEY }}
+          SCALEWAY_SECRET_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
+          SCALEWAY_ORGANIZATION_ID: ${{ secrets.SCALEWAY_ORGANIZATION_ID }}
+          SCALEWAY_PROJECT_ID: ${{ secrets.SCALEWAY_PROJECT_ID }}
+        run: |
+          cd environments/production
+          terragrunt run --all --non-interactive -- plan -no-color 2>&1 | tee plan.txt
+        continue-on-error: true
+
+      - name: Comment Plan on PR
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: ${{ steps.plan.outputs.stdout }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const planOutput = fs.readFileSync('packages/infrastructure/environments/production/plan.txt', 'utf8');
+
+            // Truncate if too long for GitHub comment
+            const maxLength = 65000;
+            const truncatedPlan = planOutput.length > maxLength
+              ? planOutput.substring(0, maxLength) + '\n\n... (truncated)'
+              : planOutput;
+
+            const output = `#### Infrastructure Plan 📋
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`
+            ${truncatedPlan}
+            \`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            });
+
+      - name: Check Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1

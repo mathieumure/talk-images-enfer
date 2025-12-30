@@ -12,7 +12,8 @@ This project provides tools to scrape, store, manage, and optimize images from t
 talk-images-enfer/
 ├── packages/
 │   ├── image-scraper/     # Wiki image scraping tool
-│   └── cms/               # Strapi CMS with image optimization
+│   ├── cms/               # Strapi CMS with image optimization
+│   └── infrastructure/    # Scaleway infrastructure as code
 └── presentation/          # Reveal.js slides (Astro)
 ```
 
@@ -44,7 +45,7 @@ Complete image management and optimization stack powered by Strapi.
 **Stack:**
 - **Strapi CMS** - Content and media management
 - **PostgreSQL** - Database backend
-- **Scaleway S3** - Cloud storage
+- **LocalStack S3** - Local S3-compatible storage (dev)
 - **Imgproxy** - On-demand image processing
 - **Varnish** - HTTP cache layer
 
@@ -58,11 +59,41 @@ Complete image management and optimization stack powered by Strapi.
 ```bash
 cd packages/cms
 cp .env.example .env
-# Edit .env with your Scaleway credentials
+# Edit .env with your credentials
 docker compose up -d
 ```
 
 [Read more →](./packages/cms/README.md)
+
+### ☁️ [@talk-images/infrastructure](./packages/infrastructure)
+
+Production-ready infrastructure-as-code for deploying the image service on Scaleway.
+
+**Stack:**
+- **OpenTofu/Terraform** - Infrastructure provisioning
+- **Terragrunt** - DRY configuration management
+- **Scaleway S3** - Production object storage
+- **Serverless Containers** - Auto-scaling imgproxy
+- **GitHub Actions** - CI/CD pipelines
+
+**Features:**
+- Modular Terraform architecture (IAM, S3, Serverless)
+- Scale-to-zero for cost optimization (~€7-12/month)
+- Complete documentation with troubleshooting
+- Automated deployment workflows
+
+**Quick Start:**
+```bash
+cd packages/infrastructure
+cp .env.example .env
+# Edit .env with Scaleway credentials
+source .env
+pnpm run setup
+pnpm run plan
+pnpm run apply
+```
+
+[Read more →](./packages/infrastructure/README.md)
 
 ## Quick Start
 
@@ -126,11 +157,18 @@ talk-images-enfer/
 │   │   ├── src/              # Scraper source code
 │   │   ├── images/           # Downloaded images (Git LFS)
 │   │   └── README.md
-│   └── cms/
-│       ├── config/           # Strapi configuration
-│       ├── docker-compose.yml # 4-service stack
-│       ├── default.vcl       # Varnish cache config
+│   ├── cms/
+│   │   ├── config/           # Strapi configuration
+│   │   ├── docker-compose.yml # 5-service stack
+│   │   ├── default.vcl       # Varnish cache config
+│   │   └── README.md
+│   └── infrastructure/
+│       ├── terraform/modules/ # Reusable Terraform modules
+│       ├── environments/     # Environment configurations
+│       ├── scripts/          # Utility scripts
+│       ├── docs/             # Architecture & guides
 │       └── README.md
+├── .github/workflows/        # CI/CD pipelines
 ├── src/
 │   └── slides/               # Presentation slides
 ├── public/                   # Static assets
@@ -144,8 +182,10 @@ talk-images-enfer/
 - **Monorepo**: pnpm workspaces
 - **Presentation**: Astro + Reveal.js
 - **Scraper**: TypeScript + Cheerio + Node Fetch
-- **CMS**: Strapi 5 + PostgreSQL + Scaleway S3
+- **CMS**: Strapi 5 + PostgreSQL + LocalStack S3
 - **Image Processing**: Imgproxy + Varnish Cache
+- **Infrastructure**: OpenTofu + Terragrunt + Scaleway
+- **CI/CD**: GitHub Actions
 - **Containerization**: Docker + Docker Compose
 - **Storage**: Git LFS for binary assets
 
