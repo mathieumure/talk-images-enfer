@@ -30,7 +30,7 @@ jobs:
 
       - name: Setup Terragrunt
         run: |
-          TERRAGRUNT_VERSION=0.54.0
+          TERRAGRUNT_VERSION=0.96.1
           wget -q https://github.com/gruntwork-io/terragrunt/releases/download/v${TERRAGRUNT_VERSION}/terragrunt_linux_amd64
           chmod +x terragrunt_linux_amd64
           sudo mv terragrunt_linux_amd64 /usr/local/bin/terragrunt
@@ -47,6 +47,7 @@ jobs:
 
       - name: Terragrunt Init
         env:
+          TERRAGRUNT_TFPATH: tofu
           SCALEWAY_ACCESS_KEY: ${{ secrets.SCALEWAY_ACCESS_KEY }}
           SCALEWAY_SECRET_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
           SCALEWAY_ORGANIZATION_ID: ${{ secrets.SCALEWAY_ORGANIZATION_ID }}
@@ -58,6 +59,7 @@ jobs:
       - name: Terragrunt Plan
         id: plan
         env:
+          TERRAGRUNT_TFPATH: tofu
           SCALEWAY_ACCESS_KEY: ${{ secrets.SCALEWAY_ACCESS_KEY }}
           SCALEWAY_SECRET_KEY: ${{ secrets.SCALEWAY_SECRET_KEY }}
           SCALEWAY_ORGANIZATION_ID: ${{ secrets.SCALEWAY_ORGANIZATION_ID }}

@@ -15,7 +15,7 @@ resource "scaleway_container_namespace" "main" {
   description = var.namespace_description
   region      = var.region
 
-  environment_variables = var.namespace_environment_variables
+  environment_variables        = var.namespace_environment_variables
   secret_environment_variables = var.namespace_secret_environment_variables
 
   tags = var.tags
@@ -55,9 +55,9 @@ resource "scaleway_container" "imgproxy" {
   environment_variables = merge(
     {
       # S3 Configuration
-      IMGPROXY_USE_S3        = "true"
-      IMGPROXY_S3_ENDPOINT   = var.s3_endpoint
-      IMGPROXY_S3_REGION     = var.s3_region
+      IMGPROXY_USE_S3      = "true"
+      IMGPROXY_S3_ENDPOINT = var.s3_endpoint
+      IMGPROXY_S3_REGION   = var.s3_region
 
       # Image processing settings
       IMGPROXY_ENABLE_WEBP_DETECTION = var.imgproxy_enable_webp_detection
@@ -67,7 +67,7 @@ resource "scaleway_container" "imgproxy" {
       IMGPROXY_MAX_SRC_RESOLUTION    = tostring(var.imgproxy_max_src_resolution)
 
       # Security settings
-      IMGPROXY_ALLOWED_SOURCES = var.imgproxy_allowed_sources
+      IMGPROXY_ALLOWED_SOURCES      = var.imgproxy_allowed_sources
       IMGPROXY_ENABLE_URL_SIGNATURE = var.imgproxy_enable_url_signature ? "true" : "false"
 
       # Performance settings
