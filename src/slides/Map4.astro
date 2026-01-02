@@ -1,0 +1,53 @@
+---
+import Slide from "../components/Slide.astro";
+---
+
+<Slide data-background-color="black">
+	<div class="container">
+		<img src="https://talk-assets.s3.fr-par.scw.cloud/hell_map_fields.webp">
+		<img src="https://talk-assets.s3.fr-par.scw.cloud/hades-pin.webp" class="pin">
+	</div>
+</Slide>
+
+<style lang="scss">
+	@keyframes clip {
+		0% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
+	}
+
+	@keyframes moveToElysium {
+		0% {
+			transform: translate(98.8%, -1848.8%);
+		}
+		100% {
+			transform: translate(98.8%, -2189.9%);
+		}
+	}
+
+	img {
+		width: 100%;
+	}
+
+	.present {
+		.pin {
+			animation: moveToElysium 1s 1s linear forwards, clip 0.5s 2s alternate infinite;
+		}
+	}
+
+	.container {
+		position: relative;
+		transform: translateY(calc(-50% + 90vh))
+	}
+
+	.pin {
+		position: absolute;
+		bottom: 13.5%;
+		left: 48%;
+		width: 2.5%;
+		transform: translate(98.8%, -1848.8%);
+	}
+</style>

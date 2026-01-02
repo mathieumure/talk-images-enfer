@@ -1,0 +1,73 @@
+---
+import Slide from "../components/Slide.astro";
+---
+
+<Slide data-background-color="black">
+	<div class="container">
+		<img src="https://talk-assets.s3.fr-par.scw.cloud/hell_map_asphodel.webp">
+		<img src="https://talk-assets.s3.fr-par.scw.cloud/hades-pin.webp" class="pin">
+	</div>
+</Slide>
+
+<style lang="scss">
+	@keyframes slideUpToTartarus {
+		0% {
+			transform: translateY(calc(-100% + 90vh));
+		}
+		100% {
+			transform: translateY(calc(-90% + 90vh));
+		}
+	}
+
+	@keyframes clip {
+		0% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
+	}
+
+	@keyframes moveToTartarus {
+		0% {
+			transform: translate(0);
+		}
+		33% {
+			transform: translate(-605.5%, -296.1%);
+		}
+		66% {
+			transform: translate(721.5%, -415.1%);
+		}
+		90% {
+			transform: translate(-50.6%, -495.9%);
+		}
+		100% {
+			transform: translate(231.4%, -543.8%);
+		}
+	}
+
+	img {
+		width: 100%;
+	}
+
+	.present {
+		.container {
+			animation: slideUpToTartarus 2s 1s ease-in-out forwards;
+		}
+		.pin {
+			animation: moveToTartarus 2s 1s linear forwards, clip 0.5s 4s alternate infinite;
+		}
+	}
+
+	.container {
+		position: relative;
+		transform: translateY(calc(-100% + 90vh));
+	}
+
+	.pin {
+		position: absolute;
+		bottom: 13.5%;
+		left: 48%;
+		width: 2.5%;
+	}
+</style>
