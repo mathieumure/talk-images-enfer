@@ -6,7 +6,8 @@
 	"scripts": {
 		"build": "astro build",
 		"dev": "astro dev",
-		"preview": "astro preview"
+		"preview": "astro preview",
+		"generate:problem-images": "tsx scripts/generate-problem-images.ts"
 	},
 	"dependencies": {
 		"@fontsource/caesar-dressing": "^5.2.8",
@@ -16,7 +17,10 @@
 		"reveal.js": "5.2.1"
 	},
 	"devDependencies": {
+		"@types/node": "20.19.27",
 		"@types/reveal.js": "5.2.1",
-		"sass": "1.77.8"
+		"sass": "1.77.8",
+		"sharp": "^0.34.5",
+		"tsx": "4.21.0"
 	}
 }

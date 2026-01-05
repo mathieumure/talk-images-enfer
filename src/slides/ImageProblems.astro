@@ -1,0 +1,210 @@
+---
+import Slide from "../components/Slide.astro";
+---
+
+<Slide>
+	<div class="problems-grid">
+		<div class="problem fragment">
+			<div class="problem-visual jpeg-white-bg">
+				<img src="/demo-images/athena-white-bg.jpg" alt="Image avec fond blanc">
+			</div>
+		</div>
+
+		<div class="problem fragment">
+			<div class="problem-visual object-fit-issue">
+				<img src="/demo-images/achilles-stretched.png" alt="Image déformée">
+			</div>
+		</div>
+
+		<div class="problem fragment">
+			<div class="problem-visual broken-image">
+				<div class="broken-placeholder">
+					<img src="/demo-images/404.png" alt="Broken image">
+				</div>
+			</div>
+		</div>
+
+		<div class="problem fragment">
+			<div class="problem-visual heavy-image">
+				<div class="loading-placeholder">
+					<div class="spinner"></div>
+				</div>
+				<img src="/demo-images/hermes-heavy.png" alt="Image lourde">
+				<span class="weight-badge">11.5 MB</span>
+			</div>
+		</div>
+
+		<div class="problem fragment">
+			<div class="problem-visual blurry-image">
+				<img src="/demo-images/artemis-blurry.jpg" alt="Image floue">
+			</div>
+		</div>
+
+		<div class="problem fragment">
+			<div class="problem-visual cls-issue">
+				<img src="/demo-images/ares-cls.png" alt="Image qui déborde">
+			</div>
+		</div>
+	</div>
+</Slide>
+
+<style lang="scss">
+	.problems-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		grid-template-rows: repeat(2, 1fr);
+		gap: 2rem;
+		padding: 1rem;
+		max-width: 85%;
+		max-height: 85%;
+		margin: 0 auto;
+	}
+
+	.problem {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.problem-visual {
+		width: 100%;
+		aspect-ratio: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+		position: relative;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+
+	.problem-label {
+		font-size: 0.9rem;
+		text-align: center;
+		margin: 0;
+		line-height: 1.2;
+	}
+
+	// Styles spécifiques pour chaque problème
+	.jpeg-white-bg {
+		background: white;
+	}
+
+	.object-fit-issue img {
+		object-fit: fill; // Déforme volontairement
+	}
+
+	.problem.fragment.visible .cls-issue {
+		overflow: visible; // Permet à l'image de déborder
+
+		img {
+			position: absolute;
+			width: auto;
+			height: 150%; // Image plus grande que le conteneur
+			object-fit: contain;
+			animation: cls-appear 2s ease-in-out forwards;
+		}
+	}
+
+	@keyframes cls-appear {
+		0%, 40% {
+			opacity: 0;
+			transform: scale(1);
+		}
+		50%, 100% {
+			opacity: 1;
+			transform: scale(3);
+		}
+	}
+
+	.heavy-image {
+		.loading-placeholder {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 1;
+			opacity: 1;
+		}
+
+		.spinner {
+			width: 40px;
+			height: 40px;
+		}
+
+		img {
+			clip-path: inset(0 0 100% 0);
+		}
+
+		.weight-badge {
+			position: absolute;
+			top: 8px;
+			right: 8px;
+			background: #ff6b6b;
+			color: white;
+			padding: 4px 8px;
+			border-radius: 4px;
+			font-size: 0.8rem;
+			font-weight: bold;
+			z-index: 3;
+		}
+	}
+
+	// Animations déclenchées uniquement quand le fragment devient visible
+	.problem.fragment.visible .heavy-image {
+		.loading-placeholder {
+			animation: fade-out 0.5s ease-in-out 1s forwards;
+		}
+
+		.spinner {
+			animation: spin 1s linear infinite;
+		}
+
+		img {
+			animation: progressive-load 4s linear 1s infinite;
+		}
+	}
+
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	@keyframes fade-out {
+		to {
+			opacity: 0;
+			visibility: hidden;
+		}
+	}
+
+	@keyframes progressive-load {
+		0% {
+			clip-path: inset(0 0 100% 0);
+		}
+		100% {
+			clip-path: inset(0 0 0 0);
+		}
+	}
+
+	.blurry-image {
+		img {
+			filter: blur(4px);
+		}
+	}
+
+	.broken-image {
+		.broken-placeholder {
+			font-size: 3rem;
+			color: #999;
+			display: flex;
+			gap: 0.5rem;
+		}
+	}
+</style>
