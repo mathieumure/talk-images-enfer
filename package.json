@@ -7,13 +7,15 @@
 		"build": "astro build",
 		"dev": "astro dev",
 		"preview": "astro preview",
-		"generate:problem-images": "tsx scripts/generate-problem-images.ts"
+		"generate:problem-images": "tsx scripts/generate-problem-images.ts",
+		"generate:format-comparison": "tsx scripts/generate-format-comparison.ts"
 	},
 	"dependencies": {
 		"@fontsource/caesar-dressing": "^5.2.8",
 		"@fontsource/lato": "^5.2.7",
 		"@fontsource/spectral-sc": "^5.2.8",
 		"astro": "5.16.6",
+		"chart.js": "^4.5.1",
 		"reveal.js": "5.2.1"
 	},
 	"devDependencies": {

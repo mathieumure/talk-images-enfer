@@ -1,0 +1,294 @@
+---
+import Slide from "../components/Slide.astro";
+---
+
+<Slide animate={false}>
+	<div class="format-comparison-container">
+		<span class="title">Compression WebP</span>
+		<div class="content-row">
+			<div class="image-section">
+				<div class="image-wrapper">
+					<img id="webp-image" src="/image-format-comparison/achilles-q75.webp" alt="Achilles" />
+					<div class="image-info">
+						<span id="webp-quality">Qualité: 75</span>
+						<span id="webp-size">Taille: 48.06 KB</span>
+					</div>
+				</div>
+			</div>
+			<div class="chart-section">
+				<canvas id="webp-chart"></canvas>
+			</div>
+		</div>
+		<div class="slider-container">
+			<input type="range" id="webp-slider" min="0" max="19" value="14" step="1" />
+		</div>
+	</div>
+</Slide>
+
+<style lang="scss">
+	.format-comparison-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 10rem;
+		height: 70vh;
+		max-width: 95%;
+		margin: 0 auto;
+	}
+
+	.content-row {
+		display: grid;
+		max-height: 60svh;
+		grid-template-columns: 1fr 1fr;
+		gap: 2rem;
+		flex: 1;
+		min-height: 0;
+	}
+
+	.image-section {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		min-height: 0;
+	}
+
+	.image-wrapper {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+		background: rgba(0, 0, 0, 0.3);
+		border-radius: 12px;
+		padding: 2rem;
+	}
+
+	img {
+		max-width: 100%;
+		height: 40vh;
+		object-fit: contain;
+		border-radius: 8px;
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+	}
+
+	.image-info {
+		display: flex;
+		gap: 2rem;
+		margin-top: 1.5rem;
+		font-size: 1.2rem;
+		font-weight: bold;
+		color: #fff;
+
+		span {
+			background: rgba(0, 0, 0, 0.7);
+			padding: 0.5rem 1rem;
+			border-radius: 6px;
+		}
+	}
+
+	.slider-container {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	input[type="range"] {
+		width: 40vw;
+		height: 8px;
+		border-radius: 5px;
+		background: linear-gradient(to right, #ff6b6b, #4ecdc4, #45b7d1);
+		outline: none;
+		-webkit-appearance: none;
+
+		&::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			appearance: none;
+			width: 24px;
+			height: 24px;
+			border-radius: 50%;
+			background: #fff;
+			cursor: pointer;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+			&:hover {
+				transform: scale(2);
+			}
+		}
+
+		&::-moz-range-thumb {
+			width: 24px;
+			height: 24px;
+			border-radius: 50%;
+			background: #fff;
+			cursor: pointer;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+			border: none;
+
+			&:hover {
+				transform: scale(2);
+			}
+		}
+	}
+
+	.chart-section {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(255, 255, 255, 0.95);
+		border-radius: 12px;
+		padding: 2rem;
+		min-height: 0;
+		position: relative;
+	}
+
+	canvas {
+		width: 100% !important;
+		height: 100% !important;
+		min-height: 400px;
+	}
+</style>
+
+<script>
+	import { Chart, registerables } from 'chart.js';
+	Chart.register(...registerables);
+
+	let allData = null;
+	let webpChart = null;
+
+	async function loadCompressionData() {
+		try {
+			const response = await fetch('/image-format-comparison/compression-data.json');
+			allData = await response.json();
+			console.log('Données WebP chargées:', allData.webp.length, 'images');
+			initChart();
+			updateDisplay(14);
+		} catch (error) {
+			console.error('Erreur lors du chargement des données:', error);
+		}
+	}
+
+	function initChart() {
+		const ctx = document.getElementById('webp-chart');
+		if (!ctx) return;
+
+		if (webpChart) webpChart.destroy();
+
+		const datasets = [
+			{
+				label: 'JPEG',
+				data: allData.jpeg.map(d => d.sizeKB),
+				borderColor: '#FF6B6B',
+				backgroundColor: 'rgba(255, 107, 107, 0.1)',
+				borderWidth: 2,
+				pointRadius: 3,
+				pointHoverRadius: 8,
+				pointBackgroundColor: '#FF6B6B',
+				tension: 0.3,
+				borderDash: [5, 5]
+			},
+			{
+				label: 'WebP',
+				data: allData.webp.map(d => d.sizeKB),
+				borderColor: '#4ECDC4',
+				backgroundColor: 'rgba(78, 205, 196, 0.1)',
+				borderWidth: 3,
+				pointRadius: 3,
+				pointHoverRadius: 8,
+				pointBackgroundColor: '#4ECDC4',
+				tension: 0.3,
+			},
+		];
+
+		webpChart = new Chart(ctx, {
+			type: 'line',
+			data: {
+				labels: allData.webp.map(d => d.quality.toString()),
+				datasets: datasets
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				plugins: {
+					legend: {
+						display: true,
+						position: 'top',
+						labels: {
+							font: { size: 14, weight: 'bold' },
+							color: '#333',
+							usePointStyle: true,
+							padding: 15
+						}
+					},
+					title: {
+						display: true,
+						text: 'Comparaison des formats : Qualité vs Taille',
+						font: { size: 18, weight: 'bold' },
+						color: '#333'
+					}
+				},
+				scales: {
+					x: {
+						title: {
+							display: true,
+							text: 'Niveau de compression (%)',
+							font: { size: 14, weight: 'bold' },
+							color: '#666'
+						},
+						grid: { color: 'rgba(0, 0, 0, 0.1)' }
+					},
+					y: {
+						title: {
+							display: true,
+							text: 'Poids (KB)',
+							font: { size: 14, weight: 'bold' },
+							color: '#666'
+						},
+						beginAtZero: true,
+						grid: { color: 'rgba(0, 0, 0, 0.1)' }
+					}
+				}
+			}
+		});
+	}
+
+	function updateDisplay(index) {
+		const data = allData.webp[index];
+		if (!data) return;
+
+		const img = document.getElementById('webp-image');
+		if (img) img.src = `/image-format-comparison/${data.filename}`;
+
+		const qualityLabel = document.getElementById('webp-quality');
+		const sizeLabel = document.getElementById('webp-size');
+		if (qualityLabel) qualityLabel.textContent = `Qualité: ${data.quality}`;
+		if (sizeLabel) sizeLabel.textContent = `Taille: ${data.sizeKB} KB`;
+
+		if (webpChart) {
+			webpChart.data.datasets[1].pointRadius = allData.webp.map(() => 3);
+			webpChart.data.datasets[1].pointBackgroundColor = allData.webp.map(() => '#4ECDC4');
+			webpChart.data.datasets[1].pointRadius[index] = 12;
+			webpChart.data.datasets[1].pointBackgroundColor[index] = '#4ECDC4';
+			webpChart.update('none');
+		}
+	}
+
+	function init() {
+		loadCompressionData();
+		const slider = document.getElementById('webp-slider');
+		if (slider) {
+			slider.addEventListener('input', (e) => {
+				updateDisplay(parseInt(e.target.value));
+			});
+		}
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', init);
+	} else {
+		init();
+	}
+
+	document.addEventListener('astro:page-load', init);
+</script>
