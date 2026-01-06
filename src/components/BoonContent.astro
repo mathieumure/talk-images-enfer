@@ -1,0 +1,60 @@
+---
+type Props = {
+	icon?: string;
+	title?: string;
+}
+---
+
+<div class="boon-content fragment fade-up">
+	<img src="https://talk-assets.s3.fr-par.scw.cloud/BoonContent.webp" />
+	{Astro.props.icon && <div class="boon-icon">
+		<img src={Astro.props.icon} />
+	</div> }
+	<div class="boon-text">
+		{Astro.props.title && <h3>{Astro.props.title}</h3>}
+		<slot />
+	</div>
+</div>
+
+<style>
+	.boon-content {
+		position: relative;
+		container-type: inline-size;
+	}
+	.boon-icon {
+		position: absolute;
+		width: 6.7cqw;
+		height: 6.5cqw;
+		top: 1.6cqw;
+		left: 1cqw;
+		border-radius: 1cqw 0 1cqw 1cqw;
+
+		img {
+			width: 100%;
+			height: 100%;
+			max-height: 100%;
+			object-fit: contain;
+		}
+	}
+	.boon-text {
+		color: #a19fa2;
+		font-family: "P22Underground", system-ui;
+		position: absolute;
+		top: 2.4cqw;
+		left: 10.7cqw;
+		font-size: 1.2rem;
+		width: calc(100% - 20cqw);
+		text-align: left;
+
+		h3 {
+			font-family: "P22Underground", system-ui;
+			color: #fcfcfc;
+			font-size: 1.5rem;
+			margin-bottom: 8px;
+		}
+
+		b {
+			color: #fcfcfc;
+		}
+	}
+</style>

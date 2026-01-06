@@ -1,0 +1,29 @@
+---
+import Slide from "../components/Slide.astro";
+---
+
+<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/Boons.webp" data-background-size="contain">
+	<div class="container">
+		<slot />
+	</div>
+</Slide>
+
+<style>
+	.container {
+		display: flex;
+		flex-direction: column;
+		margin-left: 33%;
+		justify-content: space-between;
+
+		img {
+			margin: 0;
+			max-width: 100%;
+		}
+	}
+
+	/* Reduce spacing between items if there more 5+ children */
+	.container > :global(.boon-content):first-child:nth-last-child(n+5),
+	.container > :global(.boon-content):first-child:nth-last-child(n+5) ~ :global(.boon-content) {
+		margin-top: -10px;
+	}
+</style>
