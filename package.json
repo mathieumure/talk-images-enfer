@@ -16,8 +16,10 @@
 		"@fontsource/spectral-sc": "^5.2.8",
 		"astro": "5.16.6",
 		"chart.js": "^4.5.1",
+		"pinch-zoom-element": "^1.1.1",
 		"qrcode": "^1.5.4",
-		"reveal.js": "5.2.1"
+		"reveal.js": "5.2.1",
+		"two-up-element": "^1.0.1"
 	},
 	"devDependencies": {
 		"@types/node": "20.19.27",

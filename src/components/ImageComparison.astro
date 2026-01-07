@@ -1,0 +1,587 @@
+---
+interface ImageConfig {
+	format: 'jpeg' | 'webp' | 'avif';
+	quality: number;
+}
+
+interface Props {
+	/**
+	 * Default left image configuration
+	 * @default { format: 'jpeg', quality: 75 }
+	 */
+	defaultLeft?: ImageConfig;
+
+	/**
+	 * Default right image configuration
+	 * @default { format: 'avif', quality: 75 }
+	 */
+	defaultRight?: ImageConfig;
+
+	/**
+	 * Custom class for styling
+	 */
+	class?: string;
+}
+
+const {
+	defaultLeft = { format: 'jpeg', quality: 75 },
+	defaultRight = { format: 'avif', quality: 75 },
+	class: customClass
+} = Astro.props;
+
+// Generate unique instance ID to support multiple instances
+const instanceId = `img-comp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+// Available formats and qualities
+const formats = ['jpeg', 'webp', 'avif'] as const;
+const qualities = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100];
+
+// Generate all available options
+const imageOptions = formats.flatMap(format =>
+	qualities.map(quality => ({ format, quality }))
+);
+
+// Encode data for script
+const defaultLeftJson = JSON.stringify(defaultLeft);
+const defaultRightJson = JSON.stringify(defaultRight);
+---
+
+<div class={`image-comparison-container ${customClass || ''}`} data-instance-id={instanceId} data-default-left={defaultLeftJson} data-default-right={defaultRightJson}>
+	<div class="selectors-wrapper">
+		<div class="selector-group">
+			<label for={`${instanceId}-left-selector`} class="selector-label">Image gauche</label>
+			<select id={`${instanceId}-left-selector`} class="image-selector">
+				{imageOptions.map(({ format, quality }) => {
+					const formatLabel = format === 'jpeg' ? 'JPEG' : format.toUpperCase();
+					const value = `${format}-${quality}`;
+					const isSelected = format === defaultLeft.format && quality === defaultLeft.quality;
+					return (
+						<option value={value} selected={isSelected}>
+							{formatLabel} q{quality}
+						</option>
+					);
+				})}
+			</select>
+		</div>
+
+		<div class="selector-group">
+			<label for={`${instanceId}-right-selector`} class="selector-label">Image droite</label>
+			<select id={`${instanceId}-right-selector`} class="image-selector">
+				{imageOptions.map(({ format, quality }) => {
+					const formatLabel = format === 'jpeg' ? 'JPEG' : format.toUpperCase();
+					const value = `${format}-${quality}`;
+					const isSelected = format === defaultRight.format && quality === defaultRight.quality;
+					return (
+						<option value={value} selected={isSelected}>
+							{formatLabel} q{quality}
+						</option>
+					);
+				})}
+			</select>
+		</div>
+	</div>
+
+	<div class="two-up-wrapper">
+		<two-up id={`${instanceId}-two-up`} orientation="horizontal">
+			<pinch-zoom id={`${instanceId}-left-zoom`}>
+				<div class="zoom-content">
+					<img
+						id={`${instanceId}-left-img`}
+						src=""
+						alt="Left comparison image"
+					/>
+					<div id={`${instanceId}-left-metric`} class="metric metric-left">
+						<span class="format"></span>
+						<span class="size"></span>
+					</div>
+				</div>
+			</pinch-zoom>
+			<pinch-zoom id={`${instanceId}-right-zoom`}>
+				<div class="zoom-content">
+					<img
+						id={`${instanceId}-right-img`}
+						src=""
+						alt="Right comparison image"
+					/>
+					<div id={`${instanceId}-right-metric`} class="metric metric-right">
+						<span class="format"></span>
+						<span class="size"></span>
+						<span class="savings"></span>
+					</div>
+				</div>
+			</pinch-zoom>
+		</two-up>
+	</div>
+</div>
+
+<style lang="scss">
+	.image-comparison-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1.5rem;
+		height: 75vh;
+		max-width: 95%;
+		margin: 0 auto;
+	}
+
+	.selectors-wrapper {
+		display: flex;
+		gap: 2rem;
+		align-items: flex-end;
+	}
+
+	.selector-group {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.selector-label {
+		font-size: 0.9rem;
+		font-weight: bold;
+		color: rgba(255, 255, 255, 0.8);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.image-selector {
+		padding: 0.75rem 1.5rem;
+		font-size: 1.1rem;
+		font-weight: bold;
+		background: rgba(0, 0, 0, 0.7);
+		color: #fff;
+		border: 2px solid rgba(255, 255, 255, 0.2);
+		border-radius: 8px;
+		cursor: pointer;
+		transition: background 0.2s;
+		min-width: 180px;
+
+		&:hover {
+			background: rgba(0, 0, 0, 0.85);
+		}
+
+		&:focus {
+			outline: 2px solid #4ECDC4;
+			outline-offset: 2px;
+		}
+	}
+
+	.two-up-wrapper {
+		position: relative;
+		flex: 1;
+		width: 100%;
+		min-height: 0;
+		overflow: hidden;
+	}
+
+	two-up {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	pinch-zoom {
+		display: grid;
+		overflow: hidden;
+		touch-action: none;
+		justify-items: center;
+		align-items: center;
+	}
+
+	.zoom-content {
+		position: relative;
+		display: grid;
+		place-items: center;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.2);
+
+		img {
+			max-width: 100%;
+			max-height: 100%;
+			width: auto;
+			height: auto;
+			object-fit: contain;
+			display: block;
+		}
+	}
+
+	.metric {
+		position: absolute;
+		bottom: 1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		padding: 0.75rem 1rem;
+		background: rgba(0, 0, 0, 0.8);
+		border-radius: 8px;
+		font-size: 1rem;
+		font-weight: bold;
+		color: #fff;
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+		backdrop-filter: blur(5px);
+
+		&.metric-left {
+			left: 1rem;
+		}
+
+		&.metric-right {
+			right: 1rem;
+		}
+
+		.format {
+			font-size: 0.9rem;
+			opacity: 0.8;
+			text-transform: uppercase;
+		}
+
+		.size {
+			font-size: 1.1rem;
+		}
+
+		.savings {
+			font-size: 0.95rem;
+
+			&.savings-positive {
+				color: #4ECDC4;
+			}
+
+			&.savings-negative {
+				color: #FF6B6B;
+			}
+		}
+	}
+</style>
+
+<script>
+	import 'two-up-element';
+	import 'pinch-zoom-element';
+
+	// Get instance data from DOM
+	const containers = document.querySelectorAll('.image-comparison-container');
+
+	containers.forEach((container) => {
+		const instanceId = container.dataset.instanceId;
+		const defaultLeft = JSON.parse(container.dataset.defaultLeft);
+		const defaultRight = JSON.parse(container.dataset.defaultRight);
+
+		let compressionData = null;
+
+		async function loadCompressionData() {
+			try {
+				const response = await fetch('/image-format-comparison/compression-data.json');
+				compressionData = await response.json();
+				return compressionData;
+			} catch (error) {
+				console.error('Error loading compression data:', error);
+				return null;
+			}
+		}
+
+		function getImageData(format, quality) {
+			if (!compressionData) return null;
+			return compressionData[format].find(img => img.quality === quality);
+		}
+
+		function setupZoomSync() {
+			const leftZoom = document.getElementById(`${instanceId}-left-zoom`);
+			const rightZoom = document.getElementById(`${instanceId}-right-zoom`);
+
+			if (!leftZoom || !rightZoom) return;
+
+			// Redirect events from right to left to keep them in sync
+			for (const eventType of ['pointerdown', 'touchstart', 'mousedown']) {
+				rightZoom.addEventListener(eventType, (event) => {
+					const newEvent = new event.constructor(event.type, event);
+					leftZoom.dispatchEvent(newEvent);
+				}, { passive: true });
+			}
+
+			// Sync transforms from left to right
+			leftZoom.addEventListener('change', () => {
+				rightZoom.setTransform({
+					scale: leftZoom.scale,
+					x: leftZoom.x,
+					y: leftZoom.y
+				});
+			});
+
+			// Blur focused elements on touch end (Android keyboard fix)
+			leftZoom.addEventListener('touchend', () => {
+				if (document.activeElement) {
+					document.activeElement.blur();
+				}
+			});
+		}
+
+		function updateMetrics(leftData, rightData) {
+			const diffKB = leftData.sizeKB - rightData.sizeKB;
+			const percentSavings = ((diffKB / leftData.sizeKB) * 100).toFixed(0);
+			const isLighter = diffKB > 0;
+
+			// Update left metrics
+			const leftMetric = document.getElementById(`${instanceId}-left-metric`);
+			if (leftMetric) {
+				const formatLabel = leftMetric.querySelector('.format');
+				const sizeLabel = leftMetric.querySelector('.size');
+				const ext = leftData.filename.split('.').pop().toUpperCase();
+				if (formatLabel) formatLabel.textContent = ext === 'JPG' ? 'JPEG' : ext;
+				if (sizeLabel) sizeLabel.textContent = `${leftData.sizeKB} KB`;
+			}
+
+			// Update right metrics
+			const rightMetric = document.getElementById(`${instanceId}-right-metric`);
+			if (rightMetric) {
+				const formatLabel = rightMetric.querySelector('.format');
+				const sizeLabel = rightMetric.querySelector('.size');
+				const savingsLabel = rightMetric.querySelector('.savings');
+
+				const ext = rightData.filename.split('.').pop().toUpperCase();
+				if (formatLabel) formatLabel.textContent = ext === 'JPG' ? 'JPEG' : ext;
+				if (sizeLabel) sizeLabel.textContent = `${rightData.sizeKB} KB`;
+				if (savingsLabel) {
+					savingsLabel.textContent = `${Math.abs(percentSavings)}% ${isLighter ? 'lighter' : 'heavier'} (${isLighter ? '-' : '+'}${Math.abs(diffKB).toFixed(2)} KB)`;
+					savingsLabel.className = `savings savings-${isLighter ? 'positive' : 'negative'}`;
+				}
+			}
+		}
+
+		function updateComparison(leftConfig, rightConfig) {
+			const leftData = getImageData(leftConfig.format, leftConfig.quality);
+			const rightData = getImageData(rightConfig.format, rightConfig.quality);
+
+			if (!leftData || !rightData) {
+				console.error('Could not find image data for comparison');
+				return;
+			}
+
+			// Update images
+			const leftImg = document.getElementById(`${instanceId}-left-img`);
+			const rightImg = document.getElementById(`${instanceId}-right-img`);
+
+			if (leftImg) {
+				leftImg.src = `/image-format-comparison/${leftData.filename}`;
+				leftImg.alt = `${leftConfig.format.toUpperCase()} quality ${leftConfig.quality}`;
+			}
+
+			if (rightImg) {
+				rightImg.src = `/image-format-comparison/${rightData.filename}`;
+				rightImg.alt = `${rightConfig.format.toUpperCase()} quality ${rightConfig.quality}`;
+			}
+
+			// Update metrics
+			updateMetrics(leftData, rightData);
+
+			// Reset zoom on both sides
+			const leftZoom = document.getElementById(`${instanceId}-left-zoom`);
+			const rightZoom = document.getElementById(`${instanceId}-right-zoom`);
+			if (leftZoom) leftZoom.setTransform({ scale: 1, x: 0, y: 0 });
+			if (rightZoom) rightZoom.setTransform({ scale: 1, x: 0, y: 0 });
+		}
+
+		function setupSelectors() {
+			const leftSelector = document.getElementById(`${instanceId}-left-selector`);
+			const rightSelector = document.getElementById(`${instanceId}-right-selector`);
+
+			if (!leftSelector || !rightSelector) return;
+
+			function getCurrentSelection() {
+				const leftValue = leftSelector.value.split('-');
+				const rightValue = rightSelector.value.split('-');
+				return {
+					left: { format: leftValue[0], quality: parseInt(leftValue[1]) },
+					right: { format: rightValue[0], quality: parseInt(rightValue[1]) }
+				};
+			}
+
+			leftSelector.addEventListener('change', () => {
+				const { left, right } = getCurrentSelection();
+				updateComparison(left, right);
+			});
+
+			rightSelector.addEventListener('change', () => {
+				const { left, right } = getCurrentSelection();
+				updateComparison(left, right);
+			});
+		}
+
+		async function init() {
+			await loadCompressionData();
+			if (!compressionData) {
+				console.error('Failed to load compression data');
+				return;
+			}
+			setupSelectors();
+			setupZoomSync();
+			updateComparison(defaultLeft, defaultRight);
+		}
+
+		// Initialize this instance
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', init);
+		} else {
+			init();
+		}
+	});
+
+	// Re-initialize on Astro page load
+	document.addEventListener('astro:page-load', () => {
+		const containers = document.querySelectorAll('.image-comparison-container');
+		containers.forEach((container) => {
+			const instanceId = container.dataset.instanceId;
+			const defaultLeft = JSON.parse(container.dataset.defaultLeft);
+			const defaultRight = JSON.parse(container.dataset.defaultRight);
+
+			let compressionData = null;
+
+			async function loadCompressionData() {
+				try {
+					const response = await fetch('/image-format-comparison/compression-data.json');
+					compressionData = await response.json();
+					return compressionData;
+				} catch (error) {
+					console.error('Error loading compression data:', error);
+					return null;
+				}
+			}
+
+			function getImageData(format, quality) {
+				if (!compressionData) return null;
+				return compressionData[format].find(img => img.quality === quality);
+			}
+
+			function setupZoomSync() {
+				const leftZoom = document.getElementById(`${instanceId}-left-zoom`);
+				const rightZoom = document.getElementById(`${instanceId}-right-zoom`);
+
+				if (!leftZoom || !rightZoom) return;
+
+				// Redirect events from right to left to keep them in sync
+				for (const eventType of ['pointerdown', 'touchstart', 'mousedown']) {
+					rightZoom.addEventListener(eventType, (event) => {
+						const newEvent = new event.constructor(event.type, event);
+						leftZoom.dispatchEvent(newEvent);
+					}, { passive: true });
+				}
+
+				// Sync transforms from left to right
+				leftZoom.addEventListener('change', () => {
+					rightZoom.setTransform({
+						scale: leftZoom.scale,
+						x: leftZoom.x,
+						y: leftZoom.y
+					});
+				});
+
+				// Blur focused elements on touch end (Android keyboard fix)
+				leftZoom.addEventListener('touchend', () => {
+					if (document.activeElement) {
+						document.activeElement.blur();
+					}
+				});
+			}
+
+			function updateMetrics(leftData, rightData) {
+				const diffKB = leftData.sizeKB - rightData.sizeKB;
+				const percentSavings = ((diffKB / leftData.sizeKB) * 100).toFixed(0);
+				const isLighter = diffKB > 0;
+
+				const leftMetric = document.getElementById(`${instanceId}-left-metric`);
+				if (leftMetric) {
+					const formatLabel = leftMetric.querySelector('.format');
+					const sizeLabel = leftMetric.querySelector('.size');
+					const ext = leftData.filename.split('.').pop().toUpperCase();
+					if (formatLabel) formatLabel.textContent = ext === 'JPG' ? 'JPEG' : ext;
+					if (sizeLabel) sizeLabel.textContent = `${leftData.sizeKB} KB`;
+				}
+
+				const rightMetric = document.getElementById(`${instanceId}-right-metric`);
+				if (rightMetric) {
+					const formatLabel = rightMetric.querySelector('.format');
+					const sizeLabel = rightMetric.querySelector('.size');
+					const savingsLabel = rightMetric.querySelector('.savings');
+
+					const ext = rightData.filename.split('.').pop().toUpperCase();
+					if (formatLabel) formatLabel.textContent = ext === 'JPG' ? 'JPEG' : ext;
+					if (sizeLabel) sizeLabel.textContent = `${rightData.sizeKB} KB`;
+					if (savingsLabel) {
+						savingsLabel.textContent = `${Math.abs(percentSavings)}% ${isLighter ? 'lighter' : 'heavier'} (${isLighter ? '-' : '+'}${Math.abs(diffKB).toFixed(2)} KB)`;
+						savingsLabel.className = `savings savings-${isLighter ? 'positive' : 'negative'}`;
+					}
+				}
+			}
+
+			function updateComparison(leftConfig, rightConfig) {
+				const leftData = getImageData(leftConfig.format, leftConfig.quality);
+				const rightData = getImageData(rightConfig.format, rightConfig.quality);
+
+				if (!leftData || !rightData) {
+					console.error('Could not find image data for comparison');
+					return;
+				}
+
+				const leftImg = document.getElementById(`${instanceId}-left-img`);
+				const rightImg = document.getElementById(`${instanceId}-right-img`);
+
+				if (leftImg) {
+					leftImg.src = `/image-format-comparison/${leftData.filename}`;
+					leftImg.alt = `${leftConfig.format.toUpperCase()} quality ${leftConfig.quality}`;
+				}
+
+				if (rightImg) {
+					rightImg.src = `/image-format-comparison/${rightData.filename}`;
+					rightImg.alt = `${rightConfig.format.toUpperCase()} quality ${rightConfig.quality}`;
+				}
+
+				updateMetrics(leftData, rightData);
+
+				const leftZoom = document.getElementById(`${instanceId}-left-zoom`);
+				const rightZoom = document.getElementById(`${instanceId}-right-zoom`);
+				if (leftZoom) leftZoom.setTransform({ scale: 1, x: 0, y: 0 });
+				if (rightZoom) rightZoom.setTransform({ scale: 1, x: 0, y: 0 });
+			}
+
+			function setupSelectors() {
+				const leftSelector = document.getElementById(`${instanceId}-left-selector`);
+				const rightSelector = document.getElementById(`${instanceId}-right-selector`);
+
+				if (!leftSelector || !rightSelector) return;
+
+				function getCurrentSelection() {
+					const leftValue = leftSelector.value.split('-');
+					const rightValue = rightSelector.value.split('-');
+					return {
+						left: { format: leftValue[0], quality: parseInt(leftValue[1]) },
+						right: { format: rightValue[0], quality: parseInt(rightValue[1]) }
+					};
+				}
+
+				leftSelector.addEventListener('change', () => {
+					const { left, right } = getCurrentSelection();
+					updateComparison(left, right);
+				});
+
+				rightSelector.addEventListener('change', () => {
+					const { left, right } = getCurrentSelection();
+					updateComparison(left, right);
+				});
+			}
+
+			async function init() {
+				await loadCompressionData();
+				if (!compressionData) {
+					console.error('Failed to load compression data');
+					return;
+				}
+				setupSelectors();
+				setupZoomSync();
+				updateComparison(defaultLeft, defaultRight);
+			}
+
+			init();
+		});
+	});
+</script>

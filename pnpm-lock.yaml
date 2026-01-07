@@ -23,12 +23,18 @@ importers:
       chart.js:
         specifier: ^4.5.1
         version: 4.5.1
+      pinch-zoom-element:
+        specifier: ^1.1.1
+        version: 1.1.1
       qrcode:
         specifier: ^1.5.4
         version: 1.5.4
       reveal.js:
         specifier: 5.2.1
         version: 5.2.1
+      two-up-element:
+        specifier: ^1.0.1
+        version: 1.0.1
     devDependencies:
       '@types/node':
         specifier: 20.19.27
@@ -6282,6 +6288,9 @@ packages:
     resolution: {integrity: sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==}
     engines: {node: '>=6'}
 
+  pinch-zoom-element@1.1.1:
+    resolution: {integrity: sha512-aqgz+Fqw2UgMUUfxWD3UEE9YsgEyHKSma4Y2YQG+PlgX/0sTMafP8X663VlMME6G04OWyU3u2uyG86fbFEajug==}
+
   pirates@4.0.7:
     resolution: {integrity: sha512-TfySrs/5nm8fQJDcBDuUng3VOUKsd7S+zqvbOTiGXHfxX4wK31ard+hoNuvkicM/2YFzlpDgABOevKSsB4G/FA==}
     engines: {node: '>= 6'}
@@ -6313,6 +6322,9 @@ packages:
   pngjs@5.0.0:
     resolution: {integrity: sha512-40QW5YalBNfQo5yRYmiw7Yz6TKKVr3h6970B2YE+3fQpsWcrbj1PzJgxeJ19DRQjhMbKPIuMY8rFaXc8moolVw==}
     engines: {node: '>=10.13.0'}
+
+  pointer-tracker@2.5.3:
+    resolution: {integrity: sha512-LiJUeIbzk4dXq678YeyrZ++mdY17q4n/2sBHfU9wIuvmSzdiPgMvmvWN2g8mY4J7YwYOIrqrZUWP/MfFHVwYtg==}
 
   pony-cause@2.1.11:
     resolution: {integrity: sha512-M7LhCsdNbNgiLYiP4WjsfLUuFmCfnjdF6jKe2R9NKl4WFN+HZPGHJZ9lnLP7f9ZnKe3U9nuWD0szirmj+migUg==}
@@ -7436,6 +7448,9 @@ packages:
 
   tunnel-agent@0.6.0:
     resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}
+
+  two-up-element@1.0.1:
+    resolution: {integrity: sha512-KjN4SBkOKeQ6LgZDOaxgnHyXV/VkmCXELeQSPs8GJUP8yFSqrH5pw9KxI/dny3pJdywe+ae+YiM4I/s91EGhOA==}
 
   type-fest@0.13.1:
     resolution: {integrity: sha512-34R7HTnG0XIJcBSn5XhDd7nNFPRcXYRZrBB2O2jdKqYODldSzBAqzsWoZYYvduky73toYS/ESqxPvkDf/F0XMg==}
@@ -16103,6 +16118,10 @@ snapshots:
 
   pify@4.0.1: {}
 
+  pinch-zoom-element@1.1.1:
+    dependencies:
+      pointer-tracker: 2.5.3
+
   pirates@4.0.7: {}
 
   pkg-dir@3.0.0:
@@ -16137,6 +16156,8 @@ snapshots:
   pluralize@8.0.0: {}
 
   pngjs@5.0.0: {}
+
+  pointer-tracker@2.5.3: {}
 
   pony-cause@2.1.11: {}
 
@@ -17413,6 +17434,10 @@ snapshots:
   tunnel-agent@0.6.0:
     dependencies:
       safe-buffer: 5.2.1
+
+  two-up-element@1.0.1:
+    dependencies:
+      pointer-tracker: 2.5.3
 
   type-fest@0.13.1: {}
 
