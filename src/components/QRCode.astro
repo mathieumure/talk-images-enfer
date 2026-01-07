@@ -1,0 +1,75 @@
+---
+import QRCodeLib from 'qrcode';
+
+type Props = {
+	url: string;
+	class?: string;
+};
+
+const {url, ...props} = Astro.props;
+
+const data = await QRCodeLib.toDataURL(url, {
+	errorCorrectionLevel: 'H',
+	margin: 1,
+	width: 400,
+	color: {
+		dark: '#e16605',
+		light: '#000000'
+	}
+});
+---
+<div class:list={["container", props['class']]} {...props}>
+	<p>Pour aller</p>
+	<div class="image-container">
+		<img src={data} class="qrcode">
+		<img src="https://talk-assets.s3.fr-par.scw.cloud/flames.webp" class="flames">
+		<img src="https://talk-assets.s3.fr-par.scw.cloud/heat.webp" class="logo">
+	</div>
+	<p>trop loin</p>
+</div>
+
+<style>
+	p {
+		font-family: "Lato", system-ui;
+		margin: 0;
+		background-color: #000;
+		font-size: 17cqw;
+		padding: 4px;
+	}
+	img {
+		margin: 0;
+		max-width: 100%;
+	}
+
+	.container {
+		display: flex;
+		flex-direction: column;
+		container-type: inline-size;
+		position: fixed;
+		bottom: 0;
+		right: 0;
+		width: 120px;
+	}
+
+	.image-container {
+		display: inline-flex;
+		position: relative;
+	}
+
+	.logo {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 20%;
+		transform: translate(-50%, -50%);
+	}
+
+	.flames {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 20%;
+		transform: translate(-31%, -72%) rotate(45deg) scale(1.3);
+	}
+
+</style>

@@ -1,4 +1,6 @@
 ---
+import QRCode from './QRCode.astro';
+
 interface Props {
   /**
    * Use the auto-animate feature for this slide or not
@@ -7,11 +9,13 @@ interface Props {
    */
   animate?: boolean;
 	class?: string;
+	qrcode?: string;
 }
 
-const { animate = true } = Astro.props;
+const { animate = true, qrcode } = Astro.props;
 ---
 
 <section {...Astro.props} data-auto-animate={animate}>
   <slot />
 </section>
+{qrcode && <QRCode url={qrcode} />}
