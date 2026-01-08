@@ -1,0 +1,150 @@
+---
+import Slide from "../../components/Slide.astro";
+---
+
+<Slide animate={false}>
+	<div class="cms-architecture-container">
+		<h2 class="title">Architecture CMS - Solution d'optimisation d'images</h2>
+
+		<div class="mermaid-container">
+			<pre class="mermaid">
+flowchart LR
+    User[👤 User/Client]
+
+    subgraph Stack["Docker Compose Stack"]
+        direction LR
+        Strapi[📦 Strapi<br/>Port 1337]
+        Postgres[(🗄️ PostgreSQL<br/>Port 5432)]
+        LocalStack[☁️ S3<br/>Port 4566]
+        Imgproxy[🖼️ Imgproxy<br/>WebP/AVIF]
+        Varnish[🚀 Varnish<br/>Cache 1 an]
+    end
+
+    User -->|Admin/API| Strapi
+    User -->|Image Request| Varnish
+    Varnish -.->|Cache HIT| User
+    Varnish -->|Cache MISS| Imgproxy
+    Imgproxy -->|Processed| Varnish
+    Imgproxy -->|Fetch| LocalStack
+    Strapi -->|Upload| LocalStack
+    Strapi -->|Metadata| Postgres
+
+    style Varnish fill:#f9f,stroke:#333,stroke-width:2px
+    style LocalStack fill:#bbf,stroke:#333,stroke-width:2px
+    style User fill:#9f9,stroke:#333,stroke-width:2px
+			</pre>
+		</div>
+
+		<div class="key-points">
+			<div class="point">
+				<span class="icon">⚡</span>
+				<span>Cache Varnish 1 an</span>
+			</div>
+			<div class="point">
+				<span class="icon">🖼️</span>
+				<span>Optimization à la demande</span>
+			</div>
+			<div class="point">
+				<span class="icon">☁️</span>
+				<span>S3 local (dev)</span>
+			</div>
+		</div>
+	</div>
+</Slide>
+
+<style lang="scss">
+	.cms-architecture-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 2rem;
+		height: 85vh;
+		max-width: 95%;
+		margin: 0 auto;
+	}
+
+	.title {
+		font-size: 2rem;
+		font-weight: bold;
+		text-align: center;
+		margin: 0;
+		color: #fff;
+	}
+
+	.mermaid-container {
+		flex: 1;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+
+		.mermaid {
+			font-size: 0.9rem;
+			background: rgba(255, 255, 255, 0.95);
+			padding: 2rem;
+			border-radius: 12px;
+			box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+		}
+	}
+
+	.key-points {
+		display: flex;
+		gap: 3rem;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: wrap;
+
+		.point {
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+			padding: 0.75rem 1.5rem;
+			background: rgba(78, 205, 196, 0.2);
+			border-radius: 8px;
+			border: 2px solid rgba(78, 205, 196, 0.5);
+			font-size: 1.2rem;
+			font-weight: bold;
+			color: #fff;
+
+			.icon {
+				font-size: 1.5rem;
+			}
+		}
+	}
+</style>
+
+<script>
+	import mermaid from 'mermaid';
+
+	function initMermaid() {
+		mermaid.initialize({
+			startOnLoad: true,
+			theme: 'default',
+			flowchart: {
+				useMaxWidth: true,
+				htmlLabels: true,
+				curve: 'basis'
+			}
+		});
+
+		// Re-render all mermaid diagrams
+		const mermaidElements = document.querySelectorAll('.mermaid');
+		mermaidElements.forEach((element) => {
+			if (!element.dataset.processed) {
+				mermaid.run({ nodes: [element] });
+			}
+		});
+	}
+
+	// Initialize on load
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initMermaid);
+	} else {
+		initMermaid();
+	}
+
+	// Re-initialize on Astro page load
+	document.addEventListener('astro:page-load', initMermaid);
+</script>
