@@ -1,6 +1,6 @@
 ---
 interface ImageConfig {
-	format: 'jpeg' | 'webp' | 'avif';
+	format: 'source' | 'jpeg' | 'webp' | 'avif';
 	quality: number;
 }
 
@@ -33,13 +33,16 @@ const {
 const instanceId = `img-comp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
 // Available formats and qualities
-const formats = ['jpeg', 'webp', 'avif'] as const;
+const formats = ['source', 'jpeg', 'webp', 'avif'] as const;
 const qualities = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100];
 
 // Generate all available options
-const imageOptions = formats.flatMap(format =>
-	qualities.map(quality => ({ format, quality }))
-);
+const imageOptions = [
+	{ format: 'source' as const, quality: 100 },
+	...formats.filter(f => f !== 'source').flatMap(format =>
+		qualities.map(quality => ({ format, quality }))
+	)
+];
 
 // Encode data for script
 const defaultLeftJson = JSON.stringify(defaultLeft);
@@ -52,12 +55,13 @@ const defaultRightJson = JSON.stringify(defaultRight);
 			<label for={`${instanceId}-left-selector`} class="selector-label">Image gauche</label>
 			<select id={`${instanceId}-left-selector`} class="image-selector">
 				{imageOptions.map(({ format, quality }) => {
-					const formatLabel = format === 'jpeg' ? 'JPEG' : format.toUpperCase();
+					const formatLabel = format === 'source' ? 'Original' : format === 'jpeg' ? 'JPEG' : format.toUpperCase();
 					const value = `${format}-${quality}`;
 					const isSelected = format === defaultLeft.format && quality === defaultLeft.quality;
+					const displayText = format === 'source' ? formatLabel : `${formatLabel} q${quality}`;
 					return (
 						<option value={value} selected={isSelected}>
-							{formatLabel} q{quality}
+							{displayText}
 						</option>
 					);
 				})}
@@ -68,12 +72,13 @@ const defaultRightJson = JSON.stringify(defaultRight);
 			<label for={`${instanceId}-right-selector`} class="selector-label">Image droite</label>
 			<select id={`${instanceId}-right-selector`} class="image-selector">
 				{imageOptions.map(({ format, quality }) => {
-					const formatLabel = format === 'jpeg' ? 'JPEG' : format.toUpperCase();
+					const formatLabel = format === 'source' ? 'Original' : format === 'jpeg' ? 'JPEG' : format.toUpperCase();
 					const value = `${format}-${quality}`;
 					const isSelected = format === defaultRight.format && quality === defaultRight.quality;
+					const displayText = format === 'source' ? formatLabel : `${formatLabel} q${quality}`;
 					return (
 						<option value={value} selected={isSelected}>
-							{formatLabel} q{quality}
+							{displayText}
 						</option>
 					);
 				})}
@@ -338,7 +343,8 @@ const defaultRightJson = JSON.stringify(defaultRight);
 			if (leftMetric) {
 				const formatLabel = leftMetric.querySelector('.format');
 				const sizeLabel = leftMetric.querySelector('.size');
-				const ext = leftData.filename.split('.').pop().toUpperCase();
+				const isSource = leftData.filename.includes('source');
+				const ext = isSource ? 'Original' : leftData.filename.split('.').pop().toUpperCase();
 				if (formatLabel) formatLabel.textContent = ext === 'JPG' ? 'JPEG' : ext;
 				if (sizeLabel) sizeLabel.textContent = `${leftData.sizeKB} KB`;
 			}
@@ -350,7 +356,8 @@ const defaultRightJson = JSON.stringify(defaultRight);
 				const sizeLabel = rightMetric.querySelector('.size');
 				const savingsLabel = rightMetric.querySelector('.savings');
 
-				const ext = rightData.filename.split('.').pop().toUpperCase();
+				const isSource = rightData.filename.includes('source');
+				const ext = isSource ? 'Original' : rightData.filename.split('.').pop().toUpperCase();
 				if (formatLabel) formatLabel.textContent = ext === 'JPG' ? 'JPEG' : ext;
 				if (sizeLabel) sizeLabel.textContent = `${rightData.sizeKB} KB`;
 				if (savingsLabel) {
@@ -510,7 +517,8 @@ const defaultRightJson = JSON.stringify(defaultRight);
 				if (leftMetric) {
 					const formatLabel = leftMetric.querySelector('.format');
 					const sizeLabel = leftMetric.querySelector('.size');
-					const ext = leftData.filename.split('.').pop().toUpperCase();
+					const isSource = leftData.filename.includes('source');
+					const ext = isSource ? 'Original' : leftData.filename.split('.').pop().toUpperCase();
 					if (formatLabel) formatLabel.textContent = ext === 'JPG' ? 'JPEG' : ext;
 					if (sizeLabel) sizeLabel.textContent = `${leftData.sizeKB} KB`;
 				}
@@ -521,7 +529,8 @@ const defaultRightJson = JSON.stringify(defaultRight);
 					const sizeLabel = rightMetric.querySelector('.size');
 					const savingsLabel = rightMetric.querySelector('.savings');
 
-					const ext = rightData.filename.split('.').pop().toUpperCase();
+					const isSource = rightData.filename.includes('source');
+					const ext = isSource ? 'Original' : rightData.filename.split('.').pop().toUpperCase();
 					if (formatLabel) formatLabel.textContent = ext === 'JPG' ? 'JPEG' : ext;
 					if (sizeLabel) sizeLabel.textContent = `${rightData.sizeKB} KB`;
 					if (savingsLabel) {
