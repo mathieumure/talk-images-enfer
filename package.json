@@ -8,7 +8,8 @@
 		"dev": "astro dev",
 		"preview": "astro preview",
 		"generate:problem-images": "tsx scripts/generate-problem-images.ts",
-		"generate:format-comparison": "tsx scripts/generate-format-comparison.ts"
+		"generate:format-comparison": "tsx scripts/generate-format-comparison.ts",
+		"generate:srcset-demo": "tsx scripts/generate-srcset-demo.ts"
 	},
 	"dependencies": {
 		"@fontsource/caesar-dressing": "^5.2.8",

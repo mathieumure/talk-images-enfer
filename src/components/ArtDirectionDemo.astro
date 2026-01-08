@@ -1,0 +1,605 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: customClass } = Astro.props;
+const instanceId = `art-demo-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<div class={`srcset-demo-container ${customClass || ''}`} data-instance-id={instanceId}>
+  <div class="demo-grid">
+    <!-- Browser Mockup -->
+    <div class="browser-mockup">
+      <div class="browser-chrome">
+        <div class="browser-dots">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+        <div class="browser-address">localhost:4321</div>
+      </div>
+      <div class="browser-content">
+        <div class="image-container">
+          <img id={`${instanceId}-display-img`} src="" alt="Megaera" />
+          <div class="aspect-label" id={`${instanceId}-aspect-label`}>Portrait (Mobile)</div>
+        </div>
+        <div class="metrics-compact">
+          <div class="metric-row">
+            <span class="metric-label">Source:</span>
+            <span id={`${instanceId}-source-display`} class="metric-value">&lt;source media="(max-width: 639px)"&gt;</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Image:</span>
+            <span id={`${instanceId}-filename-display`} class="metric-value">megaera-mobile-2x.jpg</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Résolution:</span>
+            <span id={`${instanceId}-resolution-display`} class="metric-value">640x960</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Code Panel -->
+    <div class="code-panel">
+      <div class="code-header">Code HTML avec &lt;picture&gt;</div>
+      <pre><code id={`${instanceId}-code-display`} class="language-html"></code></pre>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="control-group">
+      <label>Viewport Width</label>
+      <div class="button-group">
+        <button data-viewport="360">360px</button>
+        <button data-viewport="720">720px</button>
+        <button data-viewport="1024" class="active">1024px</button>
+        <button data-viewport="1920">1920px</button>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label>Pixel Density (DPR)</label>
+      <div class="button-group">
+        <button data-dpr="1">1x</button>
+        <button data-dpr="2" class="active">2x</button>
+        <button data-dpr="3">3x</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style lang="scss">
+  .srcset-demo-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0.5rem 1.5rem;
+    height: 60vh;
+    max-width: 95%;
+    margin: 0 auto;
+  }
+
+  .demo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    flex: 1;
+    min-height: 0;
+    max-height: 45vh;
+  }
+
+  // Browser Mockup
+  .browser-mockup {
+    background: #2a2a2a;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .browser-chrome {
+    background: #1a1a1a;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid #333;
+  }
+
+  .browser-dots {
+    display: flex;
+    gap: 0.5rem;
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #555;
+
+      &:nth-child(1) { background: #ff5f56; }
+      &:nth-child(2) { background: #ffbd2e; }
+      &:nth-child(3) { background: #27c93f; }
+    }
+  }
+
+  .browser-address {
+    flex: 1;
+    background: #333;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: #999;
+    font-family: 'Monaco', 'Courier New', monospace;
+  }
+
+  .browser-content {
+    flex: 1;
+    padding: 2rem;
+    background: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  .image-container {
+    position: relative;
+    max-width: 90%;
+
+    img {
+      width: 100%;
+      height: auto;
+      max-height: 350px;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: block;
+    }
+
+    .aspect-label {
+      position: absolute;
+      top: 0.5rem;
+      left: 0.5rem;
+      background: rgba(78, 205, 196, 0.9);
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .metrics-compact {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+  }
+
+  .metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .metric-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #666;
+    flex-shrink: 0;
+  }
+
+  .metric-value {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #333;
+    font-family: 'Monaco', 'Courier New', monospace;
+    text-align: right;
+    word-break: break-all;
+  }
+
+  // Code Panel
+  .code-panel {
+    background: #1e1e1e;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .code-header {
+    background: #252526;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-bottom: 1px solid #3e3e3e;
+    color: #dcdcdc;
+  }
+
+  pre {
+    margin: 0;
+    padding: 1.5rem;
+    overflow: auto;
+    flex: 1;
+
+    code {
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: #dcdcdc;
+      white-space: pre;
+    }
+  }
+
+  // Controls
+  .controls {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    padding: 1rem 1.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+      font-size: 0.8rem;
+      font-weight: bold;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+  }
+
+  .button-group {
+    display: flex;
+    gap: 0.4rem;
+
+    button {
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 6px;
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.5);
+      }
+
+      &.active {
+        background: #4ECDC4;
+        border-color: #4ECDC4;
+        box-shadow: 0 2px 8px rgba(78, 205, 196, 0.3);
+      }
+    }
+  }
+
+  // Code syntax highlighting
+  :global(.html-tag) { color: #569cd6; }
+  :global(.html-attr) { color: #9cdcfe; }
+  :global(.html-string) { color: #ce9178; }
+  :global(.html-comment) { color: #608b4e; font-style: italic; }
+  :global(mark.selected-source) {
+    background: rgba(78, 205, 196, 0.25);
+    color: #4ECDC4;
+    font-weight: bold;
+    padding: 0.1em 0.3em;
+    border-radius: 3px;
+    border: 1px solid rgba(78, 205, 196, 0.5);
+  }
+  :global(mark.active-source-tag) {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    font-weight: bold;
+    padding: 0.1em 0.3em;
+    border-radius: 3px;
+    border: 1px solid rgba(255, 193, 7, 0.5);
+  }
+</style>
+
+<script>
+  function initArtDirectionDemo() {
+    const containers = document.querySelectorAll('.srcset-demo-container');
+
+    containers.forEach((container) => {
+      const instanceId = container.dataset.instanceId;
+      if (!instanceId || !instanceId.startsWith('art-demo-')) return;
+
+      // Skip if already initialized
+      if (container.dataset.initialized === 'true') return;
+      container.dataset.initialized = 'true';
+
+      let srcsetData = null;
+      let currentViewport = 1024;
+      let currentDpr = 2;
+
+    // Load srcset data
+    async function loadSrcsetData() {
+      try {
+        const response = await fetch('/srcset-demo/srcset-data.json');
+        srcsetData = await response.json();
+        return srcsetData;
+      } catch (error) {
+        console.error('Error loading srcset data:', error);
+        return null;
+      }
+    }
+
+    // Picture element source selection (matches browser behavior)
+    function selectPictureSource(viewport) {
+      // Media queries evaluated top-to-bottom
+      // Desktop: min-width 1024px
+      if (viewport >= 1024) return 'desktop';
+      // Tablet: min-width 640px
+      if (viewport >= 640) return 'tablet';
+      // Mobile: fallback (img tag)
+      return 'mobile';
+    }
+
+    // Get aspect ratio label
+    function getAspectLabel(sourceType) {
+      switch (sourceType) {
+        case 'mobile': return 'Portrait (Mobile)';
+        case 'tablet': return 'Carré (Tablet)';
+        case 'desktop': return 'Large (Desktop)';
+        default: return '';
+      }
+    }
+
+    // Get media query text
+    function getMediaQueryText(sourceType) {
+      switch (sourceType) {
+        case 'desktop': return '&lt;source media="(min-width: 1024px)"&gt;';
+        case 'tablet': return '&lt;source media="(min-width: 640px)"&gt;';
+        case 'mobile': return '&lt;img&gt; (fallback)';
+        default: return '';
+      }
+    }
+
+    // Density descriptor selection
+    function selectDensityImage(images, dpr) {
+      if (!images || images.length === 0) return null;
+
+      const sorted = [...images].sort((a, b) => a.dpr - b.dpr);
+      const exact = sorted.find(img => img.dpr === dpr);
+      if (exact) return exact;
+
+      const higher = sorted.find(img => img.dpr > dpr);
+      if (higher) return higher;
+
+      return sorted[sorted.length - 1];
+    }
+
+    // Generate HTML code
+    function generateCode() {
+      return `<picture>
+  <source
+    media="(min-width: 1024px)"
+    srcset="
+      /srcset-demo/megaera-desktop-1x.jpg 1x,
+      /srcset-demo/megaera-desktop-2x.jpg 2x
+    "
+  />
+  <source
+    media="(min-width: 640px)"
+    srcset="
+      /srcset-demo/megaera-tablet-1x.jpg 1x,
+      /srcset-demo/megaera-tablet-2x.jpg 2x
+    "
+  />
+  <img
+    srcset="
+      /srcset-demo/megaera-mobile-1x.jpg 1x,
+      /srcset-demo/megaera-mobile-2x.jpg 2x
+    "
+    src="/srcset-demo/megaera-mobile-1x.jpg"
+    alt="Megaera"
+  />
+</picture>`;
+    }
+
+    // Simple HTML syntax highlighter with source highlighting
+    function highlightHTML(code, selectedFilename, activeSourceType) {
+      // First escape HTML
+      let highlighted = code
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+
+      // Use placeholders to avoid regex conflicts
+      const MARK_START = '___MARK_START___';
+      const MARK_END = '___MARK_END___';
+      const TAG_START = '___TAG_START___';
+      const TAG_END = '___TAG_END___';
+      const ATTR_START = '___ATTR_START___';
+      const ATTR_END = '___ATTR_END___';
+      const STR_START = '___STR_START___';
+      const STR_END = '___STR_END___';
+      const ACTIVE_START = '___ACTIVE_START___';
+      const ACTIVE_END = '___ACTIVE_END___';
+
+      // Highlight selected filename FIRST
+      if (selectedFilename) {
+        const escapedFilename = selectedFilename.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(${escapedFilename})`, 'g');
+        highlighted = highlighted.replace(regex, MARK_START + '$1' + MARK_END);
+      }
+
+      // Highlight active source tag (before other replacements)
+      if (activeSourceType === 'desktop') {
+        highlighted = highlighted.replace(
+          /(&lt;source[\s\S]*?1024px[\s\S]*?\/&gt;)/,
+          ACTIVE_START + '$1' + ACTIVE_END
+        );
+      } else if (activeSourceType === 'tablet') {
+        highlighted = highlighted.replace(
+          /(&lt;source[\s\S]*?640px[\s\S]*?\/&gt;)/,
+          ACTIVE_START + '$1' + ACTIVE_END
+        );
+      } else if (activeSourceType === 'mobile') {
+        highlighted = highlighted.replace(
+          /(&lt;img[\s\S]*?\/&gt;)/,
+          ACTIVE_START + '$1' + ACTIVE_END
+        );
+      }
+
+      // Apply syntax highlighting with placeholders
+      highlighted = highlighted
+        // Tags with closing >
+        .replace(/(&lt;\/?)([a-z]+)(&gt;)/gi, TAG_START + '$1$2$3' + TAG_END)
+        // Tags with space (attributes follow)
+        .replace(/(&lt;)([a-z]+)(\s)/gi, TAG_START + '$1$2' + TAG_END + '$3')
+        // Closing />
+        .replace(/(\/)(&gt;)/g, TAG_START + '$1$2' + TAG_END)
+        // Attributes
+        .replace(/(\s)([a-z-]+)(=)/gi, '$1' + ATTR_START + '$2' + ATTR_END + '$3')
+        // Attribute values in quotes
+        .replace(/=&quot;([^&]*)&quot;/g, '=&quot;' + STR_START + '$1' + STR_END + '&quot;');
+
+      // Replace placeholders with actual HTML
+      highlighted = highlighted
+        .replace(new RegExp(MARK_START, 'g'), '<mark class=\'selected-source\'>')
+        .replace(new RegExp(MARK_END, 'g'), '</mark>')
+        .replace(new RegExp(ACTIVE_START, 'g'), '<mark class=\'active-source-tag\'>')
+        .replace(new RegExp(ACTIVE_END, 'g'), '</mark>')
+        .replace(new RegExp(TAG_START, 'g'), '<span class=\'html-tag\'>')
+        .replace(new RegExp(TAG_END, 'g'), '</span>')
+        .replace(new RegExp(ATTR_START, 'g'), '<span class=\'html-attr\'>')
+        .replace(new RegExp(ATTR_END, 'g'), '</span>')
+        .replace(new RegExp(STR_START, 'g'), '<span class=\'html-string\'>')
+        .replace(new RegExp(STR_END, 'g'), '</span>');
+
+      return highlighted;
+    }
+
+    // Update display
+    function updateDisplay(viewport, dpr) {
+      if (!srcsetData) return;
+
+      currentViewport = viewport;
+      currentDpr = dpr;
+
+      // Determine which source to use
+      const sourceType = selectPictureSource(viewport);
+      const sourceImages = srcsetData.artDirection[sourceType];
+
+      // Select image based on DPR (but cap at 2x since we only have 1x and 2x for art direction)
+      const effectiveDpr = Math.min(dpr, 2);
+      const selectedImage = selectDensityImage(sourceImages, effectiveDpr);
+      if (!selectedImage) return;
+
+      // Update image
+      const img = document.getElementById(`${instanceId}-display-img`);
+      if (img) {
+        img.src = `/srcset-demo/${selectedImage.filename}`;
+      }
+
+      // Update aspect label
+      const aspectLabel = document.getElementById(`${instanceId}-aspect-label`);
+      if (aspectLabel) {
+        aspectLabel.textContent = getAspectLabel(sourceType);
+      }
+
+      // Update metrics
+      const sourceDisplay = document.getElementById(`${instanceId}-source-display`);
+      const filenameDisplay = document.getElementById(`${instanceId}-filename-display`);
+      const resolutionDisplay = document.getElementById(`${instanceId}-resolution-display`);
+
+      if (sourceDisplay) {
+        sourceDisplay.innerHTML = getMediaQueryText(sourceType);
+      }
+      if (filenameDisplay) filenameDisplay.textContent = selectedImage.filename;
+      if (resolutionDisplay) resolutionDisplay.textContent = `${selectedImage.width}x${selectedImage.height}`;
+
+      // Update code panel
+      const code = generateCode();
+      const highlighted = highlightHTML(code, selectedImage.filename, sourceType);
+      const codeDisplay = document.getElementById(`${instanceId}-code-display`);
+      if (codeDisplay) {
+        codeDisplay.innerHTML = highlighted;
+      }
+
+      // Update button states
+      container.querySelectorAll('[data-viewport]').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.viewport) === viewport);
+      });
+
+      container.querySelectorAll('[data-dpr]').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.dpr) === dpr);
+      });
+    }
+
+    // Setup controls
+    function setupControls() {
+      // Viewport buttons
+      container.querySelectorAll('[data-viewport]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const viewport = parseInt(e.target.dataset.viewport);
+          updateDisplay(viewport, currentDpr);
+        });
+      });
+
+      // DPR buttons
+      container.querySelectorAll('[data-dpr]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const dpr = parseInt(e.target.dataset.dpr);
+          updateDisplay(currentViewport, dpr);
+        });
+      });
+    }
+
+      // Initialize
+      async function init() {
+        await loadSrcsetData();
+        if (!srcsetData) {
+          console.error('Failed to load srcset data');
+          return;
+        }
+        setupControls();
+        updateDisplay(currentViewport, currentDpr);
+      }
+
+      // Run init
+      init();
+    });
+  }
+
+  // Run on load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initArtDirectionDemo);
+  } else {
+    initArtDirectionDemo();
+  }
+
+  // Re-init on Astro page load
+  document.addEventListener('astro:page-load', initArtDirectionDemo);
+</script>

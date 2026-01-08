@@ -1,0 +1,634 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: customClass } = Astro.props;
+const instanceId = `width-demo-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<div class={`srcset-demo-container ${customClass || ''}`} data-instance-id={instanceId}>
+  <div class="demo-grid">
+    <!-- Browser Mockup -->
+    <div class="browser-mockup">
+      <div class="browser-chrome">
+        <div class="browser-dots">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+        <div class="browser-address">localhost:4321</div>
+      </div>
+      <div class="browser-content">
+        <img id={`${instanceId}-display-img`} src="" alt="Achilles" />
+        <div class="calculation">
+          <div class="calc-title">Calcul de sélection:</div>
+          <div class="calc-steps">
+            <div class="calc-step">
+              <span class="calc-label">Viewport:</span>
+              <span id={`${instanceId}-calc-viewport`} class="calc-value">1024px</span>
+            </div>
+            <div class="calc-step">
+              <span class="calc-label">sizes:</span>
+              <span id={`${instanceId}-calc-sizes`} class="calc-value">50vw</span>
+            </div>
+            <div class="calc-step">
+              <span class="calc-label">Largeur CSS:</span>
+              <span id={`${instanceId}-calc-css`} class="calc-value">512px (1024 × 50%)</span>
+            </div>
+            <div class="calc-step">
+              <span class="calc-label">DPR:</span>
+              <span id={`${instanceId}-calc-dpr`} class="calc-value">2x</span>
+            </div>
+            <div class="calc-step highlight">
+              <span class="calc-label">→ Largeur physique:</span>
+              <span id={`${instanceId}-calc-physical`} class="calc-value">1024px (512 × 2)</span>
+            </div>
+            <div class="calc-step highlight">
+              <span class="calc-label">→ Sélectionné:</span>
+              <span id={`${instanceId}-calc-selected`} class="calc-value">achilles-1280w.jpg</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Code Panel -->
+    <div class="code-panel">
+      <div class="code-header">Code HTML</div>
+      <pre><code id={`${instanceId}-code-display`} class="language-html"></code></pre>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="control-group">
+      <label>Viewport Width</label>
+      <div class="button-group">
+        <button data-viewport="360">360px</button>
+        <button data-viewport="720">720px</button>
+        <button data-viewport="1024" class="active">1024px</button>
+        <button data-viewport="1920">1920px</button>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label>Pixel Density (DPR)</label>
+      <div class="button-group">
+        <button data-dpr="1">1x</button>
+        <button data-dpr="2" class="active">2x</button>
+        <button data-dpr="3">3x</button>
+      </div>
+    </div>
+
+    <div class="control-group slider-group">
+      <label>
+        Largeur CSS (pour sizes)
+        <span id={`${instanceId}-slider-value`} class="slider-value">50%</span>
+      </label>
+      <input
+        type="range"
+        id={`${instanceId}-width-slider`}
+        min="20"
+        max="100"
+        value="50"
+        step="5"
+      />
+    </div>
+  </div>
+</div>
+
+<style lang="scss">
+  .srcset-demo-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0.5rem 1.5rem;
+    height: 60vh;
+    max-width: 95%;
+    margin: 0 auto;
+  }
+
+  .demo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    flex: 1;
+    min-height: 0;
+    max-height: 45vh;
+  }
+
+  // Browser Mockup
+  .browser-mockup {
+    background: #2a2a2a;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .browser-chrome {
+    background: #1a1a1a;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid #333;
+  }
+
+  .browser-dots {
+    display: flex;
+    gap: 0.5rem;
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #555;
+
+      &:nth-child(1) { background: #ff5f56; }
+      &:nth-child(2) { background: #ffbd2e; }
+      &:nth-child(3) { background: #27c93f; }
+    }
+  }
+
+  .browser-address {
+    flex: 1;
+    background: #333;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: #999;
+    font-family: 'Monaco', 'Courier New', monospace;
+  }
+
+  .browser-content {
+    flex: 1;
+    padding: 2rem;
+    background: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    min-height: 0;
+    overflow: auto;
+
+    img {
+      max-width: 90%;
+      max-height: 250px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .calculation {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+
+    .calc-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+      margin-bottom: 0.75rem;
+    }
+
+    .calc-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .calc-step {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0.75rem;
+      background: white;
+      border-radius: 4px;
+      font-size: 0.85rem;
+
+      &.highlight {
+        background: rgba(78, 205, 196, 0.1);
+        border: 1px solid rgba(78, 205, 196, 0.3);
+
+        .calc-label {
+          color: #2d9b94;
+          font-weight: 700;
+        }
+
+        .calc-value {
+          color: #2d9b94;
+          font-weight: 700;
+        }
+      }
+    }
+
+    .calc-label {
+      font-weight: 600;
+      color: #666;
+    }
+
+    .calc-value {
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-weight: 600;
+      color: #333;
+    }
+  }
+
+  // Code Panel
+  .code-panel {
+    background: #1e1e1e;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .code-header {
+    background: #252526;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-bottom: 1px solid #3e3e3e;
+    color: #dcdcdc;
+  }
+
+  pre {
+    margin: 0;
+    padding: 1.5rem;
+    overflow: auto;
+    flex: 1;
+
+    code {
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #dcdcdc;
+      white-space: pre;
+    }
+  }
+
+  // Controls
+  .controls {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    padding: 1rem 1.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    align-items: flex-end;
+    flex-shrink: 0;
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    label {
+      font-size: 0.9rem;
+      font-weight: bold;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    &.slider-group {
+      min-width: 250px;
+    }
+  }
+
+  .button-group {
+    display: flex;
+    gap: 0.5rem;
+
+    button {
+      padding: 0.6rem 1.2rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 6px;
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.5);
+      }
+
+      &.active {
+        background: #4ECDC4;
+        border-color: #4ECDC4;
+        box-shadow: 0 2px 8px rgba(78, 205, 196, 0.3);
+      }
+    }
+  }
+
+  .slider-value {
+    background: rgba(78, 205, 196, 0.2);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Courier New', monospace;
+    color: #4ECDC4;
+    font-size: 0.9rem;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, rgba(78, 205, 196, 0.3), rgba(78, 205, 196, 0.8));
+    outline: none;
+    cursor: pointer;
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #4ECDC4;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+
+    &::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #4ECDC4;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+  }
+
+  // Code syntax highlighting
+  :global(.html-tag) { color: #569cd6; }
+  :global(.html-attr) { color: #9cdcfe; }
+  :global(.html-string) { color: #ce9178; }
+  :global(.html-comment) { color: #608b4e; font-style: italic; }
+  :global(mark.selected-source) {
+    background: rgba(78, 205, 196, 0.25);
+    color: #4ECDC4;
+    font-weight: bold;
+    padding: 0.1em 0.3em;
+    border-radius: 3px;
+    border: 1px solid rgba(78, 205, 196, 0.5);
+  }
+</style>
+
+<script>
+  function initWidthDemo() {
+    const containers = document.querySelectorAll('.srcset-demo-container');
+
+    containers.forEach((container) => {
+      const instanceId = container.dataset.instanceId;
+      if (!instanceId || !instanceId.startsWith('width-demo-')) return;
+
+      // Skip if already initialized
+      if (container.dataset.initialized === 'true') return;
+      container.dataset.initialized = 'true';
+
+      let srcsetData = null;
+      let currentViewport = 1024;
+      let currentDpr = 2;
+      let currentWidthPercent = 50;
+
+    // Load srcset data
+    async function loadSrcsetData() {
+      try {
+        const response = await fetch('/srcset-demo/srcset-data.json');
+        srcsetData = await response.json();
+        return srcsetData;
+      } catch (error) {
+        console.error('Error loading srcset data:', error);
+        return null;
+      }
+    }
+
+    // Width descriptor selection algorithm
+    function selectWidthImage(images, viewport, dpr, sizesPercent) {
+      if (!images || images.length === 0) return null;
+
+      // Calculate physical width needed
+      const cssWidth = (viewport * sizesPercent) / 100;
+      const physicalWidth = cssWidth * dpr;
+
+      // Sort images by width
+      const sorted = [...images].sort((a, b) => a.width - b.width);
+
+      // Browser selects smallest image >= physicalWidth
+      const selected = sorted.find(img => img.width >= physicalWidth);
+      return selected || sorted[sorted.length - 1];
+    }
+
+    // Generate HTML code with dynamic sizes value
+    function generateCode(sizesPercent) {
+      return `<img
+  srcset="
+    /srcset-demo/achilles-320w.jpg 320w,
+    /srcset-demo/achilles-640w.jpg 640w,
+    /srcset-demo/achilles-960w.jpg 960w,
+    /srcset-demo/achilles-1280w.jpg 1280w,
+    /srcset-demo/achilles-1920w.jpg 1920w
+  "
+  sizes="${sizesPercent}vw"
+  src="/srcset-demo/achilles-640w.jpg"
+  alt="Achilles"
+/>`;
+    }
+
+    // Simple HTML syntax highlighter
+    function highlightHTML(code, selectedFilename) {
+      // First escape HTML
+      let highlighted = code
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+
+      // Use placeholders to avoid regex conflicts
+      const MARK_START = '___MARK_START___';
+      const MARK_END = '___MARK_END___';
+      const TAG_START = '___TAG_START___';
+      const TAG_END = '___TAG_END___';
+      const ATTR_START = '___ATTR_START___';
+      const ATTR_END = '___ATTR_END___';
+      const STR_START = '___STR_START___';
+      const STR_END = '___STR_END___';
+
+      // Highlight selected filename FIRST
+      if (selectedFilename) {
+        const escapedFilename = selectedFilename.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(${escapedFilename})`, 'g');
+        highlighted = highlighted.replace(regex, MARK_START + '$1' + MARK_END);
+      }
+
+      // Apply syntax highlighting with placeholders
+      highlighted = highlighted
+        // Tags with closing >
+        .replace(/(&lt;\/?)([a-z]+)(&gt;)/gi, TAG_START + '$1$2$3' + TAG_END)
+        // Tags with space (attributes follow)
+        .replace(/(&lt;)([a-z]+)(\s)/gi, TAG_START + '$1$2' + TAG_END + '$3')
+        // Closing />
+        .replace(/(\/)(&gt;)/g, TAG_START + '$1$2' + TAG_END)
+        // Attributes
+        .replace(/(\s)([a-z-]+)(=)/gi, '$1' + ATTR_START + '$2' + ATTR_END + '$3')
+        // Attribute values in quotes
+        .replace(/=&quot;([^&]*)&quot;/g, '=&quot;' + STR_START + '$1' + STR_END + '&quot;');
+
+      // Replace placeholders with actual HTML
+      highlighted = highlighted
+        .replace(new RegExp(MARK_START, 'g'), '<mark class=\'selected-source\'>')
+        .replace(new RegExp(MARK_END, 'g'), '</mark>')
+        .replace(new RegExp(TAG_START, 'g'), '<span class=\'html-tag\'>')
+        .replace(new RegExp(TAG_END, 'g'), '</span>')
+        .replace(new RegExp(ATTR_START, 'g'), '<span class=\'html-attr\'>')
+        .replace(new RegExp(ATTR_END, 'g'), '</span>')
+        .replace(new RegExp(STR_START, 'g'), '<span class=\'html-string\'>')
+        .replace(new RegExp(STR_END, 'g'), '</span>');
+
+      return highlighted;
+    }
+
+    // Update display
+    function updateDisplay(viewport, dpr, widthPercent) {
+      if (!srcsetData) return;
+
+      currentViewport = viewport;
+      currentDpr = dpr;
+      currentWidthPercent = widthPercent;
+
+      // Select appropriate image
+      const selectedImage = selectWidthImage(srcsetData.widthDescriptors, viewport, dpr, widthPercent);
+      if (!selectedImage) return;
+
+      // Calculate values
+      const cssWidth = (viewport * widthPercent) / 100;
+      const physicalWidth = cssWidth * dpr;
+
+      // Update image
+      const img = document.getElementById(`${instanceId}-display-img`);
+      if (img) {
+        img.src = `/srcset-demo/${selectedImage.filename}`;
+      }
+
+      // Update calculation display
+      const calcViewport = document.getElementById(`${instanceId}-calc-viewport`);
+      const calcSizes = document.getElementById(`${instanceId}-calc-sizes`);
+      const calcCss = document.getElementById(`${instanceId}-calc-css`);
+      const calcDpr = document.getElementById(`${instanceId}-calc-dpr`);
+      const calcPhysical = document.getElementById(`${instanceId}-calc-physical`);
+      const calcSelected = document.getElementById(`${instanceId}-calc-selected`);
+
+      if (calcViewport) calcViewport.textContent = `${viewport}px`;
+      if (calcSizes) calcSizes.textContent = `${widthPercent}vw`;
+      if (calcCss) calcCss.textContent = `${Math.round(cssWidth)}px (${viewport} × ${widthPercent}%)`;
+      if (calcDpr) calcDpr.textContent = `${dpr}x`;
+      if (calcPhysical) calcPhysical.textContent = `${Math.round(physicalWidth)}px (${Math.round(cssWidth)} × ${dpr})`;
+      if (calcSelected) calcSelected.textContent = selectedImage.filename;
+
+      // Update code panel
+      const code = generateCode(widthPercent);
+      const highlighted = highlightHTML(code, selectedImage.filename);
+      const codeDisplay = document.getElementById(`${instanceId}-code-display`);
+      if (codeDisplay) {
+        codeDisplay.innerHTML = highlighted;
+      }
+
+      // Update button states
+      container.querySelectorAll('[data-viewport]').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.viewport) === viewport);
+      });
+
+      container.querySelectorAll('[data-dpr]').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.dpr) === dpr);
+      });
+    }
+
+    // Setup controls
+    function setupControls() {
+      // Viewport buttons
+      container.querySelectorAll('[data-viewport]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const viewport = parseInt(e.target.dataset.viewport);
+          updateDisplay(viewport, currentDpr, currentWidthPercent);
+        });
+      });
+
+      // DPR buttons
+      container.querySelectorAll('[data-dpr]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const dpr = parseInt(e.target.dataset.dpr);
+          updateDisplay(currentViewport, dpr, currentWidthPercent);
+        });
+      });
+
+      // Width slider
+      const slider = document.getElementById(`${instanceId}-width-slider`);
+      const sliderValue = document.getElementById(`${instanceId}-slider-value`);
+
+      if (slider && sliderValue) {
+        slider.addEventListener('input', (e) => {
+          const widthPercent = parseInt(e.target.value);
+          sliderValue.textContent = `${widthPercent}%`;
+          updateDisplay(currentViewport, currentDpr, widthPercent);
+        });
+      }
+    }
+
+      // Initialize
+      async function init() {
+        await loadSrcsetData();
+        if (!srcsetData) {
+          console.error('Failed to load srcset data');
+          return;
+        }
+        setupControls();
+        updateDisplay(currentViewport, currentDpr, currentWidthPercent);
+      }
+
+      // Run init
+      init();
+    });
+  }
+
+  // Run on load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initWidthDemo);
+  } else {
+    initWidthDemo();
+  }
+
+  // Re-init on Astro page load
+  document.addEventListener('astro:page-load', initWidthDemo);
+</script>

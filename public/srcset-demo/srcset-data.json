@@ -1,0 +1,121 @@
+{
+  "densityDescriptors": [
+    {
+      "descriptor": "1x",
+      "filename": "thanatos-1x.jpg",
+      "width": 400,
+      "height": 225,
+      "sizeKB": 15.11,
+      "dpr": 1
+    },
+    {
+      "descriptor": "2x",
+      "filename": "thanatos-2x.jpg",
+      "width": 800,
+      "height": 450,
+      "sizeKB": 45.31,
+      "dpr": 2
+    },
+    {
+      "descriptor": "3x",
+      "filename": "thanatos-3x.jpg",
+      "width": 1200,
+      "height": 675,
+      "sizeKB": 85.25,
+      "dpr": 3
+    }
+  ],
+  "widthDescriptors": [
+    {
+      "descriptor": "320w",
+      "filename": "achilles-320w.jpg",
+      "width": 320,
+      "height": 180,
+      "sizeKB": 14.56
+    },
+    {
+      "descriptor": "640w",
+      "filename": "achilles-640w.jpg",
+      "width": 640,
+      "height": 360,
+      "sizeKB": 44.54
+    },
+    {
+      "descriptor": "960w",
+      "filename": "achilles-960w.jpg",
+      "width": 960,
+      "height": 540,
+      "sizeKB": 84.81
+    },
+    {
+      "descriptor": "1280w",
+      "filename": "achilles-1280w.jpg",
+      "width": 1280,
+      "height": 720,
+      "sizeKB": 132.65
+    },
+    {
+      "descriptor": "1920w",
+      "filename": "achilles-1920w.jpg",
+      "width": 1920,
+      "height": 1080,
+      "sizeKB": 240.42
+    }
+  ],
+  "artDirection": {
+    "mobile": [
+      {
+        "descriptor": "1x",
+        "filename": "megaera-mobile-1x.jpg",
+        "width": 320,
+        "height": 480,
+        "sizeKB": 23.41,
+        "dpr": 1
+      },
+      {
+        "descriptor": "2x",
+        "filename": "megaera-mobile-2x.jpg",
+        "width": 640,
+        "height": 960,
+        "sizeKB": 65.22,
+        "dpr": 2
+      }
+    ],
+    "tablet": [
+      {
+        "descriptor": "1x",
+        "filename": "megaera-tablet-1x.jpg",
+        "width": 768,
+        "height": 768,
+        "sizeKB": 82.81,
+        "dpr": 1
+      },
+      {
+        "descriptor": "2x",
+        "filename": "megaera-tablet-2x.jpg",
+        "width": 1536,
+        "height": 1536,
+        "sizeKB": 216.78,
+        "dpr": 2
+      }
+    ],
+    "desktop": [
+      {
+        "descriptor": "1x",
+        "filename": "megaera-desktop-1x.jpg",
+        "width": 1200,
+        "height": 600,
+        "sizeKB": 86.39,
+        "dpr": 1
+      },
+      {
+        "descriptor": "2x",
+        "filename": "megaera-desktop-2x.jpg",
+        "width": 2400,
+        "height": 1200,
+        "sizeKB": 231.87,
+        "dpr": 2
+      }
+    ]
+  }
+}
