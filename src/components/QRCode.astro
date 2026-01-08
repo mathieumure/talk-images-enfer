@@ -1,27 +1,7 @@
----
-import QRCodeLib from 'qrcode';
-
-type Props = {
-	url: string;
-	class?: string;
-};
-
-const {url, ...props} = Astro.props;
-
-const data = await QRCodeLib.toDataURL(url, {
-	errorCorrectionLevel: 'H',
-	margin: 1,
-	width: 400,
-	color: {
-		dark: '#e16605',
-		light: '#000000'
-	}
-});
----
-<div class:list={["container", props['class']]} {...props}>
+<div class="qrcode-container">
 	<p>Pour aller</p>
 	<div class="image-container">
-		<img src={data} class="qrcode">
+		<img class="qrcode">
 		<img src="https://talk-assets.s3.fr-par.scw.cloud/flames.webp" class="flames">
 		<img src="https://talk-assets.s3.fr-par.scw.cloud/heat.webp" class="logo">
 	</div>
@@ -35,20 +15,23 @@ const data = await QRCodeLib.toDataURL(url, {
 		background-color: #000;
 		font-size: 17cqw;
 		padding: 4px;
+		color: white;
+		text-align: center;
 	}
 	img {
 		margin: 0;
 		max-width: 100%;
 	}
 
-	.container {
+	.qrcode-container {
 		display: flex;
 		flex-direction: column;
 		container-type: inline-size;
 		position: fixed;
-		bottom: 0;
-		right: 0;
-		width: 120px;
+		bottom: 12px;
+		left: 12px;
+		width: 175px;
+		transition: all 0.2s
 	}
 
 	.image-container {

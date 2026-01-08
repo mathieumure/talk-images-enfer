@@ -17,5 +17,5 @@ const { animate = true, qrcode } = Astro.props;
 
 <section {...Astro.props} data-auto-animate={animate}>
   <slot />
+	{qrcode && <QRCode url={qrcode} />}
 </section>
-{qrcode && <QRCode url={qrcode} />}
