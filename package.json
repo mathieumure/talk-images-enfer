@@ -12,6 +12,7 @@
 		"generate:srcset-demo": "tsx scripts/generate-srcset-demo.ts"
 	},
 	"dependencies": {
+		"@astrojs/react": "^4.4.2",
 		"@fontsource/caesar-dressing": "^5.2.8",
 		"@fontsource/lato": "^5.2.7",
 		"@fontsource/spectral-sc": "^5.2.8",
@@ -19,12 +20,16 @@
 		"chart.js": "^4.5.1",
 		"pinch-zoom-element": "^1.1.1",
 		"qrcode": "^1.5.4",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
 		"reveal.js": "5.2.1",
 		"two-up-element": "^1.0.1"
 	},
 	"devDependencies": {
 		"@types/node": "20.19.27",
 		"@types/qrcode": "^1.5.6",
+		"@types/react": "^18.3.27",
+		"@types/react-dom": "^18.3.7",
 		"@types/reveal.js": "5.2.1",
 		"sass": "1.77.8",
 		"sharp": "^0.34.5",
