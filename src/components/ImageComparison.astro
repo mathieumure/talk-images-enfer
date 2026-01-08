@@ -292,15 +292,7 @@ const defaultRightJson = JSON.stringify(defaultRight);
 
 			if (!leftZoom || !rightZoom) return;
 
-			// Redirect events from right to left to keep them in sync
-			for (const eventType of ['pointerdown', 'touchstart', 'mousedown']) {
-				rightZoom.addEventListener(eventType, (event) => {
-					const newEvent = new event.constructor(event.type, event);
-					leftZoom.dispatchEvent(newEvent);
-				}, { passive: true });
-			}
-
-			// Sync transforms from left to right
+			// Sync transforms bidirectionally
 			leftZoom.addEventListener('change', () => {
 				rightZoom.setTransform({
 					scale: leftZoom.scale,
@@ -309,8 +301,22 @@ const defaultRightJson = JSON.stringify(defaultRight);
 				});
 			});
 
+			rightZoom.addEventListener('change', () => {
+				leftZoom.setTransform({
+					scale: rightZoom.scale,
+					x: rightZoom.x,
+					y: rightZoom.y
+				});
+			});
+
 			// Blur focused elements on touch end (Android keyboard fix)
 			leftZoom.addEventListener('touchend', () => {
+				if (document.activeElement) {
+					document.activeElement.blur();
+				}
+			});
+
+			rightZoom.addEventListener('touchend', () => {
 				if (document.activeElement) {
 					document.activeElement.blur();
 				}
@@ -459,15 +465,7 @@ const defaultRightJson = JSON.stringify(defaultRight);
 
 				if (!leftZoom || !rightZoom) return;
 
-				// Redirect events from right to left to keep them in sync
-				for (const eventType of ['pointerdown', 'touchstart', 'mousedown']) {
-					rightZoom.addEventListener(eventType, (event) => {
-						const newEvent = new event.constructor(event.type, event);
-						leftZoom.dispatchEvent(newEvent);
-					}, { passive: true });
-				}
-
-				// Sync transforms from left to right
+				// Sync transforms bidirectionally
 				leftZoom.addEventListener('change', () => {
 					rightZoom.setTransform({
 						scale: leftZoom.scale,
@@ -476,8 +474,22 @@ const defaultRightJson = JSON.stringify(defaultRight);
 					});
 				});
 
+				rightZoom.addEventListener('change', () => {
+					leftZoom.setTransform({
+						scale: rightZoom.scale,
+						x: rightZoom.x,
+						y: rightZoom.y
+					});
+				});
+
 				// Blur focused elements on touch end (Android keyboard fix)
 				leftZoom.addEventListener('touchend', () => {
+					if (document.activeElement) {
+						document.activeElement.blur();
+					}
+				});
+
+				rightZoom.addEventListener('touchend', () => {
 					if (document.activeElement) {
 						document.activeElement.blur();
 					}
