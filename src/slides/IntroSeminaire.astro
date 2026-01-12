@@ -1,0 +1,44 @@
+---
+import Slide from "../components/Slide.astro";
+
+const msPerDay = 1000 * 60 * 60 * 24;
+const nbDaysSinceFirstPicture = Math.floor(
+	(Date.now() - new Date("1992-07-18").getTime()) / msPerDay,
+);
+---
+
+<Slide>
+	<Slide><h1>💀🔥 Journée d'accueil n° {nbDaysSinceFirstPicture} 🔥💀</h1></Slide>
+	<Slide>
+		<h1>💀🔥 Journée d'accueil n° {nbDaysSinceFirstPicture} 🔥💀</h1>
+		<ol>
+			<li class="fragment">👋 Accueil convivial</li>
+			<li class="fragment">🎤 Mot de bienvenue de la direction</li>
+			<li class="fragment">🚀 Présentation du nouvel organigrame</li>
+			<li class="fragment striked">❤️ Présentation de nos valeurs</li>
+			<li class="fragment">📔 Histoire de notre entreprise</li>
+			<li class="fragment">🗺️ Présentation des différents départements</li>
+			<li class="fragment">🪙 Quête 🪙</li>
+			<li class="fragment">🥤 Pot de bienvenue </li>
+		</ol>
+	</Slide>
+</Slide>
+
+<style lang="scss">
+	h1 {
+		font-family: "Caesar Dressing", system-ui;
+		font-size: 5rem;
+	}
+
+	ol {
+		margin: 12px 0 0;
+	}
+
+	li {
+		margin-bottom: 20px;
+	}
+
+	.striked {
+		text-decoration: line-through;
+	}
+</style>
