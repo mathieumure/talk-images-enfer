@@ -1,0 +1,48 @@
+---
+import Slide from "../components/Slide.astro";
+---
+
+<Slide
+	class="intro-slide"
+	data-background-image="https://talk-assets.s3.fr-par.scw.cloud/intro.webp"
+	data-background-size="contain"
+>
+	<div class="subtitles">
+		<p class="fragment current-visible">Peu d'histoires sont racontées...</p>
+		<p class="fragment current-visible">
+			Deuxième paragraphe qui remplace le premier...
+		</p>
+		<p class="fragment current-visible">Troisième et dernier paragraphe.</p>
+	</div>
+</Slide>
+
+<style lang="scss">
+	.intro-slide {
+		height: 100%;
+		position: relative;
+	}
+
+	.subtitles {
+		position: absolute;
+		bottom: 25%;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 90%;
+		text-align: center;
+
+		p {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			margin: 0;
+			padding: 1rem 2rem;
+			background: rgba(0, 0, 0, 0.75);
+			color: #fff;
+			font-size: 2.5rem;
+			font-family: "Spectral SC", system-ui;
+			text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+			border-radius: 4px;
+		}
+	}
+</style>
