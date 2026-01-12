@@ -59,7 +59,15 @@ import "@fontsource/lato";
 			Reveal.on("slidechanged", function (event: any) {
 				const currentSlide = event.currentSlide;
 				const qrcodeUrl = currentSlide.getAttribute('data-qrcode');
-				console.log(qrcodeUrl);
+				if (qrcodeUrl) {
+					updateQRCode(qrcodeUrl);
+				} else {
+					(document.querySelector('.qrcode-container') as HTMLDivElement).style.opacity = '0';
+				}
+			});
+			Reveal.on('ready', (event: any) => {
+				const currentSlide = event.currentSlide;
+				const qrcodeUrl = currentSlide.getAttribute('data-qrcode');
 				if (qrcodeUrl) {
 					updateQRCode(qrcodeUrl);
 				} else {
