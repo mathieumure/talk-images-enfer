@@ -1,0 +1,24 @@
+---
+import Slide from "./Slide.astro";
+
+type ImageFormat = 'jpg' | "bmp" | "png" | "gif" | "webp" | "svg" | "avif" | "jpgxl";
+
+const formats: Array<ImageFormat> = ['jpg' , "bmp" , "png" , "gif" , "webp" , "svg" , "avif" , "jpgxl" ]
+
+type Props = {
+	current?: ImageFormat;
+}
+---
+<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/styx.webp" data-background-size="contain" class="imageSlide">
+	{ formats.map(format => {
+		if (format === Astro.props.current) {
+			return <div class="container">
+				<img src={`https://talk-assets.s3.fr-par.scw.cloud/${format}_logo.png`} />
+				<div>
+					<slot />
+				</div>
+			</div>
+		}
+		return <img class={format} src={`https://talk-assets.s3.fr-par.scw.cloud/${format}_logo.png`}/>;
+	}) }
+</Slide>
