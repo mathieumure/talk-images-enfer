@@ -1,0 +1,22 @@
+---
+import Slide from "../../components/Slide.astro";
+import ImageCompressionWithGrid from "./ImageCompressionWithGrid.astro";
+import BoonSlide from "../../components/BoonSlide.astro";
+import BoonContent from "../../components/BoonContent.astro";
+---
+<Slide>
+	<Slide>
+		<h1>Comment compresser une image</h1>
+	</Slide>
+	<ImageCompressionWithGrid />
+	<BoonSlide>
+		<BoonContent></BoonContent>
+	</BoonSlide>
+</Slide>
+
+<style>
+	h1 {
+		font-family: "Spectral SC", system-ui;
+		font-size: 5rem;
+	}
+</style>

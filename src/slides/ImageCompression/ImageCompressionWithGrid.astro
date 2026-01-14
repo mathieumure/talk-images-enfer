@@ -1,0 +1,105 @@
+---
+import Slide from "../../components/Slide.astro";
+---
+<Slide>
+	<h1>Comment compresser une image</h1>
+	<canvas id="image-compression" width="1000" height="562"></canvas>
+</Slide>
+
+<script>
+	const canvas = document.querySelector("canvas#image-compression") as HTMLCanvasElement;
+	const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+	const img = new Image();
+	const imgSrc = "/image-format-comparison/achilles-q100.webp";
+
+	canvas.addEventListener('click', () => {
+		const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+		showSplit(imgData, canvas.width);
+	})
+
+	ctx.strokeStyle = "lime";
+	ctx.lineWidth = 1;
+	img.onload = () => {
+		ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+	};
+	img.src = imgSrc;
+
+	function regionStd(x: number, y: number, w: number, h: number, data: Array<number>, totalWidth: number) {
+		let sum = 0,
+			sumSq = 0;
+		for (let j = 0; j < h; j++) {
+			let idx = ((y + j) * totalWidth + x) * 4;
+			for (let i = 0; i < w; i++) {
+				const v = data[idx];
+				sum += v;
+				sumSq += v * v;
+				idx += 4;
+			}
+		}
+		const n = w * h;
+		const mean = sum / n;
+
+		return Math.sqrt(sumSq / n - mean * mean);
+	}
+	function buildQuadtree(params) {
+		const { x, y, w, h, forceSplitSize, minSize, threshold, data, totalWidth } =
+			params;
+
+		// always split big regions
+		const forced = w > forceSplitSize && h > forceSplitSize;
+		const std = regionStd(x, y, w, h, data, totalWidth);
+
+		// if the region is too small or color varies little, stop
+		if (w <= minSize || h <= minSize || (!forced && std < threshold)) return;
+
+		ctx.strokeRect(x, y, w, h);
+
+		const midW = (w / 2) | 0;
+		const midH = (h / 2) | 0;
+		if (midW === 0 || midH === 0) return;
+
+		const nextParams = { ...params, w: midW, h: midH };
+
+		// left top
+		buildQuadtree({ ...nextParams });
+
+		// right top
+		buildQuadtree({ ...nextParams, x: x + midW, y });
+
+		// left bottom
+		buildQuadtree({ ...nextParams, x, y: y + midH });
+
+		// right bottom
+		buildQuadtree({
+			...nextParams,
+			x: x + midW,
+			y: y + midH,
+		});
+	}
+
+	function showSplit(imgData, totalWidth) {
+		const params = {
+			threshold: 28,
+			minSize: 8,
+			forceSplitSize: 128,
+			totalWidth,
+		};
+
+		buildQuadtree({
+			x: 0,
+			y: 0,
+			w: totalWidth,
+			h: totalWidth,
+			data: imgData.data,
+			...params,
+		});
+	}
+
+</script>
+
+<style>
+	h1 {
+		font-family: "Spectral SC", system-ui;
+		font-size: 5rem;
+	}
+</style>
