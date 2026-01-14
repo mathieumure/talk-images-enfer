@@ -1,21 +1,36 @@
 ---
 import Slide from "../../components/Slide.astro";
 ---
+
 <Slide>
 	<h1>Comment compresser une image</h1>
 	<canvas id="image-compression" width="1000" height="562"></canvas>
 </Slide>
 
 <script>
-	const canvas = document.querySelector("canvas#image-compression") as HTMLCanvasElement;
+	const canvas = document.querySelector(
+		"canvas#image-compression",
+	) as HTMLCanvasElement;
 	const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 	const img = new Image();
 	const imgSrc = "/image-format-comparison/achilles-q100.webp";
+	let step = "initial";
+	let cells: Array<{ x: number; y: number; w: number; h: number }> = [];
+	let originalImgData: ImageData;
 
-	canvas.addEventListener('click', () => {
-		const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-		showSplit(imgData, canvas.width);
-	})
+	canvas.addEventListener("click", () => {
+		if (step === "initial") {
+			originalImgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+			showSplit(originalImgData, canvas.width);
+			step = "grid";
+		} else if (step === "grid") {
+			showHorizontalPrediction();
+			step = "prediction";
+		} else if (step === "prediction") {
+			showDCTCoefficients();
+			step = "dct";
+		}
+	});
 
 	ctx.strokeStyle = "lime";
 	ctx.lineWidth = 1;
@@ -24,7 +39,14 @@ import Slide from "../../components/Slide.astro";
 	};
 	img.src = imgSrc;
 
-	function regionStd(x: number, y: number, w: number, h: number, data: Array<number>, totalWidth: number) {
+	function regionStd(
+		x: number,
+		y: number,
+		w: number,
+		h: number,
+		data: Array<number>,
+		totalWidth: number,
+	) {
 		let sum = 0,
 			sumSq = 0;
 		for (let j = 0; j < h; j++) {
@@ -50,7 +72,10 @@ import Slide from "../../components/Slide.astro";
 		const std = regionStd(x, y, w, h, data, totalWidth);
 
 		// if the region is too small or color varies little, stop
-		if (w <= minSize || h <= minSize || (!forced && std < threshold)) return;
+		if (w <= minSize || h <= minSize || (!forced && std < threshold)) {
+			cells.push({ x, y, w, h });
+			return;
+		}
 
 		ctx.strokeRect(x, y, w, h);
 
@@ -95,6 +120,111 @@ import Slide from "../../components/Slide.astro";
 		});
 	}
 
+	function showHorizontalPrediction() {
+		const totalWidth = canvas.width;
+		// ctx.globalAlpha = 0.7;
+
+		for (const cell of cells) {
+			let r = 0,
+				g = 0,
+				b = 0;
+			for (let row = 0; row < cell.h; row++) {
+				const leftIdx = ((cell.y + row) * totalWidth + cell.x) * 4;
+				r += originalImgData.data[leftIdx];
+				g += originalImgData.data[leftIdx + 1];
+				b += originalImgData.data[leftIdx + 2];
+			}
+			r = Math.round(r / cell.h);
+			g = Math.round(g / cell.h);
+			b = Math.round(b / cell.h);
+
+			ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+			ctx.fillRect(cell.x, cell.y, cell.w, cell.h);
+		}
+
+		ctx.globalAlpha = 1;
+	}
+
+	function dct1d(input: number[]): number[] {
+		const N = input.length;
+		const output: number[] = new Array(N);
+		for (let k = 0; k < N; k++) {
+			let sum = 0;
+			for (let n = 0; n < N; n++) {
+				sum += input[n] * Math.cos((Math.PI / N) * (n + 0.5) * k);
+			}
+			output[k] = sum;
+		}
+		return output;
+	}
+
+	function dct2d(block: number[][]): number[][] {
+		const h = block.length;
+		const w = block[0].length;
+		const temp: number[][] = [];
+		for (let y = 0; y < h; y++) {
+			temp.push(dct1d(block[y]));
+		}
+		const result: number[][] = [];
+		for (let y = 0; y < h; y++) {
+			result.push(new Array(w));
+		}
+		for (let x = 0; x < w; x++) {
+			const col: number[] = [];
+			for (let y = 0; y < h; y++) {
+				col.push(temp[y][x]);
+			}
+			const dctCol = dct1d(col);
+			for (let y = 0; y < h; y++) {
+				result[y][x] = dctCol[y];
+			}
+		}
+		return result;
+	}
+
+	function showDCTCoefficients() {
+		const totalWidth = canvas.width;
+		const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+		const data = imgData.data;
+
+		for (const cell of cells) {
+			const block: number[][] = [];
+			for (let row = 0; row < cell.h; row++) {
+				const rowData: number[] = [];
+				for (let col = 0; col < cell.w; col++) {
+					const idx = ((cell.y + row) * totalWidth + cell.x + col) * 4;
+					const r = originalImgData.data[idx];
+					const g = originalImgData.data[idx + 1];
+					const b = originalImgData.data[idx + 2];
+					rowData.push(0.299 * r + 0.587 * g + 0.114 * b);
+				}
+				block.push(rowData);
+			}
+
+			const dctBlock = dct2d(block);
+
+			let maxVal = 0;
+			for (let row = 0; row < cell.h; row++) {
+				for (let col = 0; col < cell.w; col++) {
+					const logVal = Math.log1p(Math.abs(dctBlock[row][col]));
+					if (logVal > maxVal) maxVal = logVal;
+				}
+			}
+
+			for (let row = 0; row < cell.h; row++) {
+				for (let col = 0; col < cell.w; col++) {
+					const idx = ((cell.y + row) * totalWidth + cell.x + col) * 4;
+					const logVal = Math.log1p(Math.abs(dctBlock[row][col]));
+					const normalized = maxVal > 0 ? (logVal / maxVal) * 255 : 0;
+					data[idx] = normalized;
+					data[idx + 1] = normalized;
+					data[idx + 2] = normalized;
+				}
+			}
+		}
+
+		ctx.putImageData(imgData, 0, 0);
+	}
 </script>
 
 <style>
