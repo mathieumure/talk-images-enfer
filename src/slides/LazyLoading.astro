@@ -1,6 +1,123 @@
 ---
 import Slide from "../components/Slide.astro";
+import "../styles/srcset-demos.scss";
+
+const code = `<img
+	src="/achilles.jpg"
+	loading="lazy" />
+`;
 ---
-<Slide>
-	<h1>Lazy loading</h1>
+
+<Slide animate={false}>
+	<div class="lazy-loading-container">
+		<div class="lazy-loading-grid">
+			<div class="lazy-scroll-area" id="lazy-scroll-container">
+				<p>Scroll down 👇</p>
+				<div class="lazy-spacer"></div>
+				<div class="lazy-image-wrapper" id="lazy-target">
+					<img
+						alt="Achilles"
+						class="lazy-demo-image"
+					/>
+				</div>
+			</div>
+
+			<div class="lazy-code-section">
+				<h2>Lazy Loading</h2>
+				<div class="srcset-code-panel">
+					<div class="srcset-code-header">Code HTML</div>
+					<pre><code class="language-html" data-line-numbers="3">{code}</code></pre>
+				</div>
+			</div>
+		</div>
+	</div>
 </Slide>
+
+<script>
+	const container = document.getElementById('lazy-scroll-container');
+	const target = document.getElementById('lazy-target');
+	const img = target?.querySelector('img');
+
+	if (container && target && img) {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						img.src = "/srcset-demo/achilles-1280w.jpg";
+					}
+				});
+			},
+			{ root: container, threshold: 0.25 }
+		);
+		observer.observe(target);
+	}
+</script>
+
+<style lang="scss">
+	.lazy-loading-container {
+		height: 90vh;
+		padding: 0.5rem 1.5rem;
+	}
+
+	.lazy-loading-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.5rem;
+		height: 100%;
+	}
+
+	.lazy-scroll-area {
+		overflow-y: scroll;
+		background: #2a2a2a;
+		border-radius: 8px;
+		padding: 1rem;
+	}
+
+	.lazy-spacer {
+		height: 500vh;
+	}
+
+	.lazy-image-wrapper {
+		position: relative;
+		min-height: 300px;
+	}
+
+	.lazy-placeholder {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #1a1a1a;
+		border: 2px dashed #555;
+		border-radius: 4px;
+		transition: opacity 0.3s;
+
+		&.hidden {
+			opacity: 0;
+			pointer-events: none;
+		}
+	}
+
+	.lazy-status {
+		color: #888;
+		font-size: 1.2rem;
+		font-weight: 600;
+	}
+
+	.lazy-demo-image {
+		width: 100%;
+		border-radius: 4px;
+	}
+
+	.lazy-code-section {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+
+		h2 {
+			margin: 0;
+			font-size: 2.5rem;
+		}
+	}
+</style>

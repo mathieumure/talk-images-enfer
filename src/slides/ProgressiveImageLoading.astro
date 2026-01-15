@@ -1,6 +1,134 @@
 ---
 import Slide from "../components/Slide.astro";
+import "../styles/srcset-demos.scss";
+
+const BASE_IMAGE = 'data:image/webp;base64,UklGRiABAABXRUJQVlA4IBQBAAAQCwCdASpkADgAP/3+/3+/uzWyMBW8A/A/iWMA1YEtmaQ+er+SeFNoxC1hnkcK/a97lBlpRjzhCKCEWVybU5On34RHVO9qIM7mqSKjEroX55BGbxzM2Tn4Rt3fA25EcjQwAP4bIKw+ED5x0sas2VQyUnWtBy7tP/Uh/+UizWwfeSoFaz1HJNEjdobpXRaZbYiKrq3GmzEUXyBeGO4Cs1bjOp/LxvaM9pF2v1M72F74FpISAM3SyGcuT1tZEiGDwLvL7B2vwjvIr4KrZdqcZ/zF4hMg5bv40QzNWdC3o2fpJkEMoeyiCa/strLiwAEhcCpwCnx1jqwo68KOvC7edRt8/ZOD+gQVhVed1jeIpDOg+6DAAAA='
+
+const code = `<img
+	src="${BASE_IMAGE.slice(0, 35)}..."
+	data-src="/achilles.jpg"
+	class="progressive" />
+`;
+
 ---
-<Slide>
-	<h1>Progressive image loading</h1>
+
+<Slide animate={false}>
+	<div class="progressive-loading-container">
+		<div class="progressive-loading-grid">
+			<div class="progressive-demo-area">
+				<div class="progressive-image-wrapper" id="progressive-target">
+					<img
+						alt="Achilles"
+						class="progressive-demo-image loading"
+						src={BASE_IMAGE}
+					/>
+				</div>
+				<button id="progressive-reload-btn" class="reload-btn">
+					Recharger
+				</button>
+			</div>
+
+			<div class="progressive-code-section">
+				<h2>Progressive Image Loading</h2>
+				<div class="srcset-code-panel">
+					<div class="srcset-code-header">Code HTML</div>
+					<pre><code class="language-html" data-line-numbers="2-3">{code}</code></pre>
+				</div>
+			</div>
+		</div>
+	</div>
 </Slide>
+
+<script>
+	const target = document.getElementById('progressive-target');
+	const img = target?.querySelector('img') as HTMLImageElement;
+	const reloadBtn = document.getElementById('progressive-reload-btn');
+	const baseImage = img.src;
+
+
+	function loadProgressiveImage() {
+		if (!img) return;
+		img.classList.add('loading');
+		img.src = baseImage;
+
+		img.onload = () => {
+			if (img.src.endsWith('/srcset-demo/achilles-1280w.jpg')) {
+				img.classList.remove('loading')
+			}
+		}
+
+		setTimeout(() => {
+			img.src = '/srcset-demo/achilles-1280w.jpg';
+		}, 1500);
+	}
+
+	loadProgressiveImage();
+	reloadBtn?.addEventListener('click', loadProgressiveImage);
+</script>
+
+<style lang="scss">
+	.progressive-loading-container {
+		height: 90vh;
+		padding: 0.5rem 1.5rem;
+	}
+
+	.progressive-loading-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.5rem;
+		height: 100%;
+	}
+
+	.progressive-demo-area {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		background: #2a2a2a;
+		border-radius: 8px;
+		padding: 1rem;
+	}
+
+	.progressive-image-wrapper {
+		position: relative;
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.progressive-demo-image {
+		width: 100%;
+		border-radius: 4px;
+		transition: filter 0.3s ease;
+
+		&.loading {
+			filter: blur(10px);
+		}
+	}
+
+	.reload-btn {
+		padding: 0.75rem 1.5rem;
+		font-size: 1rem;
+		background: #4a9eff;
+		border: none;
+		border-radius: 4px;
+		color: white;
+		cursor: pointer;
+		transition: background 0.2s;
+
+		&:hover {
+			background: #3a8eef;
+		}
+	}
+
+	.progressive-code-section {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+
+		h2 {
+			margin: 0;
+			font-size: 2.5rem;
+		}
+	}
+</style>
