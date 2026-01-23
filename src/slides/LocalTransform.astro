@@ -1,0 +1,73 @@
+---
+
+import Slide from "../components/Slide.astro";
+import Code from "../components/Code.astro";
+
+const code = [
+"import sharp from 'sharp'",
+"const sourcePath = '/home/melinoe/house-of-the-dead/public/img/src/hades-family.tiff';",
+"const outputPath = '/home/melinoe/house-of-the-dead/public/img/out/hades-family-2048.webp';",
+'',
+'await sharp(sourcePath)',
+'  .resize(2048)',
+"  .toFormat('webp', { quality: 75 })",
+'  .toFile(outputPath);',
+]
+
+---
+
+<Slide>
+	<Slide>
+		<p class="sharpLogo">sharp</p>
+	</Slide>
+	<Slide>
+		<p class="sharpLogo">sharp</p>
+		<Code lang="sh">
+			{`npm install -D sharp`}
+		</Code>
+	</Slide>
+	<Slide>
+		<p class="sharpLogo" data-id="sharp-logo">sharp</p>
+		<Code lang="js" animateId="code-animation">{code.slice(1, 3).join('\n')}</Code>
+	</Slide>
+	<Slide>
+		<p class="sharpLogo" data-id="sharp-logo">sharp</p>
+		<Code lang="js" animateId="code-animation" lineNumbers={[1, 5]}>{code.slice(0, 5).join('\n')}</Code>
+	</Slide>
+	<Slide>
+		<p class="sharpLogo" data-id="sharp-logo">sharp</p>
+		<Code lang="js" animateId="code-animation" lineNumbers={[6]}>{code.slice(0, 6).join('\n')}</Code>
+	</Slide>
+	<Slide>
+		<p class="sharpLogo" data-id="sharp-logo">sharp</p>
+		<Code lang="js" animateId="code-animation" lineNumbers={[7]}>{code.slice(0, 7).join('\n')}</Code>
+	</Slide>
+	<Slide>
+		<p class="sharpLogo" data-id="sharp-logo">sharp</p>
+		<Code lang="js" animateId="code-animation" lineNumbers={[8]}>{code.slice(0, 8).join('\n')}</Code>
+	</Slide>
+</Slide>
+
+
+<style>
+	.sharpLogo {
+		background-color: #072d00;
+		display: flex;
+		color: #aad7a0;
+		gap: 20px;
+		justify-content: center;
+		align-items: center;
+		margin-bottom: 50px;
+
+		&:before {
+			content: url("https://sharp.pixelplumbing.com/_astro/sharp-logo.CiVIswaO.svg");
+			display: block;
+			width: 40px;
+			height: 40px;
+		}
+
+		img {
+			height: 40px;
+		}
+	}
+</style>

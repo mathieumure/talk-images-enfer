@@ -1,0 +1,65 @@
+---
+type Props = {
+	title?: string;
+	lang: string;
+	lineNumbers?: Array<number>;
+	class?: string;
+	animateId?: string;
+}
+
+const { lineNumbers = [] } = Astro.props;
+---
+<div class:list={['code-section', Astro.props.class]}>
+	{Astro.props.title && <h2>{Astro.props.title}</h2>}
+	<div class="code-panel">
+		<div class="code-header">{Astro.props.lang}</div>
+		<pre data-id={Astro.props.animateId}><code class={`language-${Astro.props.lang}`} data-line-numbers={lineNumbers.join(",")}><slot /></code></pre>
+	</div>
+</div>
+
+<style>
+	.code-section {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+
+		h2 {
+			margin: 0;
+			font-size: 2.5rem;
+		}
+	}
+
+	.code-panel {
+		background: #1e1e1e;
+		border-radius: 8px;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+	}
+
+	.code-header {
+		background: #252526;
+		padding: 0.75rem 1rem;
+		font-size: 0.9rem;
+		font-weight: bold;
+		border-bottom: 1px solid #3e3e3e;
+		color: #dcdcdc;
+	}
+
+	.code-panel pre {
+		margin: 0;
+		padding: 1.5rem;
+		overflow: auto;
+		flex: 1;
+
+		code {
+			max-height: 100% !important;
+			font-family: 'Monaco', 'Courier New', monospace;
+			font-size: 0.85rem;
+			line-height: 1.6;
+			color: #dcdcdc;
+			white-space: pre;
+		}
+	}
+</style>
