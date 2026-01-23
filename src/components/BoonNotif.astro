@@ -1,0 +1,31 @@
+---
+type Props = {
+	logo: string;
+}
+---
+
+<div class="boon-container">
+	<img src="https://talk-assets.s3.fr-par.scw.cloud/boon-container.webp" class="background">
+	<img src={Astro.props.logo} class="logo">
+</div>
+
+<style>
+	.boon-container {
+		position: relative;
+		width: 250px;
+		margin: auto;
+
+		.background {
+			width: 100%;
+		}
+
+		.logo {
+			width: 100px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			margin: 0;
+		}
+	}
+</style>

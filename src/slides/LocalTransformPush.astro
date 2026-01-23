@@ -1,0 +1,66 @@
+---
+import Code from "../components/Code.astro";
+import Slide from "../components/Slide.astro";
+import TextBox from "../components/TextBox.astro";
+import BoonNotif from "../components/BoonNotif.astro";
+---
+
+<Slide>
+	<Slide>
+		<Code lang="sh">git commit -am "chore: add all images" && git push</Code>
+	</Slide>
+	<Slide>
+		<BoonNotif logo="https://talk-assets.s3.fr-par.scw.cloud/athena-logo.png" />
+	</Slide>
+	<Slide>
+		<div class="heroContainer">
+			<img src="https://talk-assets.s3.fr-par.scw.cloud/athena.png" />
+			<TextBox title="Athena" subtitle="Staff engineer" class="textbox">
+				<p>Je ne sais pas ce que tu as foutu mais les Ops m'engeulent parce que les blobs ont explosé sur Githuh et les dev mettent 10 minutes à pull main</p>
+			</TextBox>
+		</div>
+	</Slide>
+	<Slide>
+		<h1 class="title">Git LFS</h1>
+	</Slide>
+</Slide>
+
+<style>
+	.boon-container {
+		position: relative;
+		width: 250px;
+		margin: auto;
+
+		.background {
+			width: 100%;
+		}
+
+		.logo {
+			width: 100px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			margin: 0;
+		}
+	}
+
+	.heroContainer {
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+
+		> img {
+			width: 30%;
+		}
+
+		.textbox {
+			width: 50%;
+			transform: translateY(7%);
+		}
+	}
+
+	.title {
+		font-family: "Spectral SC", system-ui;
+	}
+</style>

@@ -1,0 +1,75 @@
+---
+import Code from "../components/Code.astro";
+import Slide from "../components/Slide.astro";
+import TextBox from "../components/TextBox.astro";
+import BoonNotif from "../components/BoonNotif.astro";
+---
+
+<Slide>
+	<Slide>
+		<Code lang="sh">git commit -am "chore: add all images" && git push</Code>
+	</Slide>
+	<Slide>
+		<p>...</p>
+	</Slide>
+	<Slide>
+		<BoonNotif logo="https://talk-assets.s3.fr-par.scw.cloud/hephaestus-logo.png" />
+	</Slide>
+	<Slide>
+		<div class="heroContainer">
+			<img src="https://talk-assets.s3.fr-par.scw.cloud/hephaestus.png" />
+			<TextBox title="Hephaïtos" subtitle="THE sysadmin" class="textbox">
+				<p>Alors t'es gentil mais avec ton dernier commits les runners sont à 500% de CPU</p>
+				<p>Et la CI met maintenant plus d'une heure à build ton app</p>
+			</TextBox>
+		</div>
+	</Slide>
+	<Slide>
+		<BoonNotif logo="https://talk-assets.s3.fr-par.scw.cloud/poseidon-logo.png" />
+	</Slide>
+	<Slide>
+		<div class="heroContainer">
+			<img src="https://talk-assets.s3.fr-par.scw.cloud/poseidon.png" />
+			<TextBox title="Poseidon" subtitle="Business analyst" class="textbox">
+				<p>Alors après une étude de marché on a décidé de porter l'application sur TVs.</p>
+				<p>Il faudrait donc supporter des images en 4K maintenant</p>
+			</TextBox>
+		</div>
+	</Slide>
+</Slide>
+
+<style>
+	.boon-container {
+		position: relative;
+		width: 250px;
+		margin: auto;
+
+		.background {
+			width: 100%;
+		}
+
+		.logo {
+			width: 100px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			margin: 0;
+		}
+	}
+
+	.heroContainer {
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+
+		> img {
+			width: 30%;
+		}
+
+		.textbox {
+			width: 50%;
+			transform: translateY(7%);
+		}
+	}
+</style>
