@@ -1,7 +1,82 @@
 ---
 import Slide from "../components/Slide.astro";
+import TextBox from "../components/TextBox.astro";
 ---
 
-<Slide>
-	<img src="https://talk-assets.s3.fr-par.scw.cloud/Olympians.webp">
+<Slide class="slideContainer">
+	<Slide>
+		<img src="https://talk-assets.s3.fr-par.scw.cloud/Olympians.webp">
+		<img src="/ares.png" class="ares" />
+		<img src="/dyonysos.png" class="dyonysos">
+	</Slide>
+	<Slide>
+		<div>
+			<div class="heroContainer">
+				<img src="https://talk-assets.s3.fr-par.scw.cloud/ares.png" />
+				<TextBox title="Ares" subtitle="CEO Vénère" class="textbox">
+					<p>Voilà la toute dernière photos d'équipe à mettre sur le HP du site qu'on a reçu de la part de notre photographe</p>
+					<p>C'est un fichier <b>TIFF</b></p>
+				</TextBox>
+			</div>
+		</div>
+	</Slide>
+	<Slide>
+		<div>
+			<div class="heroContainer">
+				<img src="https://talk-assets.s3.fr-par.scw.cloud/ares.png" />
+				<TextBox title="Ares" subtitle="CEO Vénère" class="textbox">
+					<p>Voilà la toute dernière photos d'équipe à mettre sur le HP du site qu'on a reçu de la part de notre photographe</p>
+					<p>C'est un fichier <b>TIFF</b></p>
+				</TextBox>
+			</div>
+			<div class="heroContainer">
+				<img src="https://talk-assets.s3.fr-par.scw.cloud/dyonysos.png">
+				<TextBox title="Dyonysos" subtitle="Lead Content Designer" class="textbox">
+					<p>Comme promis voici la dernière créa concernant les icônes.</p>
+					<p>J'ai pas su exporter le format alors je te file le fichier <b>.ai</b></p>
+				</TextBox>
+			</div>
+		</div>
+	</Slide>
+	<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/magic.png" />
+	<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/magic.png">
+		<h2 class="section">Transformation</h2>
+	</Slide>
 </Slide>
+
+<style>
+	.slideContainer {
+		position: relative;
+	}
+	.ares {
+		position: absolute;
+		bottom: 3%;
+		left: 22%;
+		width: 30%;
+		opacity: 0;
+	}
+	.dyonysos {
+		width: 27%;
+		position: absolute;
+		bottom: 4%;
+		right: 21%;
+		opacity: 0;
+	}
+	.heroContainer {
+		display: flex;
+		align-items: flex-end;
+
+		> img {
+			width: 30%;
+		}
+
+		.textbox {
+			width: 50%;
+			transform: translateY(7%);
+		}
+	}
+
+	.section {
+		background-color: black;
+	}
+</style>
