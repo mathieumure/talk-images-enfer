@@ -1,0 +1,27 @@
+---
+
+import Slide from "../components/Slide.astro";
+
+---
+<Slide>
+	<Slide>
+		<div class="contained">
+			<img src="https://talk-assets.s3.fr-par.scw.cloud/lighthouse_bad_part1.png">
+		</div>
+	</Slide>
+	<Slide>
+		<div class="contained">
+			<img src="https://talk-assets.s3.fr-par.scw.cloud/lighthouse_bad_part2.png">
+		</div>
+	</Slide>
+</Slide>
+
+<style>
+	.contained {
+		display: flex;
+		max-height: 80vh;
+		img {
+			object-fit: contain;
+		}
+	}
+</style>

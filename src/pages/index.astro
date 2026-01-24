@@ -44,21 +44,27 @@ import LocalTransform from "../slides/LocalTransform.astro";
 import LocalTransformPush from "../slides/LocalTransformPush.astro";
 import CIPerf from "../slides/CIPerf.astro";
 import FieldsOfMourningRecap from "../slides/FieldsOfMourningRecap.astro";
+import WebAlamanach from "../components/WebAlamanach.astro";
+import ImageProblemsLighthouse from "../slides/ImageProblemsLighthouse.astro";
 ---
 
 <Layout title="Au secours, mes images pourrissent mes perfs">
 	<main class="reveal">
 		<div class="slides">
 			<Title />
+			<!--Intro-->
 			<Intro />
 			<IntroSeminaire />
 			<SpeakerAntoineCharon />
 			<SpeakerMathieuMort />
 			<ImageProblems />
+			<ImageProblemsLighthouse />
 			<WelcomeToHell />
 			<FirstPicture />
+			<WebAlamanach />
 			<IntroRecap />
 			<Map />
+			<!--Partie 1-->
 			<Asphodel />
 			<RiverOfImageFormat />
 			<ImageCompression />
@@ -69,6 +75,7 @@ import FieldsOfMourningRecap from "../slides/FieldsOfMourningRecap.astro";
 			<ImageFormatStat />
 			<AsphodelRecap />
 			<Map2 />
+			<!--Partie 2-->
 			<Tartarus />
 			<TartarusIntro />
 			<DensityDescriptorSlide />
@@ -78,6 +85,7 @@ import FieldsOfMourningRecap from "../slides/FieldsOfMourningRecap.astro";
 			<ProgressiveImageLoading />
 			<TartarusRecap />
 			<Map3 />
+			<!--Partie 3-->
 			<FieldsOfMourning />
 			<Team />
 			<LocalTransform />
@@ -88,10 +96,12 @@ import FieldsOfMourningRecap from "../slides/FieldsOfMourningRecap.astro";
 			<CIPerf />
 			<FieldsOfMourningRecap />
 			<Map4 />
+			<!--Partie 4-->
 			<Elysium />
 			<CmsArchitecture />
 			<CmsLogsDemo />
 			<Map5 />
+			<!--Conclusion-->
 			<Conclusion />
 		</div>
 	</main>
