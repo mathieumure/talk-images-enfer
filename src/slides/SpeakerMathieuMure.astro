@@ -1,0 +1,43 @@
+---
+import Slide from "../components/Slide.astro";
+import TextBox from "../components/TextBox.astro";
+---
+
+<Slide class="speaker-slide" data-qrcode="https://www.linkedin.com/in/mathieu-mure/">
+	<div class="container">
+		<img src="https://talk-assets.s3.fr-par.scw.cloud/MathieuMort.webp" class="mathieu-mort old fragment fade-out" data-fragment-index="1">
+		<img src="https://talk-assets.s3.fr-par.scw.cloud/mathieu_mure.webp" class="mathieu-mort fragment" data-fragment-index="1">
+		<TextBox title="Mathieu Mure" subtitle="Staff Engineer" class="caption-container fragment" data-fragment-index="1">
+			<p>Staff Engineer</p>
+			<p>à Disneyland Paris</p>
+		</TextBox>
+	</div>
+</Slide>
+
+<style lang="scss">
+	.container {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-direction: column;
+		height: 90vh;
+	}
+
+	.old {
+		position: absolute;
+	}
+
+	.mathieu-mort {
+		flex-shrink: 0;
+		width: auto;
+		height: 80%;
+	}
+
+	.caption-container {
+		flex-grow: 1;
+		transform: translateY(-50%);
+		aspect-ratio: 2 / 1;
+		width: 60%;
+	}
+</style>

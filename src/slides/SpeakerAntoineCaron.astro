@@ -1,0 +1,40 @@
+---
+import Slide from "../components/Slide.astro";
+import TextBox from '../components/TextBox.astro'
+---
+
+<Slide class="speaker-slide" data-qrcode="https://www.linkedin.com/in/antoine-caron-slash/">
+	<div class="container">
+		<img src="https://talk-assets.s3.fr-par.scw.cloud/AntoineCharon.webp" class="antoine-charon old fragment fade-out" data-fragment-index="1">
+		<img src="https://talk-assets.s3.fr-par.scw.cloud/antoine_caron.webp" class="antoine-charon fragment" data-fragment-index="1">
+		<TextBox title="Antoine Caron" subtitle="Engineering Manager" class="caption-container fragment" data-fragment-index="1">
+			<p>Engineering Manager</p>
+			<p>Chez Scaleway</p>
+		</TextBox>
+	</div>
+</Slide>
+
+<style lang="scss">
+	.container {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.old {
+		position: absolute;
+	}
+
+	.antoine-charon {
+		flex-shrink: 0;
+		width: auto;
+		max-width: min(40vw, 700px);
+		max-height: 100vh;
+	}
+
+	.caption-container {
+		flex-grow: 1;
+		transform: translateX(-33px);
+	}
+</style>
