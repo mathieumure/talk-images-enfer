@@ -1,0 +1,175 @@
+---
+
+import Slide from "../components/Slide.astro";
+import TextBox from "../components/TextBox.astro";---
+
+<Slide>
+	<Slide>
+		<div class="container">
+			<img src="https://talk-assets.s3.fr-par.scw.cloud/scylla-and-the-sirens.avif">
+			<p class="fragment imageRaw">Image RAW / DAM</p>
+			<p class="fragment transformer">Transformer</p>
+			<p class="fragment cache">Cache CDN</p>
+			<p class="fragment webpage">Web page</p>
+		</div>
+	</Slide>
+	<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/elysium_0.jpg">
+		<h1>Image RAW / DAM</h1>
+		<div class="logo-display">
+			<div class="picture">
+				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/scaleway.webp">
+				<p>Scaleway Object storage</p>
+			</div>
+			<div class="picture">
+				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/amazon_s3.png">
+				<p>Amazon S3</p>
+			</div>
+			<div class="picture">
+				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/google_storage.png">
+				<p>Google storage</p>
+			</div>
+			<div class="picture">
+				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/AEM_assets.png">
+				<p>Adobe Experience Manager Assets</p>
+			</div>
+			<div class="picture">
+				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/Bynder.png">
+				<p>Bynder</p>
+			</div>
+			<div class="picture">
+				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/Cloudinary.png">
+				<p>Cloudinary</p>
+			</div>
+		</div>
+	</Slide>
+	<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/elysium_1.jpg">
+		<h1>Transformer</h1>
+		<div class="logo-display">
+			<div class="picture">
+				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/Cloudinary.png">
+				<p>Cloudinary</p>
+			</div>
+			<div class="picture">
+				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/fastly.svg">
+				<p>Fastly</p>
+			</div>
+			<div class="picture">
+				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/Akamai_logo.png">
+				<p>Akamai</p>
+			</div>
+			<div class="picture">
+				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/imgix.svg" style="background-color: white;">
+				<p>Imgix</p>
+			</div>
+		</div>
+	</Slide>
+	<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/elysium_2.webp">
+		<h1>Cache CDN</h1>
+		<div class="logo-display">
+			<div class="picture">
+				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/fastly.svg">
+				<p>Fastly</p>
+			</div>
+			<div class="picture">
+				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/Akamai_logo.png">
+				<p>Akamai</p>
+			</div>
+			<div class="picture">
+				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/nginx.jpg">
+				<p>Nginx</p>
+			</div>
+		</div>
+	</Slide>
+	<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/elysium_0.jpg">
+		<div class="heroContainer">
+			<img src="https://talk-assets.s3.fr-par.scw.cloud/hermes.png">
+			<TextBox title="Hermes" subtitle="Vibecoder qui n'a pas le temps" class="textbox">
+				<p>C'est bien gentil tout ça mais je n'arrive pas définir mon infra avec <b>Curseur</b>, mon outil de Vibecode</p>
+				<p>On n'a pas moyen d'avoir ça sans la puissance des nuages ?</p>
+			</TextBox>
+		</div>
+	</Slide>
+</Slide>
+
+<style>
+	h1 {
+		font-family: "Spectral SC", system-ui;
+		font-size: 5rem;
+		background-color: #000;
+		width: 100%;
+		color: #40bb3f;
+		margin-bottom: 40vh;
+	}
+
+	.heroContainer {
+		display: flex;
+		align-items: center;
+
+		> img {
+			width: 40%;
+			margin: 0;
+			transform: scale(2) translate(19%);
+		}
+
+		.textbox {
+			width: 60%;
+			transform: translateY(7%);
+		}
+	}
+
+	.container {
+		position: relative;
+		container-type: inline-size;
+
+		img {
+			margin: 0;
+		}
+	}
+
+	.transformer {
+		position: absolute;
+		top: 10cqh;
+		left: 55cqw;
+		background-color: black;
+	}
+
+	.cache {
+		position: absolute;
+		top: 45cqh;
+		left: 50cqw;
+		background-color: black;
+	}
+
+	.imageRaw {
+		position: absolute;
+		top: 35cqh;
+		left: 20cqw;
+		background-color: black;
+	}
+
+	.webpage {
+		position: absolute;
+		bottom: 7cqh;
+		right: 12cqw;
+		background-color: black;
+	}
+
+	.logo-display {
+		display: grid;
+		align-items: center;
+		grid-template-columns: repeat(6, 1fr);
+		gap: 20px;
+		background-color: black;
+	}
+
+	.picture {
+		display: grid;
+		grid-template-rows: 60% 40%;
+		img {
+			margin: auto;
+		}
+		p {
+			font-size: 1.5rem;
+		}
+	}
+</style>
