@@ -68,7 +68,7 @@ import Slide from "../../components/Slide.astro";
 			params;
 
 		// always split big regions
-		const forced = w > forceSplitSize && h > forceSplitSize;
+		const forced = w > minSize && h > minSize;
 		const std = regionStd(x, y, w, h, data, totalWidth);
 
 		// if the region is too small or color varies little, stop
