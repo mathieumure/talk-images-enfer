@@ -3,11 +3,6 @@ import '../../styles/git-lfs-explanation.scss';
 export default function GitLFSExplanation() {
   return (
     <div className="lfs-explanation-container">
-      <div className="lfs-explanation-header">
-        <h2>Git LFS: Comment ça fonctionne ?</h2>
-        <p>Large File Storage - Gérer les fichiers volumineux efficacement</p>
-      </div>
-
       <div className="lfs-explanation-content">
         <div className="lfs-diagram-comparison">
           <div className="lfs-diagram-side lfs-without-lfs">
@@ -109,38 +104,7 @@ Repo de 5 MB + 42 MB
             </div>
           </div>
         </div>
-
-        <div className="lfs-key-benefits">
-          <div className="lfs-benefit">
-            <div className="lfs-benefit-icon">⚡</div>
-            <div className="lfs-benefit-text">
-              <strong>Clone rapide</strong>
-              <span>Repo léger, images à la demande</span>
-            </div>
-          </div>
-          <div className="lfs-benefit">
-            <div className="lfs-benefit-icon">💾</div>
-            <div className="lfs-benefit-text">
-              <strong>Économies d'espace</strong>
-              <span>Pas de duplication d'images</span>
-            </div>
-          </div>
-          <div className="lfs-benefit">
-            <div className="lfs-benefit-icon">🔄</div>
-            <div className="lfs-benefit-text">
-              <strong>Transparent</strong>
-              <span>Workflow Git inchangé</span>
-            </div>
-          </div>
-          <div className="lfs-benefit">
-            <div className="lfs-benefit-icon">📦</div>
-            <div className="lfs-benefit-text">
-              <strong>Versionning</strong>
-              <span>Historique complet préservé</span>
-            </div>
-          </div>
-        </div>
-      </div>
+			</div>
     </div>
   );
 }

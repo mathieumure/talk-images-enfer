@@ -1,0 +1,73 @@
+---
+import Slide from "../components/Slide.astro";
+import QRCodeLib from "qrcode";
+
+const repoUrl = "https://github.com/mathieumure/talk-images-enfer";
+const feedbackUrl = "https://openfeedback.io/";
+
+const qrOptions = {
+	errorCorrectionLevel: "H" as const,
+	margin: 1,
+	width: 400,
+	color: {
+		dark: "#e16605",
+		light: "#000000",
+	},
+};
+
+const repoQR = await QRCodeLib.toDataURL(repoUrl, qrOptions);
+const feedbackQR = await QRCodeLib.toDataURL(feedbackUrl, qrOptions);
+---
+
+<Slide animate={false}>
+	<div class="qr-container">
+		<div class="qr-column">
+			<img src={repoQR} alt="QR code vers les slides" />
+			<h3>Slides</h3>
+			<p class="url">{repoUrl}</p>
+		</div>
+		<div class="qr-column">
+			<img src={feedbackQR} alt="QR code vers le feedback" />
+			<h3>Feedback</h3>
+			<p class="url">{feedbackUrl}</p>
+		</div>
+	</div>
+</Slide>
+
+<style>
+	.qr-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 8vw;
+		height: 100%;
+	}
+
+	.qr-column {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.qr-column img {
+		width: 300px;
+		height: 300px;
+		border-radius: 8px;
+	}
+
+	h3 {
+		font-family: "Spectral SC", system-ui;
+		color: #e16605;
+		margin: 0;
+		font-size: 2rem;
+	}
+
+	.url {
+		font-family: "Lato", system-ui;
+		color: #888;
+		font-size: 0.9rem;
+		margin: 0;
+		word-break: break-all;
+	}
+</style>
