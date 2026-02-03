@@ -282,7 +282,7 @@ const defaultRightJson = JSON.stringify(defaultRight);
 
 		async function loadCompressionData() {
 			try {
-				const response = await fetch('/image-format-comparison/compression-data.json');
+				const response = await fetch(`${import.meta.env.BASE_URL}image-format-comparison/compression-data.json`);
 				compressionData = await response.json();
 				return compressionData;
 			} catch (error) {
@@ -457,7 +457,7 @@ const defaultRightJson = JSON.stringify(defaultRight);
 
 			async function loadCompressionData() {
 				try {
-					const response = await fetch('/image-format-comparison/compression-data.json');
+					const response = await fetch(`${import.meta.env.BASE_URL}image-format-comparison/compression-data.json`);
 					compressionData = await response.json();
 					return compressionData;
 				} catch (error) {

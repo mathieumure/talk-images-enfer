@@ -25,6 +25,9 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install
       - run: pnpm build
+        env:
+          ASTRO_SITE: https://mathieumure.github.io
+          ASTRO_BASE: /talk-images-enfer
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

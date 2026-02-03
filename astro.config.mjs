@@ -3,7 +3,7 @@ import react from "@astrojs/react";
 
 // https://astro.build/config
 export default defineConfig({
-	site: "https://jsulpis.github.io",
-	// base: "/slides-template",
+	site: process.env.ASTRO_SITE || "https://jsulpis.github.io",
+	base: process.env.ASTRO_BASE || "/",
 	integrations: [react()],
 });

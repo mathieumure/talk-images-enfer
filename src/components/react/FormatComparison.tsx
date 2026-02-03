@@ -49,7 +49,7 @@ export default function FormatComparison({ format, title }: FormatComparisonProp
   useEffect(() => {
     async function loadData() {
       try {
-        const response = await fetch('/image-format-comparison/compression-data.json');
+        const response = await fetch(`${import.meta.env.BASE_URL}image-format-comparison/compression-data.json`);
         const data = await response.json();
         setCompressionData(data);
       } catch (error) {
@@ -196,7 +196,7 @@ export default function FormatComparison({ format, title }: FormatComparisonProp
   }
 
   const currentData = compressionData[format][sliderValue];
-  const imageSrc = `/image-format-comparison/${currentData.filename}`;
+  const imageSrc = `${import.meta.env.BASE_URL}image-format-comparison/${currentData.filename}`;
 
   return (
     <div className="format-comparison-container">
