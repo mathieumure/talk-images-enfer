@@ -128,7 +128,7 @@ export default function ArtDirectionDemo() {
   useEffect(() => {
     async function loadData() {
       try {
-        const response = await fetch('/srcset-demo/srcset-data.json');
+        const response = await fetch('srcset-demo/srcset-data.json');
         const data = await response.json();
         setSrcsetData(data);
       } catch (error) {
@@ -168,7 +168,7 @@ export default function ArtDirectionDemo() {
         {/* Browser Mockup */}
         <BrowserMockup>
           <div className="srcset-image-container">
-            <img src={`/srcset-demo/${selectedImage.filename}`} alt="Megaera" />
+            <img src={`srcset-demo/${selectedImage.filename}`} alt="Megaera" />
             <div className="srcset-aspect-label">{getAspectLabel(sourceType)}</div>
           </div>
           <div className="srcset-metrics-compact">

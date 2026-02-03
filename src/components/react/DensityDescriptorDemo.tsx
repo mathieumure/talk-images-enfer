@@ -75,7 +75,7 @@ export default function DensityDescriptorDemo() {
   useEffect(() => {
     async function loadData() {
       try {
-        const response = await fetch('/srcset-demo/srcset-data.json');
+        const response = await fetch('srcset-demo/srcset-data.json');
         const data = await response.json();
         setSrcsetData(data);
       } catch (error) {
@@ -105,7 +105,7 @@ export default function DensityDescriptorDemo() {
       <div className="srcset-demo-grid">
         {/* Browser Mockup */}
         <BrowserMockup
-          imageSrc={`/srcset-demo/${selectedImage.filename}`}
+          imageSrc={`srcset-demo/${selectedImage.filename}`}
           imageAlt="Thanatos"
         >
           <div className="srcset-metrics">

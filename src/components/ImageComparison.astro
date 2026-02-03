@@ -282,7 +282,7 @@ const defaultRightJson = JSON.stringify(defaultRight);
 
 		async function loadCompressionData() {
 			try {
-				const response = await fetch('/image-format-comparison/compression-data.json');
+				const response = await fetch('image-format-comparison/compression-data.json');
 				compressionData = await response.json();
 				return compressionData;
 			} catch (error) {
@@ -381,12 +381,12 @@ const defaultRightJson = JSON.stringify(defaultRight);
 			const rightImg = document.getElementById(`${instanceId}-right-img`);
 
 			if (leftImg) {
-				leftImg.src = `/image-format-comparison/${leftData.filename}`;
+				leftImg.src = `image-format-comparison/${leftData.filename}`;
 				leftImg.alt = `${leftConfig.format.toUpperCase()} quality ${leftConfig.quality}`;
 			}
 
 			if (rightImg) {
-				rightImg.src = `/image-format-comparison/${rightData.filename}`;
+				rightImg.src = `image-format-comparison/${rightData.filename}`;
 				rightImg.alt = `${rightConfig.format.toUpperCase()} quality ${rightConfig.quality}`;
 			}
 
@@ -457,7 +457,7 @@ const defaultRightJson = JSON.stringify(defaultRight);
 
 			async function loadCompressionData() {
 				try {
-					const response = await fetch('/image-format-comparison/compression-data.json');
+					const response = await fetch('image-format-comparison/compression-data.json');
 					compressionData = await response.json();
 					return compressionData;
 				} catch (error) {
@@ -553,12 +553,12 @@ const defaultRightJson = JSON.stringify(defaultRight);
 				const rightImg = document.getElementById(`${instanceId}-right-img`);
 
 				if (leftImg) {
-					leftImg.src = `/image-format-comparison/${leftData.filename}`;
+					leftImg.src = `image-format-comparison/${leftData.filename}`;
 					leftImg.alt = `${leftConfig.format.toUpperCase()} quality ${leftConfig.quality}`;
 				}
 
 				if (rightImg) {
-					rightImg.src = `/image-format-comparison/${rightData.filename}`;
+					rightImg.src = `image-format-comparison/${rightData.filename}`;
 					rightImg.alt = `${rightConfig.format.toUpperCase()} quality ${rightConfig.quality}`;
 				}
 
