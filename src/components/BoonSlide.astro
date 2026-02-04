@@ -1,8 +1,14 @@
 ---
 import Slide from "../components/Slide.astro";
+
+type Props = {
+	bgImage?: string;
+}
+
+const {bgImage = "https://talk-assets.s3.fr-par.scw.cloud/Boons.webp"} = Astro.props;
 ---
 
-<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/Boons.webp" data-background-size="contain">
+<Slide data-background-image={bgImage} data-background-size="contain">
 	<div class="container">
 		<slot />
 	</div>

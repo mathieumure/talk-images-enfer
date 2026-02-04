@@ -15,7 +15,7 @@ export default function BrowserMockup({ imageSrc, imageAlt, children }: BrowserM
           <span className="srcset-dot"></span>
           <span className="srcset-dot"></span>
         </div>
-        <div className="srcset-browser-address">localhost:4321</div>
+        <div className="srcset-browser-address">localhell:666</div>
       </div>
       <div className="srcset-browser-content">
         {imageSrc && <img src={imageSrc} alt={imageAlt || ''} />}

@@ -1,87 +1,72 @@
 ---
 
 import Slide from "../components/Slide.astro";
-import TextBox from "../components/TextBox.astro";---
+import TextBox from "../components/TextBox.astro";
+import StorySlide from "../components/StorySlide.astro";
+
+const introText = [
+	'Vous voilà maintenant coincé dans Elysium.',
+	'Comme beaucoup d\'autres avant vous, vous errez maintenant sans but,',
+	'mais peut être que ce paradis n\'est qu\'une chimère.',
+	'Il ne vous reste plus qu\'à vous assoir et scroller de vidéo en vidéo...'
+]
+
+---
 
 <Slide>
-	<Slide>
-		<div class="container">
-			<img src="https://talk-assets.s3.fr-par.scw.cloud/scylla-and-the-sirens.avif">
-			<p class="fragment imageRaw">Image RAW / DAM</p>
-			<p class="fragment transformer">Transformer</p>
-			<p class="fragment cache">Cache CDN</p>
-			<p class="fragment webpage">Web page</p>
-		</div>
-	</Slide>
+	<StorySlide text={introText}/>
 	<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/elysium_0.jpg">
-		<h1>Image RAW / DAM</h1>
-		<div class="logo-display">
-			<div class="picture">
-				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/scaleway.webp">
-				<p>Scaleway Object storage</p>
-			</div>
-			<div class="picture">
-				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/amazon_s3.png">
-				<p>Amazon S3</p>
-			</div>
-			<div class="picture">
-				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/google_storage.png">
-				<p>Google storage</p>
-			</div>
-			<div class="picture">
-				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/AEM_assets.png">
-				<p>Adobe Experience Manager Assets</p>
-			</div>
-			<div class="picture">
-				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/Bynder.png">
-				<p>Bynder</p>
-			</div>
-			<div class="picture">
-				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/Cloudinary.png">
-				<p>Cloudinary</p>
-			</div>
-		</div>
+		<h1 class="fragment">Un ares et ça repart...</h1>
 	</Slide>
 	<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/elysium_1.jpg">
-		<h1>Transformer</h1>
-		<div class="logo-display">
-			<div class="picture">
-				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/Cloudinary.png">
-				<p>Cloudinary</p>
-			</div>
-			<div class="picture">
-				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/fastly.svg">
-				<p>Fastly</p>
-			</div>
-			<div class="picture">
-				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/Akamai_logo.png">
-				<p>Akamai</p>
-			</div>
-			<div class="picture">
-				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/imgix.svg" style="background-color: white;">
-				<p>Imgix</p>
+		<img src="https://talk-assets.s3.fr-par.scw.cloud/prometeus.png" style="width: 50%" class="fragment">
+	</Slide>
+	<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/elysium_1.jpg">
+		<div class="sideToSide">
+			<img src="https://talk-assets.s3.fr-par.scw.cloud/prometeus.png" style="width: 50%">
+			<div class="sideText">
+				<ul>
+						<li class="fragment">Stocker l'essence</li>
+						<li class="fragment">Bucket S3</li>
+						<li class="fragment">Accessible en HTTP</li>
+				</ul>
 			</div>
 		</div>
 	</Slide>
 	<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/elysium_2.webp">
-		<h1>Cache CDN</h1>
-		<div class="logo-display">
-			<div class="picture">
-				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/fastly.svg">
-				<p>Fastly</p>
-			</div>
-			<div class="picture">
-				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/Akamai_logo.png">
-				<p>Akamai</p>
-			</div>
-			<div class="picture">
-				<img src="https://talk-assets.s3.fr-par.scw.cloud/logos-solutions/nginx.jpg">
-				<p>Nginx</p>
+		<img src="https://talk-assets.s3.fr-par.scw.cloud/cerberus.png" style="width: 50%" class="fragment">
+	</Slide>
+	<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/elysium_2.webp">
+		<div class="sideToSide">
+			<img src="https://talk-assets.s3.fr-par.scw.cloud/cerberus.png" style="width: 50%">
+			<div class="sideText">
+				<ul>
+					<li class="fragment">Transformer au bon format</li>
+					<li class="fragment">A la volée</li>
+					<li class="fragment">via des paramètres d'URL</li>
+					<pre class="fragment"><code>https://img.localhell:666/essence.tiff?
+						f=webp&
+						w=1080&
+						q=75</code></pre>
+				</ul>
 			</div>
 		</div>
 	</Slide>
 	<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/elysium_0.jpg">
-		<div class="heroContainer">
+		<img src="https://talk-assets.s3.fr-par.scw.cloud/sisyphus.png" style="width: 50%" class="fragment">
+	</Slide>
+	<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/elysium_0.jpg">
+		<div class="sideToSide">
+			<img src="https://talk-assets.s3.fr-par.scw.cloud/sisyphus.png" style="width: 50%">
+			<div class="sideText">
+				<ul>
+					<li class="fragment">Cache / CDN</li>
+				</ul>
+			</div>
+		</div>
+	</Slide>
+	<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/elysium_1.jpg">
+		<div class="heroContainer fragment">
 			<img src="https://talk-assets.s3.fr-par.scw.cloud/hermes.png">
 			<TextBox title="Hermes" subtitle="Vibecoder qui n'a pas le temps" class="textbox">
 				<p>C'est bien gentil tout ça mais je n'arrive pas définir mon infra avec <b>Curseur</b>, mon outil de Vibecode</p>
@@ -99,6 +84,23 @@ import TextBox from "../components/TextBox.astro";---
 		width: 100%;
 		color: #40bb3f;
 		margin-bottom: 40vh;
+	}
+
+	.sideToSide {
+		display: flex;
+		gap: 36px;
+	}
+
+	.sideText {
+		flex: 1;
+		background-color: black;
+
+		ul {
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-around;
+		}
 	}
 
 	.heroContainer {
