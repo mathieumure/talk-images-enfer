@@ -3,6 +3,10 @@ import Slide from "../components/Slide.astro";
 import "../styles/srcset-demos.scss";
 
 const code = `<img
+	src="/megaera.jpg"
+	fetchpriority="high" />
+
+<img
 	src="/achilles.jpg"
 	loading="lazy" />
 `;
@@ -13,6 +17,11 @@ const code = `<img
 		<div class="lazy-loading-grid">
 			<div class="lazy-scroll-area" id="lazy-scroll-container">
 				<p>Scroll down 👇</p>
+				<img
+					alt="Achilles"
+					src="/srcset-demo/megaera-desktop-1x.jpg"
+					class="lazy-demo-image"
+				/>
 				<div class="lazy-spacer"></div>
 				<div class="lazy-image-wrapper" id="lazy-target">
 					<img
@@ -26,7 +35,7 @@ const code = `<img
 				<h2>Lazy Loading</h2>
 				<div class="srcset-code-panel">
 					<div class="srcset-code-header">Code HTML</div>
-					<pre><code class="language-html" data-line-numbers="3">{code}</code></pre>
+					<pre><code class="language-html" data-line-numbers="3,7">{code}</code></pre>
 				</div>
 			</div>
 		</div>

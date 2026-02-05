@@ -64,8 +64,8 @@ const DPR_OPTIONS = [
 export default function WidthDescriptorDemo() {
   const [srcsetData, setSrcsetData] = useState<SrcsetData | null>(null);
   const [currentViewport, setCurrentViewport] = useState(1024);
-  const [currentDpr, setCurrentDpr] = useState(2);
-  const [currentWidthPercent, setCurrentWidthPercent] = useState(50);
+  const [currentDpr, setCurrentDpr] = useState(1);
+  const [currentWidthPercent, setCurrentWidthPercent] = useState(100);
 
   // Load srcset data on mount
   useEffect(() => {
