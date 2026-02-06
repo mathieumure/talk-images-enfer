@@ -11,6 +11,14 @@ const introText = [
 	'Il ne vous reste plus qu\'à vous assoir et scroller de vidéo en vidéo...'
 ]
 
+const code = `<img src-set="
+  https://localhell:666/images/heracles.tiff?f=webp&q=75&w=320 320w,
+  https://localhell:666/images/heracles.tiff?f=webp&q=75&w=640 640w,
+  https://localhell:666/images/heracles.tiff?f=webp&q=75&w=920 920w,
+  https://localhell:666/images/heracles.tiff?f=webp&q=75&w=1024 1024w,
+  https://localhell:666/images/heracles.tiff?f=webp&q=75&w=2048 2048w,
+  https://localhell:666/images/heracles.tiff?f=webp&q=75&w=4096 4096w,
+"/>`
 ---
 
 <Slide>
@@ -44,11 +52,19 @@ const introText = [
 					<li class="fragment">Transformer au bon format</li>
 					<li class="fragment">A la volée</li>
 					<li class="fragment">via des paramètres d'URL</li>
-					<pre class="fragment"><code>https://img.localhell:666/essence.tiff?
+					<pre class="fragment local-code language-bash"><code>https://img.localhell:666/essence.tiff?
 						f=webp&
 						w=1080&
 						q=75</code></pre>
 				</ul>
+			</div>
+		</div>
+	</Slide>
+	<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/elysium_2.webp">
+		<div class="sideToSide">
+			<img src="https://talk-assets.s3.fr-par.scw.cloud/cerberus.png" style="width: 30%">
+			<div class="sideText">
+				<pre><code class="language-html">{code}</code></pre>
 			</div>
 		</div>
 	</Slide>
@@ -173,5 +189,9 @@ const introText = [
 		p {
 			font-size: 1.5rem;
 		}
+	}
+
+	.local-code {
+		margin: 0;
 	}
 </style>

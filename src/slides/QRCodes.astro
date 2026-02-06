@@ -22,12 +22,18 @@ const feedbackQR = await QRCodeLib.toDataURL(feedbackUrl, qrOptions);
 <Slide animate={false}>
 	<div class="qr-container">
 		<div class="qr-column">
-			<img src={repoQR} alt="QR code vers les slides" />
+			<div class="qr-cell">
+				<img src={repoQR} alt="QR code vers les slides" />
+				<img src="/coins.png" class="qrcode-logo"/>
+			</div>
 			<h3>Slides</h3>
 			<p class="url">{repoUrl}</p>
 		</div>
 		<div class="qr-column">
-			<img src={feedbackQR} alt="QR code vers le feedback" />
+			<div class="qr-cell">
+				<img src={feedbackQR} alt="QR code vers le feedback" />
+				<img src="/coins.png" class="qrcode-logo"/>
+			</div>
 			<h3>Feedback</h3>
 			<p class="url">{feedbackUrl}</p>
 		</div>
@@ -43,6 +49,10 @@ const feedbackQR = await QRCodeLib.toDataURL(feedbackUrl, qrOptions);
 		height: 100%;
 	}
 
+	.qr-cell {
+		position: relative;
+	}
+
 	.qr-column {
 		display: flex;
 		flex-direction: column;
@@ -54,6 +64,16 @@ const feedbackQR = await QRCodeLib.toDataURL(feedbackUrl, qrOptions);
 		width: 300px;
 		height: 300px;
 		border-radius: 8px;
+	}
+
+	.qrcode-logo {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 80px !important;
+		height: auto !important;
+		transform: translate(-50%, -50%);
+		margin: 0;
 	}
 
 	h3 {

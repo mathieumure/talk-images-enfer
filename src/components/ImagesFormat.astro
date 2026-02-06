@@ -7,9 +7,10 @@ const formats: Array<ImageFormat> = ['jpg' , "bmp" , "png" , "gif" , "webp" , "s
 
 type Props = {
 	current?: ImageFormat;
+	qrCode?: string;
 }
 ---
-<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/styx.webp" data-background-size="contain" class="imageSlide" data-qrcode="https://github.com/mathieumure/talk-images-enfer/blob/main/image-formats-support.md">
+<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/styx.webp" data-background-size="contain" class="imageSlide" data-qrcode={Astro.props.qrCode}>
 	{ formats.map(format => {
 		if (format === Astro.props.current) {
 			return <div class="container">

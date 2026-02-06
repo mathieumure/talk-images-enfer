@@ -52,7 +52,7 @@ const code = `<img
 			(entries) => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
-						img.src = "srcset-demo/achilles-1280w.jpg";
+						img.src = "srcset-demo/achilles-1280w.jpg?q="+new Date().getTime();
 					}
 				});
 			},
