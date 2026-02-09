@@ -1,0 +1,23 @@
+---
+const DEVICES_SIZES = [360, 720, 920, 1024, 1240, 2048];
+const IMG_NAME = 'TODO';
+const srcSet = DEVICES_SIZES
+	.map(size => `http://localhost:8080/insecure/format:webp/resize:fit:${size}:0/quality:75/plain/${IMG_NAME} ${size}w`)
+  .join(',');
+---
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<base href={import.meta.env.BASE_URL} />
+	<meta name="viewport" content="width=device-width" />
+	<meta name="generator" content={Astro.generator} />
+
+	<title>Demo</title>
+</head>
+
+<body>
+	<main>
+		<!--TODO configure image of 150px-->
+		<img srcset={srcSet} />
+	</main>
+</body>
