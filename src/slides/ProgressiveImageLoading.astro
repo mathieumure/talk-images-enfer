@@ -8,6 +8,16 @@ const code = `<img
 	src="${BASE_IMAGE.slice(0, 35)}..."
 	data-src="/achilles.jpg"
 	class="progressive" />
+
+<script>
+	const image = new Image();
+
+	image.onload = function () {
+		document.querySelector('img').src = image.src;
+	}
+
+	image.src = document.querySelector('img').dataset.src;
+</script>
 `;
 
 ---
@@ -32,7 +42,7 @@ const code = `<img
 				<h2>Progressive Image Loading</h2>
 				<div class="srcset-code-panel">
 					<div class="srcset-code-header">Code HTML</div>
-					<pre><code class="language-html" data-line-numbers="2-3">{code}</code></pre>
+					<pre><code class="language-html" data-line-numbers="0-14|2-3|7|9-11|13">{code}</code></pre>
 				</div>
 			</div>
 		</div>

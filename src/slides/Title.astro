@@ -1,14 +1,24 @@
 ---
 import Slide from "../components/Slide.astro";
+import {SLIDES_CONFIG} from "../config.ts";
 ---
 
 <Slide class="title-slide" data-background-video="https://talk-assets.s3.fr-par.scw.cloud/Talkimages_intro.mp4" data-background-video-loop data-background-video-muted data-background-size="cover">
 	<p class="title first">Au secours, mes</p>
 	<img src="https://talk-assets.s3.fr-par.scw.cloud/Intro_logo.png" alt="intro" />
 	<p class="title second">pourrissent mes perfs</p>
+	{SLIDES_CONFIG.CONF_LOGO && <img src={SLIDES_CONFIG.CONF_LOGO} class="conf-logo"/> }
 </Slide>
 
 <style lang="scss">
+	.conf-logo {
+		position: absolute;
+		top: 0;
+		right: 0;
+		margin: 0;
+		max-width: 300px;
+	}
+
 	.title {
 		font-family: 'Spectral SC', system-ui;
 		text-shadow: 2px 2px 6px #000;

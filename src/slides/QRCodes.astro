@@ -1,9 +1,10 @@
 ---
 import Slide from "../components/Slide.astro";
 import QRCodeLib from "qrcode";
+import { SLIDES_CONFIG } from "../config.ts";
 
 const repoUrl = "https://github.com/mathieumure/talk-images-enfer";
-const feedbackUrl = "https://openfeedback.io/";
+const feedbackUrl = SLIDES_CONFIG.OPEN_FEEDBACK;
 
 const qrOptions = {
 	errorCorrectionLevel: "H" as const,

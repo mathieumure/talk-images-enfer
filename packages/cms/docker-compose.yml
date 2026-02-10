@@ -88,6 +88,9 @@ services:
       IMGPROXY_QUALITY: 85
       IMGPROXY_GZIP_COMPRESSION: 5
       IMGPROXY_MAX_SRC_RESOLUTION: 50
+      IMGPROXY_ALLOW_LOOPBACK_SOURCE_ADDRESSES: 'true'
+    extra_hosts:
+      - "localhost:host-gateway"
     expose:
       - '8080'
     healthcheck:
