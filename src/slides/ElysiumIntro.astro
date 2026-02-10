@@ -11,14 +11,20 @@ const introText = [
 	'Il ne vous reste plus qu\'à vous assoir et scroller de vidéo en vidéo...'
 ]
 
-const code = `<img src-set="
-  https://localhell:666/images/heracles.tiff?f=webp&q=75&w=320 320w,
-  https://localhell:666/images/heracles.tiff?f=webp&q=75&w=640 640w,
-  https://localhell:666/images/heracles.tiff?f=webp&q=75&w=920 920w,
-  https://localhell:666/images/heracles.tiff?f=webp&q=75&w=1024 1024w,
-  https://localhell:666/images/heracles.tiff?f=webp&q=75&w=2048 2048w,
-  https://localhell:666/images/heracles.tiff?f=webp&q=75&w=4096 4096w,
-"/>`
+const code = `<picture>
+  <source type="image/webp" src-set="
+  	https://localhell:666/img/heracles.tiff?f=webp&q=75&w=640 640w,
+  	https://localhell:666/img/heracles.tiff?f=webp&q=75&w=1024 1024w,
+  	https://localhell:666/img/heracles.tiff?f=webp&q=75&w=2048 2048w,
+  	https://localhell:666/img/heracles.tiff?f=webp&q=75&w=4096 4096w,
+  "/>
+  <source type="image/avif" src-set="
+  	https://localhell:666/img/heracles.tiff?f=avif&q=75&w=640 640w,
+  	https://localhell:666/img/heracles.tiff?f=avif&q=75&w=1024 1024w,
+  	https://localhell:666/img/heracles.tiff?f=avif&q=75&w=2048 2048w,
+  	https://localhell:666/img/heracles.tiff?f=avif&q=75&w=4096 4096w,
+  "/>
+</picture>`
 ---
 
 <Slide>
@@ -64,7 +70,7 @@ const code = `<img src-set="
 		<div class="sideToSide">
 			<img src="https://talk-assets.s3.fr-par.scw.cloud/cerberus.png" style="width: 30%">
 			<div class="sideText">
-				<pre><code class="language-html">{code}</code></pre>
+				<pre><code class="language-html small-code">{code}</code></pre>
 			</div>
 		</div>
 	</Slide>
@@ -84,9 +90,8 @@ const code = `<img src-set="
 	<Slide data-background-image="https://talk-assets.s3.fr-par.scw.cloud/elysium_1.jpg">
 		<div class="heroContainer fragment">
 			<img src="https://talk-assets.s3.fr-par.scw.cloud/hermes.png">
-			<TextBox title="Hermes" subtitle="Vibecoder qui n'a pas le temps" class="textbox">
-				<p>C'est bien gentil tout ça mais je n'arrive pas définir mon infra avec <b>Curseur</b>, mon outil de Vibecode</p>
-				<p>On n'a pas moyen d'avoir ça sans la puissance des nuages ?</p>
+			<TextBox title="Hermes" subtitle="Plus radin que Charon" class="textbox">
+				<p>C'est bien gentil tout ça mais je peux éviter de dépenser trop d'argent dans les nuages ?</p>
 			</TextBox>
 		</div>
 	</Slide>
@@ -193,5 +198,9 @@ const code = `<img src-set="
 
 	.local-code {
 		margin: 0;
+	}
+
+	.small-code {
+		font-size: 1rem;
 	}
 </style>

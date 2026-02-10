@@ -96,14 +96,6 @@ ${desktopLines}
 ${tabletLines}
     "
   />
-  <source
-    media="(min-width: 640px)"
-    type="image/webp"
-    srcset="
-    	/srcset-demo/megaera-tablet-1x.webp 1x,  <!-- 43.5 KB -->
-      /srcset-demo/megaera-tablet-2x.webp 2x,  <!-- 126.5 KB -->
-    "
-  />
   <img
     srcset="
 ${mobileLines}
